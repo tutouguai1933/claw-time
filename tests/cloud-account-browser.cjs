@@ -32,7 +32,12 @@ const {chromium} = require(path.join(process.env.USERPROFILE, '.cache/codex-runt
     assert.equal(await a.evaluate(() => AccountManager.cloud), true, 'HTTP service must activate real server accounts');
     await addTask(a, 'guest-private');
     const guestTasks = await a.evaluate(() => todayTasks.map(t => t.name));
-    await a.evaluate(() => AccountManager.register('cloud-alice', 'cloud-password-123', false));
+    await a.evaluate(() => go('mine'));
+    await a.getByRole('button', {name: '登录 / 注册', exact: true}).click();
+    await a.locator('input[name=username]').fill('cloud-alice');
+    await a.locator('input[name=password]').fill('cloud-password-123');
+    await a.getByRole('button', {name: '注册新账号', exact: true}).click();
+    await a.waitForFunction(() => AccountManager.activeUser?.username === 'cloud-alice');
     assert.deepEqual(await a.evaluate(() => todayTasks), [], 'guest import must require explicit opt-in');
     await addTask(a, 'server-task');
     await a.evaluate(() => AccountManager.flush());
@@ -57,7 +62,10 @@ const {chromium} = require(path.join(process.env.USERPROFILE, '.cache/codex-runt
     await assert.rejects(() => b.evaluate(() => AccountManager.flush()));
     assert.equal(await b.evaluate(() => AccountManager.syncStatus), 'conflict');
     assert.equal(await b.evaluate(() => AccountManager.persist()), false, 'blocked conflict must not report a successful save');
-    await b.evaluate(() => AccountManager.reloadCloud());
+    await b.evaluate(() => go('mine'));
+    b.once('dialog', dialog => dialog.accept());
+    await b.getByRole('button', {name: '重新载入云端', exact: true}).click();
+    await b.waitForFunction(() => AccountManager.syncStatus === 'synced');
     assert.deepEqual(await b.evaluate(() => todayTasks.map(t => t.name)), ['server-task', 'offline-task']);
     assert.ok(await b.evaluate(() => localStorage.getItem('claw-time.cloud.backup:' + AccountManager.activeUser.id)));
     console.log('PASS stale device cannot overwrite cloud data; reload retains a local backup');

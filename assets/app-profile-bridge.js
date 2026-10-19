@@ -224,7 +224,9 @@
     global[name] = function () { const result = original.apply(this, arguments); if (!restoring) { updateStatistics(); persist(); } return result; };
   });
   let queued = false;
-  function scheduleSave() {
+  function scheduleSave(event) {
+    // Account controls persist explicitly; rerendering on pointerup cancels their click.
+    if (event?.target?.closest?.('#account-card,.account-dialog')) return;
     if (queued || restoring || !initialized) return;
     queued = true; queueMicrotask(() => { queued = false; if (!restoring) { updateStatistics(); persist(); } });
   }

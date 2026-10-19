@@ -23,7 +23,7 @@
     persist() {
       if (switching) return !api.cloud;
       if (!initialized) return false;
-      try { store.save(bridge.getState()); message = ''; failed = false; api.render(); return true; }
+      try { const hadMessage = message || failed; store.save(bridge.getState()); message = ''; failed = false; if (hadMessage) api.render(); return true; }
       catch (error) { report(error.code === 'PROFILE_CONFLICT' ? error : new Error('保存失败：本机存储不可用或空间不足，请保留当前页面后重试。'), true); return false; }
     },
     scopeKey(base) { return base + ':profile:' + (store && store.user ? store.user.id : 'guest'); },
