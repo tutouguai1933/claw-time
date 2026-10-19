@@ -1,0 +1,176 @@
+[
+  {
+    "pet": 0,
+    "expr": 0,
+    "width": 260,
+    "height": 242,
+    "holes": []
+  },
+  {
+    "pet": 0,
+    "expr": 1,
+    "width": 262,
+    "height": 246,
+    "holes": []
+  },
+  {
+    "pet": 0,
+    "expr": 2,
+    "width": 263,
+    "height": 247,
+    "holes": []
+  },
+  {
+    "pet": 1,
+    "expr": 0,
+    "width": 260,
+    "height": 253,
+    "holes": []
+  },
+  {
+    "pet": 1,
+    "expr": 1,
+    "width": 263,
+    "height": 255,
+    "holes": []
+  },
+  {
+    "pet": 1,
+    "expr": 2,
+    "width": 264,
+    "height": 254,
+    "holes": []
+  },
+  {
+    "pet": 2,
+    "expr": 0,
+    "width": 259,
+    "height": 253,
+    "holes": []
+  },
+  {
+    "pet": 2,
+    "expr": 1,
+    "width": 263,
+    "height": 257,
+    "holes": []
+  },
+  {
+    "pet": 2,
+    "expr": 2,
+    "width": 263,
+    "height": 253,
+    "holes": []
+  },
+  {
+    "pet": 3,
+    "expr": 0,
+    "width": 237,
+    "height": 283,
+    "holes": [
+      {
+        "left": 149,
+        "right": 195,
+        "top": 182,
+        "bottom": 209,
+        "area": 525
+      }
+    ]
+  },
+  {
+    "pet": 3,
+    "expr": 1,
+    "width": 243,
+    "height": 284,
+    "holes": [
+      {
+        "left": 154,
+        "right": 201,
+        "top": 184,
+        "bottom": 211,
+        "area": 515
+      }
+    ]
+  },
+  {
+    "pet": 3,
+    "expr": 2,
+    "width": 239,
+    "height": 284,
+    "holes": [
+      {
+        "left": 151,
+        "right": 196,
+        "top": 184,
+        "bottom": 211,
+        "area": 496
+      }
+    ]
+  },
+  {
+    "pet": 4,
+    "expr": 0,
+    "width": 252,
+    "height": 265,
+    "holes": [
+      {
+        "left": 182,
+        "right": 205,
+        "top": 162,
+        "bottom": 187,
+        "area": 261
+      }
+    ]
+  },
+  {
+    "pet": 4,
+    "expr": 1,
+    "width": 256,
+    "height": 273,
+    "holes": [
+      {
+        "left": 186,
+        "right": 209,
+        "top": 168,
+        "bottom": 194,
+        "area": 271
+      }
+    ]
+  },
+  {
+    "pet": 4,
+    "expr": 2,
+    "width": 252,
+    "height": 267,
+    "holes": [
+      {
+        "left": 180,
+        "right": 204,
+        "top": 164,
+        "bottom": 189,
+        "area": 274
+      }
+    ]
+  },
+  {
+    "pet": 5,
+    "expr": 0,
+    "width": 256,
+    "height": 258,
+    "holes": []
+  },
+  {
+    "pet": 5,
+    "expr": 1,
+    "width": 260,
+    "height": 257,
+    "holes": []
+  },
+  {
+    "pet": 5,
+    "expr": 2,
+    "width": 261,
+    "height": 259,
+    "holes": []
+  }
+]

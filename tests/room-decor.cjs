@@ -1,0 +1,56 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {pathToFileURL}=require('node:url');
+const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
+let browser;
+(async()=>{
+ const root=path.resolve(__dirname,'..'),ids=['wand','yarn','bowl','mouse','cushion','plant','rug','moon','stars','raindrop','rainbow'];
+ for(const id of ids){const bytes=fs.readFileSync(path.join(root,'assets/decor-art',id+'.png'));assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.ok(bytes.length>1000);}
+ console.log('PASS 十一件场景材质PNG完整');
+ browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+ const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(pathToFileURL(path.join(root,'current_project.html')).href,{waitUntil:'domcontentloaded'});await page.evaluate(()=>AccountManager.ready);await page.evaluate(()=>artReady);
+ assert.deepEqual(await page.evaluate(()=>['圆地毯','绿植','月亮挂饰','暖橘抱枕'].map(n=>RoomDecor.get(n).layer)),['floor','back','wall','front']);
+ assert.ok(await page.evaluate(()=>RoomDecor.normalize({name:'圆地毯',y:10}).y>=72));
+ assert.ok(await page.evaluate(()=>RoomDecor.normalize({name:'月亮挂饰',y:90}).y<60));
+ console.log('PASS 地毯贴地、绿植在后、挂饰在墙、玩具在前');
+ const clipping=await page.evaluate(async()=>{
+  const base=HouseEditor.getSaved();base.enabled=true;base.decor=[];const empty=await HouseEditor.compose(base,1,0);
+  base.decor=[{id:0,name:'绿植',x:80,y:45,w:16,h:18}];const planted=await HouseEditor.compose(base,1,0);
+  const count=(x,y,w,h)=>{const a=empty.getContext('2d').getImageData(x,y,w,h).data,b=planted.getContext('2d').getImageData(x,y,w,h).data;return a.reduce((sum,v,i)=>sum+(v!==b[i]),0);};
+  return {leaves:count(610,630,110,100),belowSill:count(600,840,120,70)};
+ });
+ assert.ok(clipping.leaves>0);assert.equal(clipping.belowSill,0);
+ console.log('PASS 窗台绿植露出叶片，下面部分被遮挡');
+ const moonSource='data:image/png;base64,'+fs.readFileSync(path.join(root,'assets/decor-art/moon.png')).toString('base64');
+ const moon=await page.evaluate(async source=>{
+  const im=new Image();im.src=source;await im.decode();const p={name:'月亮挂饰',x:10,y:5,w:20,h:20};
+  const render=async(time,light)=>{const c=document.createElement('canvas');c.width=750;c.height=1400;await RoomDecor.draw(c.getContext('2d'),p,{load:()=>Promise.resolve(im),time,light});return c.toDataURL();};
+  return [(await render(1,'none'))===(await render(2,'brightness(.48) saturate(.78)'))];
+ },moonSource);
+ assert.equal(moon[0],false);console.log('PASS 月亮挂饰随光照变化');
+ await page.evaluate(async()=>{const s=HouseEditor.getSaved();s.enabled=true;s.decor=[{id:0,name:'暖橘抱枕',x:35,y:78,w:18,h:10}];HouseEditor.restore(s);await HouseEditor.sync();homePicks=[0,1,2,3];curPet=0;homeFixed=true;go('home');renderHome();});
+ const oldX=await page.evaluate(()=>HouseEditor.getSaved().decor[0].x);
+ await page.evaluate(()=>{window.kick=RoomDecor.interact(crowdDogs[0],crowdDogs[1],{destinations:[{x:27,y:78},{x:29,y:78}],isCurrent:()=>true});});
+ await page.waitForSelector('.room-cushion-motion');
+ const start=await page.locator('.room-cushion-motion').evaluate(e=>parseFloat(getComputedStyle(e).left));await page.waitForTimeout(800);
+ const during=await page.locator('.room-cushion-motion').evaluate(e=>({left:parseFloat(getComputedStyle(e).left),duration:getComputedStyle(e).transitionDuration}));
+ assert.ok(during.duration.split(',').every(d=>d.trim()==='5.8s'));assert.ok(during.left>start);assert.equal(await page.evaluate(()=>HouseEditor.getSaved().decor[0].x),oldX);
+ assert.equal(await page.evaluate(()=>window.kick),true);assert.ok(await page.evaluate(()=>HouseEditor.getSaved().decor[0].x>35));
+ assert.equal(await page.locator('.room-cushion-motion').count(),0);
+ console.log('PASS 小狗缓慢推动抱枕，完成后才保存新位置');
+ const settled=await page.evaluate(()=>HouseEditor.getSaved().decor[0].x);
+ await page.evaluate(async()=>{await AccountManager.register('抱枕甲','pillow-a-123');TableShadow.select(4);await HouseEditor.sync();renderHome();PetInteractions.encounter(crowdDogs[2],crowdDogs[1],$('pet-crowd'));});
+ await page.waitForSelector('.room-cushion-motion');
+ await page.evaluate(()=>AccountManager.register('抱枕乙','pillow-b-123'));
+ assert.equal(await page.locator('.room-cushion-motion').count(),0);
+ await page.waitForTimeout(6500);
+ assert.equal(await page.evaluate(()=>HouseEditor.getSaved().decor.length),0);
+ assert.equal(await page.locator('#table-shadow').getAttribute('data-shadow'),'0');
+ await page.evaluate(()=>AccountManager.login('抱枕甲','pillow-a-123'));
+ assert.equal(await page.evaluate(()=>HouseEditor.getSaved().decor[0].x),settled);
+ assert.equal(await page.locator('#table-shadow').getAttribute('data-shadow'),'4');
+ console.log('PASS 真实相遇触发抱枕，中途换账号取消移动且影子独立');
+ await page.evaluate(()=>{RoomDecor.reset();HouseEditor.restore(null);});assert.equal(await page.locator('.room-cushion-motion').count(),0);
+ assert.deepEqual(errors,[]);console.log('PASS 取消/账号恢复清理移动，无运行异常');
+ await browser.close();
+})().catch(async e=>{console.error(e);if(browser)await browser.close();process.exitCode=1;});

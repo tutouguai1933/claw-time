@@ -1,0 +1,26 @@
+const assert=require('node:assert/strict'),path=require('node:path'),{pathToFileURL}=require('node:url');
+const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
+(async()=>{const b=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});try{
+ const p=await b.newPage({viewport:{width:390,height:844}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.addInitScript(()=>{window.intervals=[];const old=window.setInterval;window.setInterval=function(f,ms,...args){intervals.push(ms);return old(f,ms,...args);};});
+ await p.goto(pathToFileURL(path.resolve(__dirname,'../current_project.html')).href,{waitUntil:'domcontentloaded'});await p.evaluate(()=>AccountManager.ready);await p.evaluate(()=>artReady);
+ assert.ok(await p.evaluate(()=>!intervals.includes(38000)&&!intervals.includes(36000)&&!intervals.includes(17000)&&!intervals.includes(10500)),'old slow fixed timers are replaced with independent room clocks');
+ assert.deepEqual(await p.evaluate(()=>[PetRoom.cadence.meetingMinMs,PetRoom.cadence.meetingMaxMs,PetRoom.cadence.idleMinMs,PetRoom.cadence.idleMaxMs]),[6500,10000,4000,7000],'meetings and small walks use a visible but gentle cadence');
+ await p.evaluate(()=>{go('home');curPet=0;homeFixed=true;homePicks=[0,1,2,3,8];renderHome();focusing=true;PetInteractions.configure({random:()=>.2});window.quietActors=crowdDogs.slice(0,2);window.quietWalkingStates=[];window.quietObserver=new MutationObserver(()=>quietWalkingStates.push(quietActors.map(c=>c.el.dataset.petWalking==='true').join(',')));quietObserver.observe($('pet-crowd'),{subtree:true,attributes:true,attributeFilter:['data-pet-walking']});window.quietTrip=PetRoom.meet(quietActors,$('pet-crowd'),{zone:'floor'});});
+ await p.waitForFunction(()=>quietActors.every(c=>c.el.dataset.petWalking==='true'));
+ assert.ok(await p.evaluate(()=>quietWalkingStates.includes('true,false')),'the actual first start is observed while the other companion is still waiting');await p.evaluate(()=>quietObserver.disconnect());
+ assert.equal(await p.evaluate(()=>quietActors.every(c=>c.el.dataset.petWalking==='true')),true);
+ assert.equal(await p.evaluate(()=>new Set(quietActors.map(c=>getComputedStyle(c.el.querySelector('.dressed')).animationDuration)).size),2,'each walker has its own step rhythm');
+ await p.evaluate(()=>PetInteractions.reset());
+ await p.evaluate(()=>{window.heroVisit=PetRoom.visitHero(crowdDogs[0],$('pet-crowd'));});
+ assert.ok(await p.evaluate(()=>!!heroVisit));await p.waitForFunction(()=>heroVisit.actors[0].el.dataset.petRoomPhase==='meeting');
+ assert.ok((await p.locator('#home-bubble').textContent()).length>0);assert.equal(await p.locator('#home-sprite-wrap .dressed').evaluate(e=>Math.round(e.getBoundingClientRect().width)),110,'hero retains full size during pair reactions');
+ assert.equal(await p.evaluate(()=>Math.abs(parseFloat($('home-sprite-wrap').style.left)||0)),0,'greeting never moves the hero to companion coordinates');
+ await p.evaluate(()=>PetInteractions.reset());
+ const drift=await p.evaluate(()=>{focusing=false;return Array.from({length:30},()=>{PetRoom.wanderHero(true);const transform=$('home-sprite-wrap').style.transform;return Number(transform.match(/translateX\(([-.\d]+)/)?.[1]||0);});});
+ assert.ok(drift.some(x=>x!==0));assert.ok(drift.every(x=>Math.abs(x)<=18),'hero wanders only a little around the middle');
+ await p.evaluate(()=>PetInteractions.reset());assert.equal(await p.locator('#home-sprite-wrap').evaluate(e=>e.style.transform),'');
+ assert.equal(await p.locator('#balcony-fish,.fish-tank,.balcony-companion').count(),0,'old home picks cannot create a fish or tank');
+ assert.equal(await p.locator('#home-sprite-wrap').evaluate(e=>getComputedStyle(e).visibility),'visible','ordinary companion stays visible after quiet interactions');
+ assert.deepEqual(errors,[]);console.log('PASS quiet room: independent livelier cadence, staggered starts/steps, full-size hero greetings, bounded drift, cancellation and retired fish exclusion');
+}finally{await b.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

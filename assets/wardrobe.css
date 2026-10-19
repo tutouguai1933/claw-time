@@ -1,0 +1,33 @@
+#view-dress.dressing-pet .back-nav{margin-bottom:4px}
+#view-dress.dressing-pet h2.page-title{margin:4px 2px 8px}
+#view-dress.dressing-pet .dress-tabs.main{margin-bottom:6px}
+#dress-pet .pet-pick{padding:3px 2px 6px;margin-bottom:4px}
+#dress-pet .pet-pick .pp{padding:5px 9px 4px}
+.wardrobe-preview{position:sticky;top:0;z-index:20;background:var(--cream);border-radius:20px}
+#dress-pet #pet-show{margin-bottom:5px;min-height:220px!important;padding:42px 0 24px!important}
+#dress-pet .raincoat-colors{margin-bottom:6px;min-height:29px;gap:8px}
+.wardrobe-filters{display:flex;gap:6px;overflow-x:auto;margin:8px 0 6px;scrollbar-width:none}
+.wardrobe-filters button{flex:0 0 auto;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--wood);font-family:inherit;font-size:11px;font-weight:700;line-height:1.4;padding:5px 9px;cursor:pointer;white-space:nowrap}
+.wardrobe-filters button[aria-pressed=true]{background:#FFE3CC;border-color:#EEA373;color:#92562F}
+#outfit-wear{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:rgb(255,158,100) #F5E5D5;padding:4px 2px 7px;touch-action:pan-x pan-y}
+#outfit-wear::-webkit-scrollbar{height:6px}
+#outfit-wear::-webkit-scrollbar-track{background:#F5E5D5;border-radius:6px}
+#outfit-wear::-webkit-scrollbar-thumb{background:#FF9E64;border-radius:6px}
+#outfit-wear .outfit-item{flex:0 0 86px;width:86px;min-height:104px;box-sizing:border-box;padding:9px 3px 6px;font-family:inherit;scroll-snap-align:start;border-radius:15px;gap:4px;opacity:1}
+#outfit-wear .outfit-item .of-ic{height:42px;display:flex;align-items:center;justify-content:center}
+#outfit-wear .outfit-item .of-name{font-size:10px;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis}
+#outfit-wear .outfit-item.locked{background:#FFFDF9;border-style:dashed}
+#outfit-wear .outfit-item.wearing{border-style:solid;background:#FFF0E2}
+#outfit-wear .of-price{font-size:10px;line-height:14px}
+.wardrobe-scrollbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 7px;font-size:10px;color:var(--wood)}
+.wardrobe-scrollbar button{width:26px;height:24px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--wood);cursor:pointer;font-size:15px;line-height:1}
+#dress-pet{padding-bottom:74px}
+#view-dress.dressing-pet #dress-pet .pet-actions{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;z-index:40;background:var(--cream);padding:7px 0;margin:0;box-shadow:0 -8px 12px var(--cream)}
+.wardrobe-note{margin:3px 2px 0;font-size:10px;color:var(--gray);line-height:1.6}
+#wardrobe-checkout{z-index:1400}
+.wardrobe-checkout-sheet{max-height:80dvh;overflow-y:auto;padding:22px}
+.wardrobe-checkout-sheet h3{font-size:18px;margin:0 0 16px}
+.wardrobe-checkout-row{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.wardrobe-checkout-note{font-size:12px;color:var(--wood);line-height:1.8;margin:14px 0}
+.wardrobe-checkout-sheet>.btn{width:100%;margin-top:8px}
+.wardrobe-checkout-sheet>.btn:disabled{opacity:.5;cursor:default}

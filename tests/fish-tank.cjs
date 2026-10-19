@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict'),path=require('node:path'),{pathToFileURL}=require('node:url');
+const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
+(async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});try{
+ const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],requests=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+ await page.goto(pathToFileURL(path.resolve(__dirname,'../current_project.html')).href,{waitUntil:'domcontentloaded'});await page.evaluate(()=>AccountManager.ready);await page.evaluate(()=>artReady);
+ await page.evaluate(()=>{const state=AppProfileBridge.createDefaultState();state.curPet=8;state.dressPet=8;state.extraUnlock[2]=1;state.homeFixed=true;state.homePicks=[0,1,8,9];state.petOutfits={8:['今天我生日']};AppProfileBridge.setState(state);go('home');});
+ const noTank=async()=>assert.equal(await page.locator('#balcony-fish,#overview-fish,.balcony-companion,.fish-tank,.fish-swimmer,.fish-resident').count(),0,'retired fish and tank have no rendered surface');
+ await noTank();
+ assert.equal(await page.evaluate(()=>curPet),0);assert.equal(await page.evaluate(()=>dressPet),0);
+ assert.equal(await page.locator('#home-sprite-wrap').evaluate(e=>getComputedStyle(e).visibility),'visible');
+ await page.evaluate(async()=>{const s=HouseEditor.getSaved();s.enabled=true;s.replaced=['back','left'];HouseEditor.restore(s);await HouseEditor.sync();});await noTank();
+ await page.evaluate(()=>openOverview());await noTank();
+ assert.ok(await page.locator('#ov-crowd .cr').count()>0,'overview still contains ordinary companions');
+ await page.evaluate(()=>dismissSheet($('overview')));
+ await page.emulateMedia({reducedMotion:'reduce'});await noTank();
+ await page.setViewportSize({width:850,height:500});await noTank();
+ await page.evaluate(()=>{go('dress');renderPetPick();renderPetDress();});
+ assert.equal(await page.locator('#pet-show .fish-tank,#pet-pick [data-pet-id="8"]').count(),0);
+ assert.equal(await page.evaluate(()=>typeof window.FishCompanion),'undefined','fish renderer is no longer loaded');
+ assert.equal(requests.some(url=>/fish-companion\.js|companion-art\/fish-v2/.test(url)),false,'active page never requests archived fish assets');
+ assert.deepEqual(errors,[]);console.log('PASS fish retirement: home, replacement furniture, overview, resizing, reduced motion and wardrobe remain free of fish/tank assets');
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

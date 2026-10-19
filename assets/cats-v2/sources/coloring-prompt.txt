@@ -1,0 +1,21 @@
+# Built-in image_gen / precise-object-edit
+
+## First edit
+
+Use case: precise-object-edit.
+Edit target: the provided transparent 6 columns × 3 rows atlas of 18 hand-drawn cats. Edit exactly this image. Preserve the precise layout, silhouette, size, black ink outlines, species identity, fur markings and body colors, ears, whiskers, mouths, all original expressions, and the transparent exterior. All white/cream fur and eye interiors must stay fully opaque. Do not add any characters or text.
+Make ONLY these local interior fill changes:
+1. On EVERY ONE of the 18 cats, fill the interiors of BOTH small oval eyebrows above the eyes with a clearly visible warm medium-dark brown (#80502d, close to #6c4326). Keep their thick black outlines. These are the TWO little closed oval shapes on the forehead, not the eyes below them. Some eyebrow interiors were white or charcoal: they must all visibly become brown.
+2. On EVERY ONE of the 18 cats, fill the small triangular/rounded nose INTERIOR with the same warm brown (#80502d). Preserve the thick black outline, mouth and stem. This includes the black-fur cat: its nose interior must be clearly brown rather than black/gray.
+3. Recolor only the interior iris parts of existing OPEN eyes. Retain original eye shape, dark pupils, tiny white highlights and eyelid expression. Column 1 calico: amber golden yellow-brown (#d9a536). Column 2 white cat: light blue (#70b9e7). Column 3 black cat: clear light blue (#70b9e7). Column 4 black-and-white masked cat: yellow (#e0b836). Column 5 spotted cream/gray cat: warm brown (#9c6138). Column 6 orange tabby: blue (#70b9e7). In star-shaped open eyes fill the eye color around preserved bright highlights.
+4. Specifically the calico in column 1 ROW 2 has a STAR-SHAPED eye on the LEFT as viewed. Keep that exact star silhouette and fill its interior bright YELLOW (#f2d143). Its right-side closed wink remains the same black chevron. Closed-eye arcs, crosses, chevrons, dots, sleeping eyes stay closed: do not invent new eyeballs or change the expression. The cream cat column 2 row 3 stays sleeping.
+Critical: do not repaint or recolor broad areas. Only eyebrow interiors, nose interiors, existing iris interiors, and that one yellow star. Keep original atlas resolution and all 18 full-body cats aligned and separate. Background must be actual transparent alpha, not white/checkerboard.
+
+## Targeted correction (input: first-edit.png)
+
+Use case: precise-object-edit. Input is the EXACT EDIT TARGET transparent 6-column, 3-row cat atlas. Preserve it almost entirely.
+Only TWO local corrections:
+A. In COLUMN FIVE from the left (the cream/gray SPOTTED cat), ROW TWO AND ROW THREE, fill the existing visible eye interiors with rich warm BROWN (#9c6138), matching that same cat's top-row eyes. Their visible eyes are the TWO sideways drooping, half-closed shapes immediately below the pair of small brown oval eyebrows. Keep the original black lids and outlines and nose. Do not mistake the eyebrows for eyes. Both upper eye interior areas inside the thick eyelid outlines must visibly brown rather than blank cream. Preserve the sleepy half-closed expression and dark pupils where present. Do not recolor the lower muzzle/fur.
+B. On the WHITE CAT COLUMN TWO ROW TWO, preserve the LIGHT BLUE eye iris regions inside its two round eyes, but restore the two long vertical tear streams BELOW the eyes to original opaque cream white (#fff4e4). Only the iris within each eye circle should remain blue. Preserve tear outlines and expression.
+Everything else MUST stay exactly the same as the target: all 18 brown noses and two brown eyebrows each; all other eye colors (column 1 amber, column 2 blue, column 3 blue, column 4 yellow, column 5 brown, column 6 blue); column 1 row 2 left star eye bright yellow; closed eyes remain closed; all body fills, fur marks, white interiors, character placement, sizes, full-body shapes, black ink and transparent exterior remain unchanged. No added objects, text, borders, background, or redesign. Actual transparent alpha background.
+

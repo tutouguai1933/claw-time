@@ -1,0 +1,36 @@
+{
+  "version": 4,
+  "tool": "built-in image_gen",
+  "source": "assets/scene-clean/room.png",
+  "sourceOriginal": "assets/scenes/original-room-1-0.png",
+  "retainedOriginal": "Both original scene files remain unchanged; original cushion pixels are composited at y+18.",
+  "backup": "assets/house-art/archive-cushion-v4/pad-1-flower.png",
+  "floorRepair": {
+    "file": "pad-floor-repair.png",
+    "position": [
+      278,
+      890
+    ],
+    "size": [
+      230,
+      200
+    ],
+    "prompt": "Use case: precise-object-edit. Edit target: the provided warm illustrated cat room assets/scene-clean/room.png. Remove ONLY the small round yellow floor cushion in the lower center foreground, including its oval cast shadow. Continue the pale warm rug, its diagonal beam of sunlight, and any tiny ladder segment naturally behind the removed cushion. Keep EVERYTHING ELSE unchanged: identical camera, room geometry, windows, climbing tree, small cat house and ladder on left, sofa on right, wooden floor, flat geometric pastel illustration, light direction and colors. Do not redesign furniture, do not move scene objects, no added objects or decoration, no text. The cushion and its shadow are the only thing to remove. Full room image retained exactly in framing."
+  },
+  "replacement": {
+    "file": "pad-1.png",
+    "prompt": "Use case: background-extraction. Reference image: the original warm pastel cat room. Deliver ONLY the original small round yellow floor cushion from the lower-center of this room, isolated on a genuinely transparent background. Keep the cushion's exact simple original design: low squat circular ottoman seen from a gently elevated front angle, wide ellipse top, pale buttery cream top with a single broad geometric patch of soft sunlight, muted ochre-yellow shallow side wall, thin cream piping at top/side join. Width around twice visible height. Gentle flat geometric hand-painted children's illustration, subtle grain, matching reference palette. Natural small muted olive-gray oval floor shadow directly underneath, soft and light. No floor or carpet pixels. No flowers, petals, buttons, tufting, stitches, ribbons, pattern, outlines, legs, extra objects, text, watermark, checkerboard. One centered object, tightly framed with transparent padding around it. Restore the authentic simple original cushion shape and lighting as closely as possible."
+  },
+  "placement": {
+    "nativeShiftPixels": 18,
+    "slotBox": [
+      37,
+      64.2857142857,
+      30,
+      14
+    ]
+  },
+  "status": "archived; unused by runtime",
+  "runtimeActive": false,
+  "supersededBy": "Original cushion is fixed in its original position; cushion replacement and movement are disabled."
+}

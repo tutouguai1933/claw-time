@@ -1,0 +1,23 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "mode": "edit",
+  "outputs": [
+    {
+      "asset": "room.png",
+      "prompt": "Use case: precise-object-edit. This is a tightly cropped 400 by 150 pixel corner of an illustration. Remove ONLY the white overlaid text '豆包AI生成' at the center-bottom. Fill the letters with exactly matching underlying pale yellow wooden floor on the left and sage-green shadow floor on the right. Preserve the precise diagonal boundary of the green shadow and its exact angle. Keep all original colors, smooth subtle paper grain and brightness. Do not change framing, aspect ratio, shadow position or background. No text remains. Return the same crop only.",
+      "editInput": "400×150 native-resolution lower-right corner of assets/scenes/original-room-1-0.png",
+      "generation": "exec-b5f42058-1fb7-4942-a839-b03c2fa7c613.png"
+    },
+    {
+      "asset": "focus-table.png",
+      "prompt": "Use case: precise-object-edit. This is a tightly cropped 400 by 150 pixel corner of a sunny dining-room illustration. Remove ONLY the white overlaid text '豆包AI生成'. Fill the letter shapes seamlessly with exactly matching underlying orange wooden floor and deep reddish brown diagonal table leg. Preserve the precise placement, angle, width and sharp boundaries of the reddish brown leg that passes behind the middle of the text; preserve the narrow darker plank seams in the orange floor. Keep all original colors, grain and brightness. Do not change framing, aspect ratio, leg geometry or background. Return the same crop only, no text remains.",
+      "editInput": "400×150 native-resolution lower-right corner of assets/scenes/focus-table.png",
+      "generation": "exec-4e06cf48-6f1a-4bcc-b46f-d0027137c12a.png"
+    },
+    {
+      "asset": "newyear.png",
+      "prompt": null,
+      "note": "No watermark found. Unmodified source copy."
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "generator": "built-in image_gen",
+  "atlas": "atlas.png",
+  "columns": 4,
+  "rows": 3,
+  "alphaThreshold": 8,
+  "padding": 8,
+  "packing": "Largest 8-connected alpha>8 subject assigned by bbox center to each grid cell. Full connected bbox retained where original art crosses grid lines; source pixels/alpha unchanged; 8px transparent margin.",
+  "atlasWidth": 1448,
+  "atlasHeight": 1086,
+  "items": [
+    {
+      "id": "wand",
+      "file": "wand.png",
+      "width": 304,
+      "height": 324,
+      "sourceCell": {
+        "row": 0,
+        "col": 0,
+        "left": 0,
+        "top": 0,
+        "right": 362,
+        "bottom": 362
+      },
+      "sourceCrop": {
+        "x": 41,
+        "y": 49,
+        "width": 288,
+        "height": 308
+      }
+    },
+    {
+      "id": "yarn",
+      "file": "yarn.png",
+      "width": 331,
+      "height": 252,
+      "sourceCell": {
+        "row": 0,
+        "col": 1,
+        "left": 362,
+        "top": 0,
+        "right": 724,
+        "bottom": 362
+      },
+      "sourceCrop": {
+        "x": 404,
+        "y": 113,
+        "width": 315,
+        "height": 236
+      }
+    },
+    {
+      "id": "bowl",
+      "file": "bowl.png",
+      "width": 301,
+      "height": 224,
+      "sourceCell": {
+        "row": 0,
+        "col": 2,
+        "left": 724,
+        "top": 0,
+        "right": 1086,
+        "bottom": 362
+      },
+      "sourceCrop": {
+        "x": 774,
+        "y": 135,
+        "width": 285,
+        "height": 208
+      }
+    },
+    {
+      "id": "mouse",
+      "file": "mouse.png",
+      "width": 301,
+      "height": 187,
+      "sourceCell": {
+        "row": 0,
+        "col": 3,
+        "left": 1086,
+        "top": 0,
+        "right": 1448,
+        "bottom": 362
+      },
+      "sourceCrop": {
+        "x": 1129,
+        "y": 154,
+        "width": 285,
+        "height": 171
+      }
+    },
+    {
+      "id": "cushion",
+      "file": "cushion.png",
+      "width": 341,
+      "height": 295,
+      "sourceCell": {
+        "row": 1,
+        "col": 0,
+        "left": 0,
+        "top": 362,
+        "right": 362,
+        "bottom": 724
+      },
+      "sourceCrop": {
+        "x": 29,
+        "y": 427,
+        "width": 325,
+        "height": 279
+      }
+    },
+    {
+      "id": "plant",
+      "file": "plant.png",
+      "width": 301,
+      "height": 329,
+      "sourceCell": {
+        "row": 1,
+        "col": 1,
+        "left": 362,
+        "top": 362,
+        "right": 724,
+        "bottom": 724
+      },
+      "sourceCrop": {
+        "x": 416,
+        "y": 387,
+        "width": 285,
+        "height": 313
+      }
+    },
+    {
+      "id": "rug",
+      "file": "rug.png",
+      "width": 391,
+      "height": 131,
+      "sourceCell": {
+        "row": 1,
+        "col": 2,
+        "left": 724,
+        "top": 362,
+        "right": 1086,
+        "bottom": 724
+      },
+      "sourceCrop": {
+        "x": 739,
+        "y": 548,
+        "width": 375,
+        "height": 115
+      }
+    },
+    {
+      "id": "moon",
+      "file": "moon.png",
+      "width": 215,
+      "height": 330,
+      "sourceCell": {
+        "row": 1,
+        "col": 3,
+        "left": 1086,
+        "top": 362,
+        "right": 1448,
+        "bottom": 724
+      },
+      "sourceCrop": {
+        "x": 1197,
+        "y": 393,
+        "width": 199,
+        "height": 314
+      }
+    },
+    {
+      "id": "stars",
+      "file": "stars.png",
+      "width": 96,
+      "height": 332,
+      "sourceCell": {
+        "row": 2,
+        "col": 0,
+        "left": 0,
+        "top": 724,
+        "right": 362,
+        "bottom": 1086
+      },
+      "sourceCrop": {
+        "x": 152,
+        "y": 719,
+        "width": 80,
+        "height": 316
+      }
+    },
+    {
+      "id": "raindrop",
+      "file": "raindrop.png",
+      "width": 133,
+      "height": 324,
+      "sourceCell": {
+        "row": 2,
+        "col": 1,
+        "left": 362,
+        "top": 724,
+        "right": 724,
+        "bottom": 1086
+      },
+      "sourceCrop": {
+        "x": 479,
+        "y": 721,
+        "width": 117,
+        "height": 308
+      }
+    },
+    {
+      "id": "rainbow",
+      "file": "rainbow.png",
+      "width": 269,
+      "height": 310,
+      "sourceCell": {
+        "row": 2,
+        "col": 2,
+        "left": 724,
+        "top": 724,
+        "right": 1086,
+        "bottom": 1086
+      },
+      "sourceCrop": {
+        "x": 784,
+        "y": 746,
+        "width": 253,
+        "height": 294
+      }
+    }
+  ]
+}

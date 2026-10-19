@@ -1,0 +1,70 @@
+{
+  "generator": "built-in image_gen",
+  "reference": "../scenes/original-room-0-0.png",
+  "backgroundPrompt": "Use case: precise-object-edit. Edit target: the supplied room illustration. Remove ALL FOUR pieces of movable furniture completely: the small cat-house climbing stand at far left (including its hanging ball and little ladder), the huge tall cat tree in the back left/center (including crown top, cylinder, every platform and big ladder), the sofa on the right including green pillow, and the round floor cushion in front. Also remove their cast shadows and any snow resting on those removed objects. Reconstruct the empty peach wall, the already existing large wooden window, its existing outdoor sky/weather/clouds/stars, floor boards and the flat rectangular pale mint rug behind the removed objects. Preserve the EXACT original perspective, window position/size/dividers, wall-floor boundary, room framing, time of day, original colors, exterior weather and atmospheric lighting. Keep the original hand-painted flat-shape warm pastel illustration style, subtle paper texture. It is an EMPTY ROOM background for compositing furniture later. No new objects, furniture, people or animals. No text or watermark. Keep full portrait aspect ratio approximately 750:1400. Window view must match this specific source.",
+  "backgroundSources": [
+    {
+      "name": "room-0-0",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-0-0.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-5704b2db-2d3f-419e-a230-55f92bbb817d.png"
+    },
+    {
+      "name": "room-0-1",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-0-1.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-607f4822-4046-4170-b13e-302266a59446.png"
+    },
+    {
+      "name": "room-0-2",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-0-2.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-579189c6-f60f-44ce-a88e-f91e2df31c5f.png"
+    },
+    {
+      "name": "room-1-0",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-1-0.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-fe168df6-4b0e-4d66-9e45-fbdf16e7355f.png"
+    },
+    {
+      "name": "room-1-1",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-1-1.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-e18510d7-3f5d-4b1b-b625-43f50eefa66e.png"
+    },
+    {
+      "name": "room-1-2",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-1-2.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-152cef66-3152-4d28-a32c-3eaa96a554c8.png"
+    },
+    {
+      "name": "room-2-0",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-2-0.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-cdfeb5f4-3e7a-4646-975a-c87441efef79.png"
+    },
+    {
+      "name": "room-2-1",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-2-1.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-e4c2e562-9417-4b09-839f-2a0d53b1156e.png"
+    },
+    {
+      "name": "room-2-2",
+      "reference": "D:/ProjectFile/codex_projects/qingpeiban/assets/scenes/original-room-2-2.png",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-a91699d0-6d6b-4b4a-8935-72230dcda8cf.png"
+    }
+  ],
+  "furniturePrompts": {
+    "left": {
+      "prompt": "Create one game furniture sprite sheet with exactly THREE independent complete furniture objects, one per equally wide column, in ONE horizontal row, fully separated by TRANSPARENT gaps. Output genuine alpha transparency, not white or a checkerboard. Input image is STYLE AND CAMERA REFERENCE ONLY, not an edit target, do not reproduce entire room. STRICTLY match the room's SIMPLE FLAT PLANAR hand-painted children's illustration: big clean solid pastel color planes, very simplified geometric forms, tiny subtle paper grain, simple two-tone flat cel shadows on the object only. NO realistic wood grain, NO realistic 3D model, NO bevel render, NO volumetric shading, NO reflections, NO glows, NO photographic lighting. Clean crisp alpha edges, no white/yellow fringe or loose specks. No cast shadow outside object. All three silhouettes wholly inside their cells with safe transparent margin. No scene/background/floor/wall, no animals/people/text/labels/watermark. Similar camera as reference, slight view of top surfaces, front with visible right side. Palette natural light wood, cream, muted sage and mint. Each of the THREE columns must have a DISTINCT STRUCTURE, not recolor of same object. Three SMALL tall cat-house stands, each silhouette width:height about .5, complete feet. LEFT: a rectangular cubby with arched doorway, four legs, side ladder and roof platform with a hanging ball rail. CENTER: an arched-top small cat cottage on four slender legs, a short side stair, simple rounded roof perch. RIGHT: an A-frame triangular-roof little cat house on a narrow raised platform, a round entrance, two low steps on right and one thin scratch pole on left. Each is a complete SMALL house only, not a tall full cat tree. Keep top-to-bottom heights equal.",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-66a2f1fd-b00e-47b2-9ad0-7c6c11812555.png"
+    },
+    "back": {
+      "prompt": "Create one game furniture sprite sheet with exactly THREE independent complete furniture objects, one per equally wide column, in ONE horizontal row, fully separated by TRANSPARENT gaps. Output genuine alpha transparency, not white or a checkerboard. Input image is STYLE AND CAMERA REFERENCE ONLY, not an edit target, do not reproduce entire room. STRICTLY match the room's SIMPLE FLAT PLANAR hand-painted children's illustration: big clean solid pastel color planes, very simplified geometric forms, tiny subtle paper grain, simple two-tone flat cel shadows on the object only. NO realistic wood grain, NO realistic 3D model, NO bevel render, NO volumetric shading, NO reflections, NO glows, NO photographic lighting. Clean crisp alpha edges, no white/yellow fringe or loose specks. No cast shadow outside object. All three silhouettes wholly inside their cells with safe transparent margin. No scene/background/floor/wall, no animals/people/text/labels/watermark. Similar camera as reference, slight view of top surfaces, front with visible right side. Palette natural light wood, cream, muted sage and mint. Each of the THREE columns must have a DISTINCT STRUCTURE, not recolor of same object. Three TALL slender cat trees, each width:height about .55 and identical overall height. LEFT: ONLY one tall cylindrical column with two round holes, a crown-shaped top, one broad midlevel platform, exactly two smaller platforms extending right, and one long ladder leaning up to the midlevel platform. Absolutely NO lower cat house/cubby and NO left small house—base consists only of thin posts and a narrow flat board. CENTER: an ARCH-BRIDGE TWIN TOWER cat tree, two tall round-topped posts holding a broad curved connecting bridge, with two staggered small steps and one slim hanging toy, base only narrow board. RIGHT: a LEAF TREE cat climbing frame, one slim trunk with three large simple leaf-shaped staggered platforms, top leaf crown, plain narrow base. Neither center nor right contains a cat house. All three flat simplified construction, no huge elaborate tower bases.",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-a5aa605e-efa5-4886-a2f3-6d8d9ad7c482.png"
+    },
+    "pad": {
+      "prompt": "Create one game furniture sprite sheet with exactly THREE independent complete furniture objects, one per equally wide column, in ONE horizontal row, fully separated by TRANSPARENT gaps. Output genuine alpha transparency, not white or a checkerboard. Input image is STYLE AND CAMERA REFERENCE ONLY, not an edit target, do not reproduce entire room. STRICTLY match the room's SIMPLE FLAT PLANAR hand-painted children's illustration: big clean solid pastel color planes, very simplified geometric forms, tiny subtle paper grain, simple two-tone flat cel shadows on the object only. NO realistic wood grain, NO realistic 3D model, NO bevel render, NO volumetric shading, NO reflections, NO glows, NO photographic lighting. Clean crisp alpha edges, no white/yellow fringe or loose specks. No cast shadow outside object. All three silhouettes wholly inside their cells with safe transparent margin. No scene/background/floor/wall, no animals/people/text/labels/watermark. Similar camera as reference, slight view of top surfaces, front with visible right side. Palette natural light wood, cream, muted sage and mint. Each of the THREE columns must have a DISTINCT STRUCTURE, not recolor of same object. Three LOW FLOOR CUSHIONS, each similarly sized and seen slightly above so top visible, no external shadow, no legs. LEFT: simple ROUND cream cylindrical padded pouf with sage piping. CENTER: a FIVE-PETAL FLOWER-SHAPED low floor cushion, muted blush petals with warm cream circular center, visible short side wall, unmistakable flower silhouette. RIGHT: a simple SQUARED ROUNDED-RECTANGLE mint floor cushion with a shallow center depression and cream piping. Each width:height about1.45. No prints or patterns.",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-c7849aed-eb32-4ffd-ba22-523a6a0e0dfc.png"
+    },
+    "sofa": {
+      "prompt": "Create a PNG game furniture sprite sheet: EXACTLY THREE DISTINCT LOW SOFT LOUNGE SEATS in a SINGLE HORIZONTAL ROW, one whole object per equally wide cell, generous transparent gaps. Actual transparent alpha background, no white rectangles, no checkerboard picture. Match ONLY the supplied reference room's SIMPLE FLAT PLANAR ILLUSTRATION style: large solid pastel shapes, clean hand-painted hard edges, very light paper grain, at most 2 flat tones per material, minimal soft shadows ON the object, almost no outline. Not realistic, no 3D render, NO puffy glossy highlights, NO detailed fabric or wood texture. First/LEFT: a warm cream round BEANBAG CHAIR, organic pear/bean silhouette with a shallow comfy seat depression and soft raised back, NO legs or wood. Second/CENTER: a very low muted blush CLOUD FLOOR LOUNGER, rounded scalloped back edge and simple flat padded seat, NO wooden frame/legs. Third/RIGHT: a soft sage SLOUCHY SINGLE FLOOR SOFA CHAIR, broad floppy cushion base, simple soft backrest and two short drooping soft arms, NO wooden frame/legs. All three objects are compact, height approximately equal, three-quarter front view with a little top visible matching the room camera. Full silhouettes, no crop. They must be clearly DIFFERENT FORMS, not recolors. No pillows, accessories, animals, people, text, watermark, room, floor, cast shadows, or white/yellow edge halos. Transparent outside every object. Style reference image is ONLY for flat geometric art and camera, do not retain furniture of the source image.",
+      "generatedSource": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-84dd4ed4-b44e-4355-823d-c26463c95ade.png"
+    }
+  }
+}

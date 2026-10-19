@@ -1,0 +1,26 @@
+{
+  "generator": "built-in image_gen",
+  "commonPrompt": "Three distinct complete furniture objects, one per transparent column; match original-room-0-0 flat planar hand-painted illustration, large pastel solid shapes, subtle paper grain, simple two-tone shadows, no 3D wood grain, no background or cast shadow, no text or animals.",
+  "jobs": [
+    {
+      "name": "sheet-left",
+      "prompt": "Three SMALL tall cat-house stands, each silhouette width:height about .5, complete feet. LEFT: a rectangular cubby with arched doorway, four legs, side ladder and roof platform with a hanging ball rail. CENTER: an arched-top small cat cottage on four slender legs, a short side stair, simple rounded roof perch. RIGHT: an A-frame triangular-roof little cat house on a narrow raised platform, a round entrance, two low steps on right and one thin scratch pole on left. Each is a complete SMALL house only, not a tall full cat tree. Keep top-to-bottom heights equal.",
+      "sourcePath": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-66a2f1fd-b00e-47b2-9ad0-7c6c11812555.png"
+    },
+    {
+      "name": "sheet-back",
+      "prompt": "Three TALL slender cat trees, each width:height about .55 and identical overall height. LEFT: ONLY one tall cylindrical column with two round holes, a crown-shaped top, one broad midlevel platform, exactly two smaller platforms extending right, and one long ladder leaning up to the midlevel platform. Absolutely NO lower cat house/cubby and NO left small house—base consists only of thin posts and a narrow flat board. CENTER: an ARCH-BRIDGE TWIN TOWER cat tree, two tall round-topped posts holding a broad curved connecting bridge, with two staggered small steps and one slim hanging toy, base only narrow board. RIGHT: a LEAF TREE cat climbing frame, one slim trunk with three large simple leaf-shaped staggered platforms, top leaf crown, plain narrow base. Neither center nor right contains a cat house. All three flat simplified construction, no huge elaborate tower bases.",
+      "sourcePath": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-a5aa605e-efa5-4886-a2f3-6d8d9ad7c482.png"
+    },
+    {
+      "name": "sheet-sofa",
+      "prompt": "Three compact SOFAS, each seen from the front right corner, complete silhouette and feet, no cropped sofa. LEFT: cream upholstery, straight two-seat back, pale wood side panels, one muted sage pillow. CENTER: a rounded CLOUD-SHAPED BACK loveseat with pale peach upholstery, large smooth scalloped cloud back silhouette and little rounded feet, one cream pillow. RIGHT: a low MINT CURVED WRAPAROUND sofa with a single broad rounded back that flows into curved arms, one wide seat cushion, short pale wood legs. Keep all three approximately width:height .9 by using slightly more view along sofa depth, NOT a wide side-on landscape couch. All simple flat color planes.",
+      "sourcePath": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-a1595754-8695-4d88-8b3d-977a8e162711.png"
+    },
+    {
+      "name": "sheet-pad",
+      "prompt": "Three LOW FLOOR CUSHIONS, each similarly sized and seen slightly above so top visible, no external shadow, no legs. LEFT: simple ROUND cream cylindrical padded pouf with sage piping. CENTER: a FIVE-PETAL FLOWER-SHAPED low floor cushion, muted blush petals with warm cream circular center, visible short side wall, unmistakable flower silhouette. RIGHT: a simple SQUARED ROUNDED-RECTANGLE mint floor cushion with a shallow center depression and cream piping. Each width:height about1.45. No prints or patterns.",
+      "sourcePath": "C:\\Users\\19332\\.codex\\generated_images\\01a14b3d-1d70-7ce0-91df-82139f27dc48\\exec-c7849aed-eb32-4ffd-ba22-523a6a0e0dfc.png"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+Use case: precise-object-edit.
+Asset type: a production sprite atlas, exactly 6 columns and 3 rows, 18 hand-drawn cats.
+Input image 1 is the EDIT TARGET: the user's original 2800x1350 transparent atlas. Input image 2 is the exact same target shown on white to make the black line art and all 18 expressions visible. Input image 3 is a STYLE REFERENCE ONLY: existing warm little dog artwork.
+Primary request: color in the empty interiors of the second and third rows by following each cat directly above in the already-colored FIRST ROW. Gently polish color fills to the warm, creamy, flat-color style of the dog reference, while retaining the user's original design.
+HIGHEST PRIORITY INVARIANTS: preserve the original hand-drawn black outlines, irregular ear and head shapes, body shapes, tail shapes, exact poses, eyebrows, noses, mouths, and every individual expression in each of the 18 cells. Color INSIDE the existing drawing. Do not replace, redesign, trace in a different style, or smooth the original characters. Keep every cell at its original location, exactly same scale and canvas composition as image 1.
+The SIX COLUMNS stay in their existing left-to-right order, in every row:
+1. 辣椒: calico with warm orange, dark brown charcoal and creamy white patches. Follow first-row patch placement.
+2. 奶球: creamy white cat, very pale warm ivory body with tiny soft pink inner ears. Preserve the unusually round drooping-ear silhouette.
+3. 煤球: charcoal-black cat, dark warm charcoal body with dusty rose inner ears, outlines and face features still clearly visible.
+4. 芝麻: black and white tuxedo/cow cat, dark charcoal head cap and back, warm white lower muzzle and bib, dusty rose ears.
+5. 布丁: preserve the user's FIRST ROW gray-cream spotted cat EXACTLY as its given design and do not swap it with another column; warm gray and ivory spotted fur, pink ears.
+6. 团子: ginger orange tabby with cream muzzle/chest and warm darker orange stripes, pink ears.
+First-row original expression per col: happy closed eyes; large curious eyes; large round eyes; droopy worried eyes; half-lidded face; playful closed eyes.
+Second-row expressions: winking sparkle eye; big tears with vertical tear streams; squeezed shut eyes; anger mark on forehead with small dot eyes; bored half lidded rectangular eyes; X eyes.
+Third-row expressions: two surprised round eyes; peaceful closed eyes; half lidded eyes; angry slanted eyes; relaxed half lidded plus sparkle; sparkling star eyes.
+Keep all these expressions pixel-faithful to the provided drawing. For black cat facial details use subtle charcoal face fill and original black strokes.
+All fur/eye-white/cream interiors must be fully OPAQUE; only the empty background around and between characters must be truly TRANSPARENT. No white rectangular background, no checkerboard painted in. No extra objects, labels, text, shadows, new highlights, or gradients. Do not add or remove any cat. Output this exact atlas with eighteen colored sprites.

@@ -1,0 +1,17 @@
+* text=auto
+*.md text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Asset manifests and regression tests rely on original bytes/checksums.
+# Preserve source art, embedded payloads, and their metadata exactly.
+/assets/** -text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.wav binary
+*.mp3 binary
+*.pdf binary
+*.pptx binary

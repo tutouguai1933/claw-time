@@ -1,0 +1,62 @@
+{
+  "method": "Built-in ImageGen localized corner edit; downsample and composite only the recorded pixel rectangle with 5px edge blend. Preserve the source WebP pixels decoded through Chrome default GPU Canvas, then encode the final RGBA directly as PNG. Final PNG reloaded and compared in default Chrome Canvas.",
+  "visualAudit": {
+    "backgrounds": "Inspected full source room, focus table, new year, and house-art/room-1-0.png. Room and focus had bottom-right watermarks; new year and the repair backdrop had none.",
+    "contactSheets": {
+      "assets/pets-v2": 20,
+      "assets/decor-art": 12,
+      "assets/companion-art": 3,
+      "assets/house-art furniture back/left/pad/sofa": 12
+    },
+    "result": "No watermark found on the 47 generated sprite/furniture PNGs inspected in contact sheets.",
+    "excludedArchive": "Eight other assets/scenes/original-room-*.png remain unchanged source archives. Only their original window-glass pixels, precipitation and accumulated snow are sampled into the canonical room; watermark regions and furniture geometry are never copied. Interior night light uses clear fixed planes."
+  },
+  "entries": [
+    {
+      "source": "assets/scenes/original-room-1-0.png",
+      "file": "assets/scene-clean/room.png",
+      "sourceSha256": "c75087e4eb1aef98e2123f58383212ab7242d03e3e1a03c6869540cc6b649ed0",
+      "sha256": "f5226d67205f09ad2df836a910746b80d4c0b798472134a4cd645619e8207584",
+      "width": 1440,
+      "height": 2670,
+      "patch": [
+        1178,
+        2586,
+        240,
+        68
+      ],
+      "outsideChanged": 0,
+      "insideChanged": 15385,
+      "sourceEncoding": "RIFF WEBP / lossy VP8, despite .png suffix",
+      "verification": "Decoded source and final PNG in real Chrome default Canvas, matching tests/clean-scene-assets.cjs; reloaded final output before comparison."
+    },
+    {
+      "source": "assets/scenes/focus-table.png",
+      "file": "assets/scene-clean/focus-table.png",
+      "sourceSha256": "cc8e18e03639d9dec68acba4d16100e28117104fa2cebc0c5d7aaae78a187c55",
+      "sha256": "5bab84346696b0601503bc500a855d13ea2e8eb32e6e9c3d620ba8a3ed464bf0",
+      "width": 1344,
+      "height": 2912,
+      "patch": [
+        1096,
+        2834,
+        226,
+        64
+      ],
+      "outsideChanged": 0,
+      "insideChanged": 13814,
+      "sourceEncoding": "RIFF WEBP / lossy VP8, despite .png suffix",
+      "verification": "Decoded source and final PNG in real Chrome default Canvas, matching tests/clean-scene-assets.cjs; reloaded final output before comparison."
+    },
+    {
+      "source": "assets/scenes/newyear.png",
+      "file": "assets/scene-clean/newyear.png",
+      "width": 1499,
+      "height": 2797,
+      "sourceSha256": "6aa584bb71e4f02818d9e11bac061451d52e76432fe19652e8f87628ffabef3c",
+      "sha256": "6aa584bb71e4f02818d9e11bac061451d52e76432fe19652e8f87628ffabef3c",
+      "outsideChanged": 0,
+      "status": "Original full image and native-resolution bottom-right corner inspected; no watermark found; byte-for-byte copy."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+.outfit-adjust-panel{margin:6px 0 10px;border:1px solid var(--line);border-radius:16px;background:var(--card);padding:6px 10px;color:var(--wood)}
+.outfit-adjust-toolbar{display:flex;align-items:center;gap:10px;min-height:44px}
+.outfit-adjust-toolbar .btn{min-height:44px;min-width:104px;padding:8px 12px;font-size:12px;flex:none}
+.outfit-adjust-hint{font-size:11px;line-height:1.5;color:var(--gray)}
+.outfit-adjust-controls[hidden]{display:none}
+.outfit-adjust-controls{display:grid;gap:4px;border-top:1px solid var(--line);padding-top:5px;margin-top:4px}
+.outfit-adjust-choice,.outfit-adjust-scale{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;min-width:0}
+.outfit-adjust-choice select{flex:1;min-width:0;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--cream);color:var(--wood);font:inherit;padding:6px 10px}
+.outfit-adjust-scale>span{min-width:82px;white-space:nowrap}.outfit-adjust-scale output{font-variant-numeric:tabular-nums}
+.outfit-adjust-scale input{min-width:0;flex:1;height:44px;accent-color:#d78b57;cursor:pointer;margin:0}
+.outfit-adjust-scale input::-webkit-slider-thumb{min-width:24px;min-height:24px}
+.outfit-adjust-footer{display:flex;align-items:center;gap:8px}
+.outfit-adjust-reset{min-height:44px;min-width:110px;border:1px solid var(--line);border-radius:11px;background:var(--cream);color:var(--wood);font:inherit;font-size:11px;font-weight:700;padding:6px 10px;cursor:pointer}
+.outfit-adjust-footer small{font-size:10px;line-height:1.6;color:var(--gray)}
+#pet-show.outfit-adjusting{touch-action:none}
+#pet-show.outfit-adjusting [data-outfit-name]{touch-action:none;pointer-events:auto!important;cursor:grab!important;user-select:none;-webkit-user-select:none;border-radius:6px}
+#pet-show.outfit-adjusting [data-outfit-name]:active{cursor:grabbing!important}
+#pet-show.outfit-adjusting [data-outfit-name].outfit-adjust-selected{outline:2px dashed #bc753e;outline-offset:4px}
+#pet-show.outfit-adjusting .outfit-x{display:none!important}
+.outfit-adjust-panel button:focus-visible,.outfit-adjust-panel select:focus-visible,.outfit-adjust-panel input:focus-visible{outline:2px solid #bc753e;outline-offset:2px}
+.outfit-adjust-panel button:disabled{opacity:.5;cursor:default}
+@media(max-width:360px){.outfit-adjust-panel{padding-inline:8px}.outfit-adjust-toolbar{gap:7px}.outfit-adjust-footer{gap:6px}.outfit-adjust-footer small{font-size:9px}.outfit-adjust-reset{min-width:102px}}

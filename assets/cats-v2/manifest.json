@@ -1,0 +1,452 @@
+[
+  {
+    "pet": 0,
+    "expr": 0,
+    "name": "辣椒",
+    "breed": "三花猫",
+    "png": "cat-0-0.png",
+    "svg": "cat-0-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      26,
+      55,
+      235,
+      221
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      63,
+      69,
+      235,
+      221
+    ],
+    "alphaRepairs": 0,
+    "sha256": "bd307550e22bcda9eaed365b3b1fb4ff9d26d2d4103bb9fd1561d9bc7b156271"
+  },
+  {
+    "pet": 0,
+    "expr": 1,
+    "name": "辣椒",
+    "breed": "三花猫",
+    "png": "cat-0-1.png",
+    "svg": "cat-0-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      26,
+      54,
+      235,
+      222
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      63,
+      320,
+      235,
+      222
+    ],
+    "alphaRepairs": 2,
+    "sha256": "3a472ba94510cb1deb30613b15b3dda799fdd73f8534999027e1247f3fdd8635"
+  },
+  {
+    "pet": 0,
+    "expr": 2,
+    "name": "辣椒",
+    "breed": "三花猫",
+    "png": "cat-0-2.png",
+    "svg": "cat-0-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      25,
+      51,
+      237,
+      225
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      69,
+      603,
+      237,
+      225
+    ],
+    "alphaRepairs": 4,
+    "sha256": "722e0dc3a2e1e07f3bf4b14c47f95bb50b8c8a50d1387fb71bd171dd5afa9048"
+  },
+  {
+    "pet": 1,
+    "expr": 0,
+    "name": "奶球",
+    "breed": "白猫",
+    "png": "cat-1-0.png",
+    "svg": "cat-1-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      23,
+      54,
+      242,
+      222
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      336,
+      69,
+      242,
+      222
+    ],
+    "alphaRepairs": 3,
+    "sha256": "484cc69851c6624102a2ffd585700a1020df21af8a778e7de2c2c2c054cc60db"
+  },
+  {
+    "pet": 1,
+    "expr": 1,
+    "name": "奶球",
+    "breed": "白猫",
+    "png": "cat-1-1.png",
+    "svg": "cat-1-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      22,
+      54,
+      244,
+      222
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      336,
+      325,
+      244,
+      222
+    ],
+    "alphaRepairs": 0,
+    "sha256": "a30d8c26da8a393d332991514987aead9bff4b573ecb145352304c38ae39c702"
+  },
+  {
+    "pet": 1,
+    "expr": 2,
+    "name": "奶球",
+    "breed": "白猫",
+    "png": "cat-1-2.png",
+    "svg": "cat-1-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      21,
+      51,
+      245,
+      225
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      350,
+      602,
+      245,
+      225
+    ],
+    "alphaRepairs": 3,
+    "sha256": "a8425dbdd1f2fdf194526534d778345c1110f35fe878b9413142b75c40e8d921"
+  },
+  {
+    "pet": 2,
+    "expr": 0,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-0.png",
+    "svg": "cat-2-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      30,
+      49,
+      227,
+      227
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      635,
+      70,
+      227,
+      227
+    ],
+    "alphaRepairs": 1,
+    "sha256": "a168df5841b1fbbd72c15ac0801015888c43e9b71e6567b432af757929259204"
+  },
+  {
+    "pet": 2,
+    "expr": 1,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-1.png",
+    "svg": "cat-2-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      30,
+      45,
+      228,
+      231
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      641,
+      322,
+      228,
+      231
+    ],
+    "alphaRepairs": 0,
+    "sha256": "3f41b9e718e22fd1f2e7386a52dcfe3b57c0645c5123b8cb951e222c6cf28f11"
+  },
+  {
+    "pet": 2,
+    "expr": 2,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-2.png",
+    "svg": "cat-2-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      29,
+      42,
+      230,
+      234
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      654,
+      603,
+      230,
+      234
+    ],
+    "alphaRepairs": 1,
+    "sha256": "f15b945d9fe8bd39969f08153b596a87a18b9623f35e22ba95c7ef05dbcef873"
+  },
+  {
+    "pet": 3,
+    "expr": 0,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-0.png",
+    "svg": "cat-3-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      26,
+      14,
+      236,
+      262
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      939,
+      34,
+      236,
+      262
+    ],
+    "alphaRepairs": 4,
+    "sha256": "88f2f028388febdd608138223ae0a1735d8b98f6a72e9a02f419f24f8ade014a"
+  },
+  {
+    "pet": 3,
+    "expr": 1,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-1.png",
+    "svg": "cat-3-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      25,
+      16,
+      237,
+      260
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      943,
+      295,
+      237,
+      260
+    ],
+    "alphaRepairs": 7,
+    "sha256": "842a78e879e88c0c077dfabcd4b868cc4007e94f7a3c406682a730875d0de05b"
+  },
+  {
+    "pet": 3,
+    "expr": 2,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-2.png",
+    "svg": "cat-3-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      23,
+      11,
+      241,
+      265
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      950,
+      571,
+      241,
+      265
+    ],
+    "alphaRepairs": 0,
+    "sha256": "a4cd5c6dc6f542fbb6edfcb9115123b9077b3047e6af27ebe1e9c439996ebc24"
+  },
+  {
+    "pet": 4,
+    "expr": 0,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-0.png",
+    "svg": "cat-4-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      21,
+      32,
+      245,
+      244
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1227,
+      53,
+      245,
+      244
+    ],
+    "alphaRepairs": 3,
+    "sha256": "ba0baff1e06cbb2a85c60ac5ef79681d885afaeec7a278e9a983eb5fbd4bd26b"
+  },
+  {
+    "pet": 4,
+    "expr": 1,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-1.png",
+    "svg": "cat-4-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      21,
+      30,
+      246,
+      246
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1232,
+      313,
+      246,
+      246
+    ],
+    "alphaRepairs": 13,
+    "sha256": "4b3ee3da5681e99f3de919ff469589bdf05c8214e2226e0a4b1048200ff2b696"
+  },
+  {
+    "pet": 4,
+    "expr": 2,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-2.png",
+    "svg": "cat-4-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      21,
+      26,
+      245,
+      250
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1253,
+      578,
+      245,
+      250
+    ],
+    "alphaRepairs": 1,
+    "sha256": "2085eb80824c4a119e0d10cee4570f72f9f9d8d6c10166bea63b28868f4f2c31"
+  },
+  {
+    "pet": 5,
+    "expr": 0,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-0.png",
+    "svg": "cat-5-0.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      17,
+      32,
+      253,
+      244
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1516,
+      53,
+      253,
+      244
+    ],
+    "alphaRepairs": 0,
+    "sha256": "6c663f5c0f891f92f9ad656d7e02d9687414605b1faee95a64b8218fd61b3a8a"
+  },
+  {
+    "pet": 5,
+    "expr": 1,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-1.png",
+    "svg": "cat-5-1.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      18,
+      31,
+      251,
+      245
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1514,
+      311,
+      251,
+      245
+    ],
+    "alphaRepairs": 3,
+    "sha256": "6bbb2a33627d75230124d704258827c33df21a1583324016bc0773bd9298f1d0"
+  },
+  {
+    "pet": 5,
+    "expr": 2,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-2.png",
+    "svg": "cat-5-2.svg",
+    "width": 288,
+    "height": 288,
+    "bounds": [
+      17,
+      32,
+      254,
+      244
+    ],
+    "baseline": 276,
+    "atlasBounds": [
+      1515,
+      584,
+      254,
+      244
+    ],
+    "alphaRepairs": 2,
+    "sha256": "5c1b5cc330ab0a027ab1c27b8b4660668b5aeafbae480f37c91ea127bf05a5de"
+  }
+]

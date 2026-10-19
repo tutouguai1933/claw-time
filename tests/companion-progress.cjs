@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict');
+require('../assets/companion-progress.js');
+const P=globalThis.CompanionProgress;
+let s=P.normalize(null,['2026-10-16','2026-10-17','2026-10-17']);
+assert.deepEqual(s.checkinDays,['2026-10-16','2026-10-17']);
+assert.equal(P.sign(s,'2026-10-18').days,3);assert.equal(P.sign(s,'2026-10-18').ok,false,'same day cannot sign twice');
+assert.equal(P.sign(s,'2026-10-20').days,4,'a missed day does not erase progress');
+assert.equal(P.normalize(s,['2026-10-21']).checkinDays.length,4,'visits no longer grant check-in credit');
+assert.equal(P.sign(s,'2026-02-30').ok,false);assert.equal(P.sign(s,'2026-10-19').ok,false,'clock rollback cannot add earlier dates');
+assert.equal(P.earned(999.99).at(-1).hours,900);assert.equal(P.earned(1000).at(-1).hours,1000);
+assert.equal(P.normalize({version:1,avatar:{type:'image',data:'javascript:alert(1)'}}).avatar.type,'pet');
+const pending=P.due(s);assert.ok(pending.length>0);s.claimed.push(...pending.map(x=>x.id));assert.equal(P.due(s).length,0);
+console.log('PASS check-in dates, idempotency, rollback-clock protection, legacy credit, one-time milestones and actual 1000-hour title');

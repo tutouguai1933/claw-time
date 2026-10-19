@@ -1,0 +1,31 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "input": "tank-source.png",
+      "output": "tank.png",
+      "width": 1176,
+      "height": 1074,
+      "sourceBounds": [
+        51,
+        104,
+        1152,
+        1050
+      ],
+      "sha256": "654e96a3e30383589a8110edeb737d537e50a885a367ba941b217659d7d12099"
+    },
+    {
+      "input": "fish-source.png",
+      "output": "fish.png",
+      "width": 1217,
+      "height": 937,
+      "sourceBounds": [
+        29,
+        176,
+        1193,
+        913
+      ],
+      "sha256": "e94f45b58f09b1f08d77f7935c590d56394378d9e5d51a44abe6ff7360c3aae6"
+    }
+  ]
+}

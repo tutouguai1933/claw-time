@@ -1,0 +1,119 @@
+[
+  {
+    "id": "red-cap",
+    "name": "小红帽",
+    "source": "sources/小红帽.png",
+    "display": "red-cap.svg",
+    "bounds": [
+      476,
+      478,
+      1123,
+      714
+    ],
+    "sha256": "9e7745653b7619477b3cf9e521f5a0c6bc5e12bdfac1384460159165174e421e"
+  },
+  {
+    "id": "student-scarf",
+    "name": "三好学生围巾",
+    "source": "sources/三好学生围巾.png",
+    "display": "student-scarf.svg",
+    "bounds": [
+      457,
+      845,
+      1228,
+      609
+    ],
+    "sha256": "010f9cb99ce8ebcfbd01691c61a422cf77258bf70be282b17af2f24899100d0f"
+  },
+  {
+    "id": "umbrella",
+    "name": "伞",
+    "source": "sources/伞.png",
+    "display": "umbrella.svg",
+    "bounds": [
+      606,
+      629,
+      1124,
+      910
+    ],
+    "sha256": "01fa652ee75032b91c06b7265de9f0b3235d70ab176c635b507846063fa091e7"
+  },
+  {
+    "id": "earmuffs",
+    "name": "耳暖",
+    "source": "sources/耳暖.png",
+    "display": "earmuffs.svg",
+    "bounds": [
+      299,
+      631,
+      1328,
+      698
+    ],
+    "sha256": "5ad4994fb4a276389b35e9a3762b39f9dfc675c5f00dcd804d8b057fbcdb7233"
+  },
+  {
+    "id": "cape",
+    "name": "帅气披风",
+    "source": "sources/帅气披风.png",
+    "display": "cape.svg",
+    "bounds": [
+      405,
+      875,
+      1171,
+      563
+    ],
+    "sha256": "f733dc4c2051bce1577ca9dd263eacd94a5953e55256232932046d909cc5da01"
+  },
+  {
+    "id": "fluffy-scarf",
+    "name": "毛绒围巾",
+    "source": "sources/毛绒围巾.png",
+    "display": "fluffy-scarf.svg",
+    "bounds": [
+      495,
+      898,
+      981,
+      605
+    ],
+    "sha256": "b754d8d977b791cda1560e37b20fa1e985d3788f7f2af81bf75dc1914156a5d7"
+  },
+  {
+    "id": "raincoat",
+    "name": "雨衣",
+    "source": "sources/雨衣.png",
+    "display": "raincoat.svg",
+    "bounds": [
+      622,
+      586,
+      886,
+      1134
+    ],
+    "sha256": "24d4c6c08188702b9514c8acccadd3d530a8546a185b4976d8937ffe25ec6f77"
+  },
+  {
+    "id": "birthday",
+    "name": "今天我生日",
+    "source": "sources/今天我生日.png",
+    "display": "birthday.svg",
+    "bounds": [
+      785,
+      629,
+      651,
+      923
+    ],
+    "sha256": "276d57f31e77fc75245441fc4c074609cbc09fc49336f336aef6ea945dba50cb"
+  },
+  {
+    "id": "santa",
+    "name": "圣诞帽",
+    "source": "sources/圣诞帽.png",
+    "display": "santa.svg",
+    "bounds": [
+      545,
+      668,
+      1176,
+      822
+    ],
+    "sha256": "d4bb01b7fd904192d2bf40fa7dcefb5b4edefd469fe78df78b61f806f6434b81"
+  }
+]

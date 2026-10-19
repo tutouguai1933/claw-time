@@ -1,0 +1,2931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="爪点时间：找点时间，和小动物一起专注。小动物陪伴式专注 Web 原型，包含专注计时、伙伴养成、角色创作与小屋装饰。">
+<title>爪点时间 · 小动物陪伴专注</title>
+<link rel="stylesheet" href="assets/house-editor.css">
+<link rel="stylesheet" href="assets/account-ui.css">
+<link rel="stylesheet" href="assets/pet-interactions.css">
+<link rel="stylesheet" href="assets/table-shadow.css">
+<link rel="stylesheet" href="assets/wardrobe.css">
+<link rel="stylesheet" href="assets/partner-collection.css">
+<link rel="stylesheet" href="assets/gift-shop.css">
+<style>
+:root{
+  --cream:#FFF4E6; --card:#FFFCF5; --wood:#8B6547; --ink:#4A3529;
+  --accent:#FF9757; --accent-d:#EE823D; --green:#7FAB7D; --red:#D98279;
+  --gray:#9D8571; --line:#F0DFCA; --shadow:0 6px 24px rgba(139,107,78,.12);
+  --r-lg:22px; --r-md:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:#EFE7DA;font-family:'Nunito','Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;color:var(--ink);}
+.page-wrap{max-width:430px;margin:0 auto;min-height:100vh;position:relative;background:var(--cream);box-shadow:0 0 40px rgba(74,59,47,.18);}
+/* ===== 顶部状态栏 + 胶囊 ===== */
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 4px;font-size:13px;font-weight:700;color:var(--ink);}
+.capsule{display:flex;align-items:center;gap:4px;background:rgba(74,59,47,.08);border-radius:20px;padding:4px 6px;}
+.capsule span{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(74,59,47,.12);font-size:12px;color:var(--ink);}
+/* ===== 视图容器 ===== */
+.view{display:none;padding:8px 16px 96px;animation:viewIn .32s cubic-bezier(.2,.75,.3,1);}
+.view.active{display:block;}
+@keyframes viewIn{from{opacity:0;transform:translateX(26px);}to{opacity:1;transform:none;}}
+.back-nav{position:sticky;top:6px;z-index:30;display:flex;align-items:center;margin:0 0 10px;pointer-events:none;}
+.back-nav .back-btn{pointer-events:auto;display:inline-flex;align-items:center;gap:5px;background:rgba(255,253,249,.88);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.72);box-shadow:0 3px 12px rgba(74,59,47,.16);border-radius:18px;padding:8px 14px;font-size:13px;font-weight:800;color:var(--wood);cursor:pointer;transition:transform .15s;}
+.back-nav .back-btn:active{transform:scale(.94);}
+h2.page-title{font-size:20px;font-weight:900;margin:6px 2px 12px;display:flex;align-items:center;gap:8px;}
+h2.page-title .sub{font-size:12px;font-weight:600;color:var(--gray);}
+/* ===== 底部 Tab ===== */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:calc(76px + env(safe-area-inset-bottom));background:var(--card);border:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;padding:0 12px env(safe-area-inset-bottom);z-index:50;overflow:visible;}
+.tab{min-width:0;width:100%;height:60px;display:flex;align-items:center;justify-content:center;font-size:0;background:none;border:none;border-radius:18px;cursor:pointer;padding:12px;}
+.tab img{width:32px;height:32px;object-fit:contain;display:block;flex-shrink:0;}
+.tab.active{color:var(--accent-d);background:#faf2e8;}
+.tab-main{position:relative;height:76px;display:flex;align-items:center;justify-content:center;}
+.tab-main .main-btn{position:relative;transform:translateY(-14px);width:64px;height:64px;background:var(--card);border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;box-shadow:none;}
+.tab-main .main-btn img{width:48px;height:48px;object-fit:contain;display:block;}
+/* ===== 通用卡片/按钮 ===== */
+.card{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:16px;margin-bottom:14px;border:1px solid var(--line);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--accent);color:#fff;font-weight:800;border:none;border-radius:16px;padding:12px 22px;font-size:15px;cursor:pointer;box-shadow:0 6px 16px rgba(240,138,69,.3);}
+.btn:active{transform:scale(.97);}
+.btn.ghost{background:var(--cream);color:var(--wood);box-shadow:none;border:1.5px solid var(--line);}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:20px;background:var(--cream);border:1.5px solid var(--line);font-size:12px;font-weight:700;color:var(--wood);cursor:pointer;}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.chip.danger{color:var(--red);border-color:rgba(217,138,138,.5);}
+/* ===== HOME 小屋 · 全屏插画 + 左右滑动场景 ===== */
+#view-home{padding:0;}
+.scene-shell{position:relative;height:calc(100dvh - 42px - 82px);min-height:560px;overflow:hidden;}
+.scene-track{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+.scene-track::-webkit-scrollbar{display:none;}
+.scene-page{flex:0 0 100%;height:100%;scroll-snap-align:start;position:relative;}
+.scene-page img{width:100%;height:100%;object-fit:cover;display:block;}
+#living-room-bg{transform:scale(1.05);transform-origin:center top;transition:opacity .4s ease;}
+.scene-shell .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,59,47,0) 55%,rgba(74,59,47,.32));pointer-events:none;z-index:2;}
+/* 右侧功能栏 */
+.side-dock{position:absolute;right:10px;top:118px;display:flex;flex-direction:column;gap:10px;z-index:15;}
+.side-dock .sd-btn{width:48px;height:48px;padding:0;border-radius:15px;background:rgba(255,253,249,.88);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(74,59,47,.14);color:var(--wood);font-weight:800;}
+.side-dock .sd-content{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.side-dock .sd-content img{display:block;width:22px;height:22px;object-fit:contain;}
+.side-dock .sd-label{font-size:10px;line-height:11px;letter-spacing:.04em;}
+.side-dock .sd-btn:active{transform:scale(.94);}
+/* 场景页码 */
+.scene-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:74px;display:flex;gap:6px;z-index:15;}
+.scene-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7);box-shadow:0 1px 3px rgba(0,0,0,.22);transition:all .2s;}
+.scene-dots i.on{width:16px;border-radius:4px;background:var(--accent);}
+/* 主页九宫格菜单 & 场景选择 */
+.hm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.hm-item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
+.hm-item .ic{width:40px;height:40px;border-radius:12px;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--accent-d);}
+.hm-item .ic svg{width:22px;height:22px;}
+.hm-item span{font-size:11px;font-weight:800;color:var(--wood);}
+.sc-pick{display:flex;gap:10px;}
+.sc-card{flex:1;border-radius:14px;overflow:hidden;border:2px solid transparent;cursor:pointer;position:relative;height:96px;}
+.sc-card.active{border-color:var(--accent);}
+.sc-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.sc-card span{position:absolute;left:6px;bottom:6px;background:rgba(74,59,47,.55);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px;}
+.top-cap{position:absolute;top:14px;display:flex;gap:6px;background:rgba(255,253,249,.72);backdrop-filter:blur(6px);padding:6px;border-radius:20px;box-shadow:0 2px 10px rgba(74,59,47,.14);}
+.top-cap.left{left:14px;}
+.top-cap.right{right:14px;}
+.scene-shell .mini-btn{width:34px;height:34px;border-radius:50%;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;color:var(--wood);font-weight:800;}
+.scene-shell .mini-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.hero-zone{position:absolute;left:0;right:0;bottom:96px;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hero-zone .bubble{background:var(--card);border-radius:16px;padding:8px 14px;font-size:13px;font-weight:800;box-shadow:var(--shadow);max-width:250px;text-align:center;opacity:0;transition:opacity .2s;}
+.hero-zone .bubble.show{opacity:1;}
+.hero-zone .sprite{width:104px;height:104px;filter:drop-shadow(0 8px 12px rgba(74,59,47,.3));}
+.hero-zone .pet-name{background:rgba(255,253,249,.88);padding:4px 14px;border-radius:14px;font-size:12px;font-weight:800;}
+.board-btn{position:absolute;left:14px;bottom:132px;background:rgba(255,253,249,.78);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.5);border-radius:14px;padding:9px 13px;font-size:12px;font-weight:800;color:var(--wood);cursor:pointer;box-shadow:0 2px 10px rgba(74,59,47,.16);display:flex;align-items:center;gap:6px;}
+.board-btn b{color:var(--accent-d);}
+.start-board{position:absolute;right:14px;bottom:132px;background:linear-gradient(145deg,#EBB98B,#D9975E);color:#fff;border:2px solid rgba(255,255,255,.55);border-radius:18px;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 6px 16px rgba(139,107,78,.38);}
+.start-board:active{transform:scale(.96);}
+/* 任务箭头 + 上方面板 */
+.task-arrow{position:absolute;top:64px;left:14px;width:36px;height:36px;border-radius:50%;background:rgba(255,253,249,.82);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 10px rgba(74,59,47,.16);color:var(--wood);}
+.task-arrow .ar{display:inline-block;transition:transform .25s;}
+.task-arrow.open .ar{transform:rotate(180deg);}
+.task-panel{position:absolute;top:106px;left:14px;width:252px;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 26px rgba(74,59,47,.2);padding:14px;display:none;z-index:20;}
+.task-panel.show{display:block;animation:fadein .2s ease;}
+.task-panel .tp-head{font-size:14px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.task-panel .tp-head b{color:var(--accent-d);}
+.task-panel .tp-head span{font-size:10px;color:var(--gray);font-weight:700;}
+.task-panel .tp-item{display:flex;align-items:center;gap:8px;background:var(--cream);border-radius:12px;padding:9px 10px;font-size:12px;font-weight:700;margin-bottom:7px;}
+.task-panel .tp-item .st{width:18px;height:18px;border-radius:50%;border:2px solid var(--gray);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
+.task-panel .tp-item.done .st{border-color:var(--green);background:var(--green);}
+.task-panel .tp-item .bonus{margin-left:auto;font-size:10px;color:var(--gray);font-weight:800;}
+.task-panel .tp-foot{display:flex;gap:8px;margin-top:8px;}
+.task-panel .tp-foot button{flex:1;border:none;border-radius:12px;padding:9px 0;font-size:12px;font-weight:800;cursor:pointer;}
+.task-panel .go-btn{background:var(--accent);color:#fff;}
+.task-panel .close-btn{background:var(--cream);color:var(--wood);}
+/* 中央闹钟 */
+.clock-btn{position:absolute;top:38%;left:50%;transform:translateX(-50%);width:80px;height:80px;background:none;border:none;cursor:pointer;z-index:5;filter:drop-shadow(0 2px 8px rgba(126,200,227,.15));animation:ring 2.6s ease-in-out infinite;}
+.clock-btn::before{content:'';position:absolute;inset:8%;border-radius:50%;background:rgba(255,255,255,.56);}
+.clock-btn img{position:relative;width:100%;height:100%;object-fit:contain;opacity:.9;}
+@keyframes ring{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.06);}}
+/* 专注设置 & 选主角浮层 */
+.fs-opt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.fs-opt .lbl{width:100%;font-size:12px;font-weight:900;color:var(--wood);}
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.pick-item{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.pick-item svg{width:58px;height:58px;}
+.pick-item span{font-size:11px;font-weight:800;color:var(--wood);}
+.pick-item.active{border-color:var(--accent);background:#FFF3E8;}
+.swap-cap{position:absolute;left:12px;bottom:16px;display:flex;gap:5px;align-items:center;background:rgba(255,253,249,.45);backdrop-filter:blur(4px);padding:6px 10px;border-radius:24px;box-shadow:0 2px 10px rgba(74,59,47,.1);z-index:10;transition:all .3s ease;max-width:85%;}
+.swap-cap.collapsed{gap:0;padding:6px;max-width:none;}
+.swap-cap .s-item{width:38px;height:38px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid transparent;transition:all .3s ease;overflow:hidden;}
+.swap-cap.collapsed .s-item:not(.swap-toggle){width:0;opacity:0;margin:0;padding:0;border-width:0;}
+.swap-cap.collapsed .pet-list{width:0;overflow:hidden;}
+.swap-cap .s-item svg{width:32px;height:32px;}
+.swap-cap .s-item.active{border-color:var(--accent);background:#FFF3E8;}
+.swap-cap .swap-toggle{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid var(--accent);background:#FFF3E8;color:var(--accent-d);flex:0 0 auto;}
+.swap-cap .swap-toggle svg{width:20px;height:20px;transition:transform .3s;}
+.swap-cap.expanded .swap-toggle svg{transform:rotate(180deg);}
+.swap-cap .swap-close{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#eee;color:#999;flex:0 0 auto;font-size:14px;line-height:1;border:none;margin-left:4px;}
+.swap-cap.collapsed .swap-close{display:none;}
+.swap-cap .pet-list{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;}
+.swap-cap .pet-list::-webkit-scrollbar{display:none;}
+/* ===== FOCUS 专注 ===== */
+.focus-stage{position:relative;isolation:isolate;border-radius:var(--r-lg);overflow:hidden;height:clamp(400px,55dvh,480px);box-shadow:var(--shadow);border:1px solid var(--line);transition:height .3s;}
+.focus-world{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);}
+.focus-world>.table-bg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.focus-world #focus-pet{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:2;}
+.focus-world #focus-pet img{object-fit:contain;}
+#food-plates{position:absolute;inset:0;pointer-events:none;z-index:3;}
+.plate-food{position:absolute;transform:translate(-50%,-50%);width:20%;height:7%;object-fit:contain;display:none;}
+#food-0{left:40.5%;top:53.3%;width:17%;height:5.5%;}
+#food-1{left:25%;top:63.5%;}
+#food-2{left:71%;top:61.6%;width:22%;}
+.plate-change{position:absolute;z-index:6;display:none;background:var(--accent-d);color:#fff;border:2px solid #fff5e9;border-radius:14px;padding:8px 12px;cursor:pointer;font-weight:800;white-space:nowrap;transform:translate(-50%,-50%);}
+#btn-food-0{left:59%;top:54%;}#btn-food-1{left:25%;top:70%;}#btn-food-2{left:73%;top:68%;}
+.plate-change.current{box-shadow:0 0 0 4px rgba(255,158,100,.3);}
+.focus-stage.food-editing{position:fixed;inset:0;width:100%;height:100dvh;border:0;border-radius:0;z-index:1000;background:var(--cream);}
+.food-editing .plate-change{display:block;}
+.food-editing .focus-bubble,.food-editing .focus-timer-float,.food-editing .focus-btns,.food-editing>.switch-key{display:none!important;}
+.food-editing .food-edit-header,.food-editing .food-edit-footer{display:flex;}
+.food-edit-header{position:absolute;top:max(16px,env(safe-area-inset-top));left:16px;right:16px;z-index:7;display:none;align-items:center;justify-content:space-between;gap:12px;}
+.food-edit-header h2{font-size:18px;}.food-edit-header p{font-size:12px;margin-top:5px;}
+.food-edit-header>div{background:rgba(255,253,249,.94);border-radius:16px;padding:12px 16px;}
+.food-edit-footer{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(90%,380px);z-index:7;display:none;flex-direction:column;gap:10px;align-items:stretch;text-align:center;}
+.food-edit-footer p{background:rgba(255,253,249,.92);border-radius:12px;padding:8px;font-size:12px;}
+.btn:disabled{opacity:.55;cursor:default;box-shadow:none;}
+.food-overlay{position:fixed;inset:0;background:rgba(74,59,47,.22);z-index:1100;display:none;align-items:flex-end;justify-content:center;}
+.food-overlay.show{display:flex;}
+.food-sheet{width:100%;max-width:430px;background:var(--card);border-radius:26px 26px 0 0;padding:18px 20px max(18px,env(safe-area-inset-bottom));max-height:78dvh;overflow-y:auto;box-shadow:0 -8px 30px rgba(74,59,47,.12);}
+.food-sheet header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}.food-sheet h3{font-size:17px;}.food-sheet p{font-size:12px;color:var(--wood);margin-bottom:12px;}
+.food-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.food-option{background:transparent;border:2px solid transparent;border-radius:14px;padding:6px 3px;color:var(--wood);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.food-option img,.food-option svg{width:100%;height:clamp(42px,9dvh,74px);object-fit:contain;}
+.food-option span{font-size:12px;font-weight:800;}.food-option small{font-size:10px;}
+.food-option.selected{border-color:var(--accent-d);background:#fff3e8;}
+.food-option.locked img{filter:grayscale(1);opacity:.4;}.food-option.locked span,.food-option.locked small{color:var(--gray);}
+.food-sheet>.btn{width:100%;margin-top:12px;}
+.toast{z-index:1500!important;}
+body.food-selecting{overflow:hidden;}
+.companion-picker{z-index:1200!important;align-items:stretch!important;justify-content:flex-start!important;}
+#companion-picker .sheet{width:min(86vw,360px);height:100dvh;max-height:100dvh;border-radius:0 24px 24px 0;overflow-y:auto;animation:drawerIn .25s ease!important;padding-top:max(24px,env(safe-area-inset-top));}
+#companion-picker .sheet::before{display:none;}
+.companion-picker header{display:flex;align-items:center;justify-content:space-between;gap:10px;}.companion-picker h2{font-size:18px;}.companion-picker p{font-size:12px;color:var(--wood);margin:8px 0 18px;}
+.companion-picker .pick-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.companion-picker .pick-item{font:inherit;color:var(--wood);}.companion-picker .pick-item small{font-size:10px;}
+@keyframes drawerIn{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+.hero-zone{z-index:4;pointer-events:none;}.hero-zone .sprite,.hero-zone button{pointer-events:auto;}
+#home-sprite-wrap{user-select:none;outline-offset:5px;}
+.focus-task-field{position:relative;width:100%;}
+.focus-task-field>input{padding-right:40px!important;}
+.focus-task-field>.task-menu-toggle{position:absolute;right:5px;top:4px;bottom:4px;width:34px;border:0;border-radius:8px;background:transparent;color:var(--wood);cursor:pointer;font-size:18px;}
+.focus-task-menu{position:fixed;z-index:75;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;max-height:220px;overflow-y:auto;text-align:left;}
+.focus-task-menu[hidden]{display:none;}.focus-task-menu button{display:block;width:100%;border:0;border-radius:9px;padding:11px 12px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;font-size:13px;background:transparent;overflow-wrap:anywhere;}
+.focus-task-menu button:hover,.focus-task-menu button:focus-visible{background:var(--cream);}
+.focus-task-menu p{font-size:12px;padding:10px;color:var(--wood);}
+.outfit-item .of-ic img{width:58px!important;height:42px!important;object-fit:contain;}
+@media(prefers-reduced-motion:reduce){.clock-btn,.focus-stage.focusing #focus-pet{animation:none!important;}.companion-picker .sheet{animation:none!important;}}
+.focus-stage .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,59,47,0) 55%,rgba(74,59,47,.15));pointer-events:none;}
+.focus-stage.focusing{height:calc(100dvh - 82px);border-radius:0;border:none;box-shadow:none;}
+#view-focus.focusing .mode-row,#view-focus.focusing .timer-wrap,#view-focus.focusing div[style*="height:14px"]{display:none;}
+.focus-stage.focusing #focus-pet>.dressed{animation:pet-eat 2s ease-in-out infinite;}
+@keyframes pet-eat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-4px);}
+}
+.focus-timer-float{position:absolute;top:20px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.92);border-radius:20px;padding:12px 24px;box-shadow:0 4px 16px rgba(0,0,0,.1);text-align:center;z-index:10;display:none;}
+.focus-stage.focusing .focus-timer-float{display:block;}
+.focus-stage.focusing .focus-btns{display:flex !important;}
+.paused .focus-stage.focusing #focus-pet>.dressed{animation-play-state:paused;}
+.focus-timer-float .ft-time{font-size:24px;font-weight:900;color:var(--wood);}
+.focus-timer-float .ft-task{font-size:13px;color:var(--gray);font-weight:700;margin-top:2px;}
+.focus-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:16px;gap:6px;pointer-events:none;}
+.focus-duo{display:flex;align-items:flex-end;gap:30px;position:relative;}
+.pet-seat{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pet-seat svg{width:82px;height:82px;filter:drop-shadow(0 6px 10px rgba(74,59,47,.25));}
+.pet-seat .tag{background:rgba(255,253,249,.9);padding:2px 10px;border-radius:10px;font-size:11px;font-weight:800;}
+.shadow-me{width:56px;height:80px;display:flex;align-items:flex-end;justify-content:center;opacity:.85;}
+.shadow-me svg{width:56px;height:64px;}
+.focus-bubble{background:var(--card);border-radius:16px;padding:8px 14px;font-size:13px;font-weight:700;box-shadow:var(--shadow);max-width:260px;text-align:center;min-height:20px;}
+.switch-key{position:absolute;top:10px;right:10px;background:rgba(255,253,249,.95);border:none;border-radius:14px;padding:7px 10px;font-size:12px;font-weight:800;color:var(--wood);display:flex;align-items:center;gap:4px;cursor:pointer;box-shadow:var(--shadow);z-index:9999;}
+.mode-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.mode-card{flex:1 1 45%;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 12px;cursor:pointer;}
+.mode-card.active{border-color:var(--accent);background:#FFF3E8;}
+.mode-card .m-name{font-size:13px;font-weight:900;}
+.mode-card .m-desc{font-size:11px;color:var(--gray);margin-top:2px;font-weight:600;}
+.timer-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0;}
+.timer-ring{width:170px;height:170px;position:relative;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring .t-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.timer-ring .t-num b{font-size:34px;font-weight:900;letter-spacing:1px;}
+.timer-ring .t-num span{font-size:12px;color:var(--gray);font-weight:700;margin-top:2px;}
+.focus-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+/* ===== ROLES 角色 · 图鉴式 ===== */
+.collection-header{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.collection-header .page-title{display:block;white-space:nowrap;}
+.collection-header .page-title .sub{margin-top:5px;white-space:normal;}
+.collection-tools{display:flex;gap:6px;flex-wrap:wrap;}
+.collect-banner{border-radius:var(--r-lg);padding:16px 12px 12px;margin-bottom:14px;background:#fff3e5;border:1px solid #efddc8;}
+.collect-banner .b-text{padding:0 3px;color:var(--ink);}
+.collect-banner .b-text b{font-size:17px;display:block;}
+.collect-banner .b-text span{font-size:11px;color:var(--wood);display:block;margin-top:5px;}
+.collect-faces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-top:16px;}
+.collect-face{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+.collect-face .dog-portrait{width:100%;max-width:50px;height:42px;}
+.collect-face span{font-size:10px;font-weight:800;color:var(--wood);}
+.dog-portrait{display:block;overflow:hidden;}
+.role-card .r-art .dog-portrait{width:88px;height:72px;}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.more-title{font-size:13px;font-weight:900;color:var(--wood);margin:18px 2px 8px;}
+.more-title span{font-size:10px;color:var(--gray);font-weight:700;}
+.draw-slot{cursor:pointer;}
+.draw-slot .r-art{display:flex;align-items:center;justify-content:center;font-size:42px;background:var(--cream);border:2px dashed var(--line);border-radius:16px;height:88px;transition:.2s;}
+.draw-slot:active .r-art{border-color:var(--accent);transform:scale(.96);}
+/* 画笔画布 */
+.draw-canvas-wrap{position:relative;width:100%;max-width:280px;aspect-ratio:1;margin:0 auto 10px;border-radius:20px;border:2px dashed var(--line);overflow:hidden;background:transparent;}
+.draw-ref{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:none;}
+.layer-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;background:transparent;transition:opacity .25s;}
+.draw-canvas-wrap.dim .layer-canvas{opacity:1;}
+.draw-hint{font-size:11px;font-weight:800;color:var(--accent-d);background:#FFF4E4;border:1px dashed var(--accent);border-radius:10px;padding:6px 10px;margin-bottom:8px;text-align:center;display:none;}
+.draw-hint.show{display:block;}
+/* 画作动态：身体部位动画 + 眨眼 */
+.drawn-anim{position:relative;display:inline-block;vertical-align:top;overflow:visible;}
+.drawn-anim .da-body{position:absolute;left:0;top:0;width:100%;height:100%;}
+.drawn-anim .da-part{position:absolute;pointer-events:none;}
+.drawn-anim .da-tail{transform-origin:50% 100%;animation:lcWag 1.3s ease-in-out infinite;}
+.drawn-anim .da-head{transform-origin:50% 100%;animation:lcBob 1.5s ease-in-out infinite;}
+.drawn-anim .da-blink{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;animation:lcBlink 3.6s ease-in-out infinite;}
+.drawn-anim .da-moe{position:absolute;left:0;top:0;opacity:0;animation:lcMoe 9s ease-in-out infinite;}
+.da-drawing{overflow:hidden;transform-origin:50% 85%;animation:daIdle 3.8s ease-in-out infinite;}
+.da-drawing .da-sheet{position:absolute;pointer-events:none;}
+.da-drawing .da-frame,.da-drawing .da-rest{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.da-drawing .da-frame{object-fit:contain;display:block;}
+.da-drawing .da-closed,.da-drawing .da-cute{visibility:hidden;}
+.da-drawing.has-blink .da-open{animation:daOpen 9s steps(1,end) infinite;}
+.da-drawing.has-blink .da-closed{animation:daClosed 9s steps(1,end) infinite;}
+.da-drawing.has-cute .da-rest{animation:daRest 9s steps(1,end) infinite;}
+.da-drawing.has-cute .da-cute{animation:daCute 9s steps(1,end) infinite;}
+@keyframes daOpen{0%,38%,78%,100%{visibility:visible}35%,75%{visibility:hidden}}
+@keyframes daClosed{0%,38%,78%,100%{visibility:hidden}35%,75%{visibility:visible}}
+@keyframes daRest{0%,97%,100%{opacity:1}90%{opacity:0}}
+@keyframes daCute{0%,97%,100%{visibility:hidden}90%{visibility:visible}}
+@keyframes daIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1%) rotate(-.7deg)}}
+@media(prefers-reduced-motion:reduce){.da-drawing{animation:none;}}
+@keyframes lcWag{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes lcBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2.5%) rotate(-3deg)}}
+@keyframes lcBlink{0%,89%,100%{opacity:0}92%,96%{opacity:1}}
+@keyframes lcMoe{0%,88%,100%{opacity:0}92%,97%{opacity:1}}
+.layer-bar{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;}
+.layer-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:10px;}
+.layer-row .layer-bar{margin-bottom:0;}
+.lb-arrow{background:var(--card);border:1.5px solid var(--line);border-radius:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--wood);cursor:pointer;flex:0 0 auto;}
+.lb-chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:800;color:var(--gray);cursor:pointer;}
+.lb-chip.on{border-color:var(--accent);color:var(--accent-d);background:#FFF7EE;}
+.lb-eye{font-size:12px;}
+.draw-tools{display:flex;gap:8px;justify-content:center;margin-bottom:10px;}
+.dt-btn{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:800;color:var(--wood);cursor:pointer;}
+.dt-btn.on{border-color:var(--accent);color:var(--accent-d);background:#FFF7EE;}
+.dt-btn:disabled{opacity:.4;}
+.brush-bar{display:flex;gap:8px;justify-content:center;margin-bottom:10px;}
+.br-chip{display:flex;flex-direction:column;align-items:center;gap:2px;width:46px;padding:5px 0 4px;border-radius:10px;background:var(--card);border:1.5px solid var(--line);cursor:pointer;color:var(--wood);}
+.br-chip i{display:block;border-radius:50%;background:var(--wood);}
+.br-chip span{font-size:9px;font-weight:800;}
+.br-chip.on{border-color:var(--accent);background:#FFF7EE;}
+#draw-grid img{pointer-events:none;-webkit-touch-callout:none;user-select:none;}
+.draw-colors{display:flex;gap:8px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;}
+.dc{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(74,59,47,.14);}
+.dc.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card);}
+.wheel-btn{position:relative;width:26px;height:26px;border-radius:50%;cursor:pointer;flex:0 0 auto;border:2px solid transparent;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);}
+.wheel-btn.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card);}
+.wheel-btn input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:none;}
+.draw-name,.face-name{width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:700;background:var(--card);color:var(--ink);margin-bottom:12px;}
+.draw-actions{display:flex;gap:8px;}
+.draw-actions .btn{flex:1;}
+/* 捏脸 */
+.face-row{margin-bottom:10px;}
+.face-row .lbl{font-size:11px;font-weight:800;color:var(--gray);margin-bottom:6px;}
+.face-row .chips{display:flex;gap:6px;flex-wrap:wrap;}
+.fc{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex:0 0 auto;}
+.fc.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card);}
+.face-preview{background:var(--cream);border-radius:20px;padding:14px 0;margin-bottom:12px;}
+/* 主页出场勾选 */
+.hp-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:52vh;overflow-y:auto;}
+.hp-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:10px 6px 8px;cursor:pointer;position:relative;}
+.hp-item.on{border-color:var(--accent);background:#FFF7EE;}
+.hp-item span{font-size:11px;font-weight:800;color:var(--ink);}
+.hp-check{position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);background:var(--cream);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.hp-item.on .hp-check{background:var(--accent);border-color:var(--accent);}
+.role-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;box-shadow:var(--shadow);}
+.role-card .r-art{width:100%;display:flex;justify-content:center;}
+.role-card .r-art svg{width:86px;height:86px;filter:drop-shadow(0 4px 8px rgba(74,59,47,.18));}
+.role-card .r-name{font-size:13px;font-weight:900;}
+.role-card .r-heart{font-size:11px;color:#E2725B;letter-spacing:1px;font-weight:800;min-height:14px;}
+.role-card .r-tag{font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px;background:var(--cream);color:var(--wood);}
+.role-card.locked{opacity:.8;}
+.role-card.locked .r-art{filter:grayscale(1);opacity:.4;}
+.role-card.locked .r-tag{background:var(--cream);color:var(--gray);}
+.role-detail{position:fixed;inset:0;z-index:80;background:rgba(74,59,47,.45);display:none;align-items:flex-end;justify-content:center;}
+.role-detail.show{display:flex;}
+.role-detail .sheet{width:100%;max-width:430px;background:var(--cream);border-radius:26px 26px 0 0;padding:20px;animation:slideup .25s ease;}
+.role-detail .sheet::before{content:'';display:block;width:44px;height:5px;border-radius:3px;background:rgba(74,59,47,.2);margin:-8px auto 14px;}
+.role-detail.closing .sheet{animation:slidedown .22s ease forwards;}
+/* 全屏弹层（画布创作用，避免绘制时下滑跑走） */
+.role-detail.fullscreen{background:var(--cream);align-items:stretch;}
+.role-detail.fullscreen .sheet{height:100%;max-width:430px;border-radius:0;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px 20px;animation:none;}
+.role-detail.fullscreen .sheet::before{display:none;}
+.fs-head{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:900;}
+.fs-close{background:var(--card);border:none;width:34px;height:34px;border-radius:50%;font-size:15px;color:var(--gray);font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.fs-sub{font-size:11px;color:var(--gray);font-weight:700;margin:2px 0 6px;}
+.role-detail.fullscreen .draw-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:auto;}
+@keyframes slidedown{from{transform:none;opacity:1;}to{transform:translateY(64px);opacity:0;}}
+@keyframes slideup{from{transform:translateY(40px);opacity:.6;}to{transform:none;opacity:1;}}
+.sheet .s-head{display:flex;gap:14px;align-items:center;margin-bottom:12px;}
+.sheet .s-head svg{width:72px;height:72px;}
+.sheet .s-name{font-size:20px;font-weight:900;}
+.sheet .s-meta{font-size:12px;color:var(--gray);font-weight:700;margin-top:2px;}
+.sheet .s-tag{display:inline-flex;padding:4px 12px;border-radius:12px;background:var(--accent-d);color:#fff;font-size:12px;font-weight:800;margin-top:6px;}
+.sheet .s-line{background:var(--card);border-radius:16px;padding:12px 14px;font-size:13px;font-weight:600;line-height:1.7;margin-bottom:10px;border:1px solid var(--line);}
+.sheet .s-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.sheet .s-cell{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;font-size:12px;font-weight:700;line-height:1.6;}
+.sheet .s-cell b{display:block;font-size:11px;color:var(--gray);margin-bottom:3px;}
+/* ===== DRESS 装扮 · 场景布置编辑器 ===== */
+.dress-tabs{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;}
+.dress-tabs::-webkit-scrollbar{display:none;}
+.dress-stage{position:relative;border-radius:var(--r-lg);overflow:hidden;height:52vh;min-height:380px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:12px;touch-action:none;}
+.dress-stage>img{width:100%;height:100%;object-fit:cover;display:block;}
+.dress-stage .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,59,47,0) 55%,rgba(74,59,47,.32));pointer-events:none;}
+.pl-item{position:absolute;cursor:grab;touch-action:none;filter:drop-shadow(0 4px 8px rgba(74,59,47,.32));z-index:5;}
+.pl-item .rm{position:absolute;top:-9px;right:-9px;width:20px;height:20px;border-radius:50%;background:rgba(74,59,47,.82);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;}
+.pl-item:hover .rm,.pl-item.touch .rm{display:flex;}
+.export-btn{position:absolute;right:12px;bottom:14px;z-index:20;background:rgba(74,59,47,.8);color:#fff;border:none;border-radius:14px;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;gap:5px;}
+.export-btn:active{transform:scale(.95);}
+.stage-tip{position:absolute;left:50%;transform:translateX(-50%);bottom:58px;z-index:10;background:rgba(255,253,249,.86);color:var(--wood);font-size:11px;font-weight:700;padding:6px 14px;border-radius:14px;white-space:nowrap;pointer-events:none;}
+.item-tray{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none;}
+.item-tray::-webkit-scrollbar{display:none;}
+.tray-item{flex:0 0 86px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;box-shadow:var(--shadow);}
+.tray-item svg{width:46px;height:46px;}
+.tray-item span{font-size:10px;font-weight:800;color:var(--wood);}
+.tray-item.locked{opacity:.55;}
+.tray-item .lk{font-size:9px;font-weight:800;color:var(--gray);}
+/* ===== MINE 我的 ===== */
+.avatar-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.avatar-cell{width:58px;height:58px;border-radius:16px;background:var(--cream);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.avatar-cell.active{border-color:var(--accent);background:#FFF3E8;}
+.avatar-cell svg{width:40px;height:40px;}
+.avatar-cell.locked{opacity:.4;}
+.progress-line{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.progress-line .p-name{width:64px;font-size:12px;font-weight:800;flex:0 0 auto;}
+.progress-line .p-bar{flex:1;height:9px;background:var(--cream);border-radius:6px;overflow:hidden;}
+.progress-line .p-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-d));border-radius:6px;}
+.progress-line .p-val{font-size:12px;font-weight:900;flex:0 0 auto;}
+.member-card{background:linear-gradient(135deg,#FFE3C9,#FFD1A8);border:1.5px solid var(--accent);border-radius:var(--r-lg);padding:16px;display:flex;align-items:center;gap:14px;}
+/* 好友广场 */
+.coin-card{display:flex;align-items:center;gap:14px;}
+.coin-ic{width:52px;height:52px;border-radius:16px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:26px;border:1.5px solid var(--line);}
+.coin-info{display:flex;align-items:baseline;gap:6px;}
+.coin-info b{font-size:26px;font-weight:900;color:var(--accent-d);}
+.coin-info span{font-size:12px;font-weight:800;color:var(--gray);}
+.coin-rank{margin-left:auto;font-size:12px;font-weight:800;color:var(--wood);background:var(--cream);border-radius:14px;padding:8px 12px;border:1.5px solid var(--line);}
+.rank-row{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);}
+.rank-row:last-child{border-bottom:none;}
+.rank-medal{width:32px;height:32px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;border:1.5px solid var(--line);}
+.rank-medal.g1{background:#FFF3D6;border-color:#F0C75A;color:#B8860B;}
+.rank-medal.g2{background:#F2F2F2;border-color:#C9C9C9;color:#6E6E6E;}
+.rank-medal.g3{background:#FBE8D6;border-color:#E8A06A;color:#A05A2A;}
+.rank-row .rk-pet{width:34px;height:34px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center;border:1px solid var(--line);}
+.rank-row .rk-name{flex:1;font-weight:800;font-size:13px;display:flex;align-items:center;gap:6px;}
+.rank-row .rk-name .me{font-size:9px;font-weight:800;background:var(--accent);color:#fff;border-radius:8px;padding:1px 6px;}
+.rank-row .rk-h{color:var(--gray);font-size:11px;font-weight:700;}
+.rank-row .rk-rw{font-size:11px;font-weight:800;color:var(--accent-d);}
+.pk-row{display:flex;align-items:center;gap:12px;background:var(--cream);border-radius:16px;padding:12px;border:1.5px solid var(--line);}
+.pk-ava{width:56px;height:56px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);}
+.pk-vs{font-size:13px;font-weight:900;color:var(--accent-d);}
+.pk-info{display:flex;flex-direction:column;gap:2px;}
+.pk-info b{font-size:14px;font-weight:900;}
+.pk-info span{font-size:11px;font-weight:700;color:var(--gray);}
+.plaza-card{display:flex;align-items:center;gap:10px;background:var(--cream);border-radius:14px;padding:10px;margin-bottom:8px;border:1.5px solid var(--line);}
+.plaza-card .rk-pet{width:38px;height:38px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);}
+.plaza-info{flex:1;min-width:0;}
+.plaza-info b{font-size:13px;font-weight:900;display:block;}
+.plaza-info span{font-size:11px;font-weight:700;color:var(--gray);}
+.plaza-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:7px 12px;font-size:11px;font-weight:800;cursor:pointer;}
+.plaza-btn.done{background:var(--cream);color:var(--wood);border:1.5px solid var(--line);}
+.outfit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.outfit-item{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;box-shadow:var(--shadow);}
+.outfit-item .of-ic{font-size:30px;}
+.outfit-item .of-ic img{width:40px!important;height:40px!important;object-fit:contain;display:block;}
+.raincoat-colors{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 12px;font-size:12px;color:var(--wood);}
+.raincoat-colors button{border:1.5px solid var(--line);border-radius:16px;padding:6px 12px;background:var(--card);font:inherit;color:var(--wood);cursor:pointer;}
+.raincoat-colors button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(240,138,69,.16);}
+.outfit-item .of-name{font-size:11px;font-weight:800;}
+.outfit-item .of-price{font-size:10px;font-weight:800;color:var(--accent-d);}
+.outfit-item.owned{border-color:var(--green);background:#F1FAF2;}
+.outfit-item.owned .of-name{color:var(--green);}
+.outfit-item.owned .of-price{color:var(--green);}
+.outfit-item.wearing{border-color:var(--accent);background:#FFF3E8;box-shadow:0 0 0 2px rgba(240,138,69,.28);}
+.outfit-item.wearing .of-name{color:var(--accent-d);}
+.outfit-item.wearing .of-price{color:var(--accent-d);}
+.outfit-item.locked{opacity:.75;}
+/* 装扮页：主角模式 */
+.dress-tabs.main{margin-bottom:10px;}
+.buddy-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.buddy-tabs .chip{flex:1;}
+/* 主角选择条 */
+.pet-pick{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-bottom:6px;}
+.pet-pick::-webkit-scrollbar{display:none;}
+.pet-pick .pp{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 10px 6px;cursor:pointer;transition:.2s;}
+.pet-pick .pp span{font-size:10px;font-weight:800;color:var(--ink);white-space:nowrap;}
+.pet-pick .pp.on{border-color:var(--accent);background:#FFF3E8;box-shadow:0 0 0 2px rgba(240,138,69,.22);}
+.pet-pick .pp.lock{opacity:.55;cursor:default;}
+.pet-actions{display:flex;gap:8px;margin-bottom:12px;}
+.pet-actions .btn{flex:1;}
+.pet-show{background:var(--card);border-radius:20px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;padding:24px 0;margin-bottom:12px;min-height:150px;box-shadow:var(--shadow);}
+.pet-show .pname{margin-left:30px;font-size:15px;font-weight:900;color:var(--ink);}
+.dressed{position:relative;display:inline-block;}
+.dressed .of-emoji{position:absolute;transform:translate(-50%,-50%);line-height:1;pointer-events:none;filter:drop-shadow(0 2px 3px rgba(74,59,47,.28));}
+.outfit-x{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#D98A8A;color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(217,138,138,.5);line-height:1;z-index:10;}
+.outfit-x:active{transform:scale(.9);}
+/* 动物群互动 */
+.pet-crowd{position:absolute;inset:0;z-index:4;pointer-events:none;}
+.pet-crowd .cr{position:absolute;transition:left 2.2s cubic-bezier(.3,.8,.4,1),top 2.2s cubic-bezier(.3,.8,.4,1);}
+.pet-crowd .cr img{filter:drop-shadow(0 3px 6px rgba(74,59,47,.28));}
+.pet-crowd .cr.walking img,.walking{animation:walkBob .28s ease-in-out infinite alternate;}
+@keyframes walkBob{from{transform:translateY(0);}to{transform:translateY(-4px);}}
+.pet-crowd .cr .cb{position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:var(--card);border-radius:10px;padding:3px 9px;font-size:10px;font-weight:800;white-space:nowrap;box-shadow:var(--shadow);opacity:0;transition:opacity .3s;color:var(--wood);}
+.pet-crowd .cr.talk .cb{opacity:1;}
+/* 场景总览 */
+.overview-btn{display:inline-flex;align-items:center;gap:4px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:7px 12px;font-size:12px;font-weight:800;color:var(--wood);cursor:pointer;box-shadow:var(--shadow);white-space:nowrap;}
+.overview-btn:active{transform:scale(.95);}
+.ov-stage{position:relative;border-radius:20px;overflow:hidden;border:1.5px solid var(--line);height:min(55dvh,440px);min-height:230px;}
+.ov-stage>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.ov-stage .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,59,47,0) 55%,rgba(74,59,47,.3));pointer-events:none;}
+.ov-stage .pet-crowd{z-index:5;}
+/* PK 性格互动 */
+.pk-react{margin-top:10px;background:var(--cream);border:1.5px dashed var(--accent);border-radius:14px;padding:10px 12px;font-size:12px;font-weight:800;line-height:1.7;color:var(--wood);min-height:20px;display:none;}
+.pk-react.show{display:block;animation:viewIn .3s ease;}
+/* PK 每晚 24:00 结算 */
+.pk-prog{margin-top:8px;}
+.pk-bar{position:relative;height:8px;border-radius:6px;background:#EDE3D6;overflow:hidden;}
+.pk-bar i{position:absolute;top:0;bottom:0;border-radius:6px;width:0;transition:width .4s;}
+#pk-bar-me{left:0;background:var(--accent);}
+#pk-bar-opp{right:0;background:var(--green);}
+.pk-tag{display:flex;justify-content:space-between;font-size:10px;font-weight:800;color:var(--gray);margin-top:4px;}
+.pk-count{font-size:11px;color:var(--gray);font-weight:700;margin-top:8px;}
+.pk-count b{color:var(--accent-d);}
+.member-card .m-crown{font-size:30px;}
+.member-card .m-title{font-size:15px;font-weight:900;color:var(--accent-d);}
+.member-card .m-desc{font-size:12px;color:var(--wood);font-weight:600;margin-top:2px;line-height:1.5;}
+.member-card .btn{padding:10px 16px;font-size:13px;margin-left:auto;flex:0 0 auto;}
+/* ===== 专注时长统计 ===== */
+.stat-tabs{display:flex;gap:8px;margin-bottom:10px;}
+.stat-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;}
+.stat-nav .mini-btn{width:30px;height:30px;border-radius:50%;background:var(--cream);border:1px solid var(--line);cursor:pointer;font-size:16px;font-weight:800;color:var(--wood);display:flex;align-items:center;justify-content:center;}
+.stat-title{font-size:14px;font-weight:900;min-width:104px;text-align:center;}
+.stat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.stat-grid .wk{font-size:10px;color:var(--gray);font-weight:800;padding:3px 0;text-align:center;}
+.stat-cell{background:var(--cream);border-radius:9px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;border:1.5px solid transparent;min-height:36px;}
+.stat-cell .d{font-size:10px;font-weight:900;color:var(--ink);}
+.stat-cell .m{font-size:9px;color:var(--accent-d);font-weight:800;}
+.stat-cell.today{border-color:var(--accent);background:#FFF3E8;}
+.stat-cell.selected{background:var(--accent);border-color:var(--accent);}
+.stat-cell.selected .d{color:#fff;}
+.stat-cell.selected .m{color:#fff;}
+.stat-cell.empty{background:transparent;cursor:default;border-color:transparent;}
+.stat-summary{font-size:11px;color:var(--gray);font-weight:700;margin-top:10px;text-align:center;}
+.stat-months{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stat-month{background:var(--cream);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;border:1.5px solid transparent;}
+.stat-month.cur{border-color:var(--accent);background:#FFF3E8;}
+.stat-month b{font-size:13px;display:block;color:var(--ink);}
+.stat-month span{font-size:10px;color:var(--accent-d);font-weight:800;}
+/* 陪伴等级 */
+.lv-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.lv-badge{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#F0B45A,#E8926B);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;box-shadow:var(--shadow);flex:0 0 auto;}
+.lv-miles{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.lv-m{font-size:10px;font-weight:800;padding:4px 8px;border-radius:10px;background:var(--cream);color:var(--gray);border:1px solid var(--line);white-space:nowrap;}
+.lv-m.ok{background:#F1FAF2;border-color:var(--green);color:var(--green);}
+.lv-m.next{border-color:var(--accent);background:#FFF3E8;color:var(--accent-d);}
+/* ===== 角色好感度条 ===== */
+.aff-bar{height:7px;background:var(--cream);border-radius:6px;overflow:hidden;width:100%;}
+.aff-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-d));border-radius:6px;}
+.aff-level{display:flex;justify-content:space-between;margin-top:8px;}
+.aff-level .lv{flex:1;text-align:center;font-size:10px;font-weight:800;color:var(--gray);position:relative;}
+.aff-level .lv.active{color:var(--accent-d);}
+.aff-level .lv::before{content:'';display:block;height:6px;background:var(--cream);border-radius:4px;margin-bottom:4px;}
+.aff-level .lv.active::before{background:linear-gradient(90deg,var(--accent),var(--accent-d));}
+.toast{position:fixed;top:18%;left:50%;transform:translateX(-50%);background:rgba(74,59,47,.92);color:#fff;padding:10px 18px;border-radius:14px;font-size:13px;font-weight:700;z-index:99;opacity:0;transition:opacity .2s;pointer-events:none;max-width:80%;text-align:center;}
+.toast.show{opacity:1;}
+.focus-full{position:fixed;inset:0;z-index:90;background:rgba(250,244,236,.98);display:none;flex-direction:column;align-items:center;padding-top:8vh;}
+.focus-full.show{display:flex;}
+/* ===== 切走倒计时浮层 ===== */
+.away-overlay{position:fixed;inset:0;z-index:95;background:rgba(74,59,47,.45);display:none;align-items:center;justify-content:center;padding:24px;}
+.away-overlay.show{display:flex;}
+.away-card{background:var(--card);border-radius:26px;padding:26px 24px;text-align:center;width:100%;max-width:320px;box-shadow:0 16px 40px rgba(74,59,47,.25);border:1px solid var(--line);}
+.away-card svg{width:84px;height:84px;margin:0 auto 6px;display:block;filter:drop-shadow(0 6px 10px rgba(74,59,47,.2));}
+.away-text{font-size:16px;font-weight:900;}
+.away-count{font-size:52px;font-weight:900;color:var(--accent-d);line-height:1.15;margin:4px 0 2px;}
+.away-tip{font-size:12px;color:var(--gray);font-weight:700;margin-bottom:16px;}
+.away-card .btn{width:100%;margin-bottom:8px;}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="statusbar">
+    <span id="clock">9:41</span>
+    <div class="capsule"><span>•••</span><span>⊕</span></div>
+  </div>
+
+  <!-- ===== 视图：小屋（全屏插画·左右滑动） ===== -->
+  <section class="view active" id="view-home">
+    <div class="scene-shell">
+      <div class="scene-track" id="scene-track">
+        <div class="scene-page"><img id="living-room-bg" src="assets/scene-clean/room.png" alt="客厅"></div>
+        <div class="scene-page"><img src="assets/scene-clean/newyear.png" alt="过年门外"></div>
+      </div>
+      <div class="veil"></div>
+      <div class="top-cap left">
+        <button class="mini-btn" data-time="0" onclick="setTime(0)">早</button>
+        <button class="mini-btn active" data-time="1" onclick="setTime(1)">中</button>
+        <button class="mini-btn" data-time="2" onclick="setTime(2)">晚</button>
+      </div>
+      <div class="top-cap right">
+        <button class="mini-btn active" onclick="setWeather(0)">晴</button>
+        <button class="mini-btn" onclick="setWeather(1)">雨</button>
+        <button class="mini-btn" onclick="setWeather(2)">雪</button>
+      </div>
+      <button class="task-arrow" id="task-arrow" onclick="toggleTasks()"><span class="ar">➤</span></button>
+      <div class="task-panel" id="task-panel">
+        <div class="tp-head">今日任务 <b>2/3</b> <span>完成领小鱼干</span></div>
+        <div class="tp-item done"><span class="st">✓</span> 专注 25 分钟<span class="bonus">+10</span></div>
+        <div class="tp-item"><span class="st"></span> 完成一个番茄<span class="bonus">+10</span></div>
+        <div class="tp-item"><span class="st"></span> 陪主角吃顿饭<span class="bonus">+10</span></div>
+        <div class="tp-foot"><button class="go-btn" onclick="go('focus');toggleFocus();toggleTasks()">去专注</button><button class="close-btn" onclick="toggleTasks()">收起来</button></div>
+      </div>
+      <button class="clock-btn" onclick="openFocusSet()" title="开始专注">
+        <img src="https://aka.doubaocdn.com/s/LCfF3aK9QX" alt="开始专注">
+      </button>
+      <div class="side-dock">
+        <button class="sd-btn" onclick="openScenePick()"><span class="sd-content"><img src="assets/home-controls/scene.svg" alt="" aria-hidden="true"><span class="sd-label">场景</span></span></button>
+        <button class="sd-btn" onclick="openHomePick()"><span class="sd-content"><img src="assets/home-controls/companions.svg" alt="" aria-hidden="true"><span class="sd-label">出场</span></span></button>
+        <button class="sd-btn" onclick="openHomeMenu()"><span class="sd-content"><img src="assets/home-controls/more.svg" alt="" aria-hidden="true"><span class="sd-label">更多</span></span></button>
+        <button class="sd-btn" onclick="openSettings()"><span class="sd-content"><img src="assets/home-controls/settings.svg" alt="" aria-hidden="true"><span class="sd-label">设置</span></span></button>
+      </div>
+      <div class="hero-zone">
+        <div class="bubble" id="home-bubble"></div>
+        <div id="home-sprite-wrap" class="sprite" role="button" tabindex="0" aria-label="双击和主角互动" style="position:relative;cursor:pointer;display:inline-block;" ondblclick="petDoubleClick()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();petDoubleClick();}"></div>
+        <div class="pet-name" id="home-petname">小豆 · 柴犬</div>
+      </div>
+      <div class="pet-crowd" id="pet-crowd"></div>
+      <div class="scene-dots" id="scene-dots"></div>
+      <div class="swap-cap" id="swap-strip"></div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：专注 ===== -->
+  <section class="view" id="view-focus">
+    <div class="back-nav" style="display:none;"><button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>返回</button></div>
+    <div class="focus-stage" id="focus-stage">
+      <div class="focus-world" id="focus-world">
+        <img class="table-bg" src="assets/scene-clean/focus-table.png" alt="专注饭桌">
+        <div class="pet-seat" id="focus-pet"></div>
+        <div id="food-plates">
+          <img class="plate-food" id="food-0" alt="一号盘菜品">
+          <img class="plate-food" id="food-1" alt="二号盘菜品">
+          <img class="plate-food" id="food-2" alt="三号盘菜品">
+        </div>
+        <button class="plate-change" onclick="cycleFood(0)" id="btn-food-0">换菜 · 1</button>
+        <button class="plate-change" onclick="cycleFood(1)" id="btn-food-1">换菜 · 2</button>
+        <button class="plate-change" onclick="cycleFood(2)" id="btn-food-2">换菜 · 3</button>
+      </div>
+      <div class="veil"></div>
+      <button class="switch-key" id="btn-pet-pick" style="z-index:99999;" onclick="openPetPick()">⇄ 选主角</button>
+      <button class="switch-key" id="btn-food-pick" onclick="toggleFoodPick()" style="top:52px;right:10px;">切换食材</button>
+      <div class="focus-timer-float">
+        <div class="ft-time" id="float-timer">25:00</div>
+        <div class="ft-task" id="float-task">专注学习中</div>
+      </div>
+      <div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:none;gap:10px;z-index:10;white-space:nowrap;" class="focus-btns">
+        <button onclick="togglePauseFocus()" style="background:rgba(255,255,255,.95);color:var(--wood);border:none;border-radius:20px;padding:10px 22px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.1);">⏸ 暂停</button>
+        <button onclick="toggleFocus()" style="background:var(--wood);color:#fff;border:none;border-radius:20px;padding:10px 22px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);">✓ 结束专注</button>
+      </div>
+      <div class="focus-scene">
+        <div class="focus-bubble" id="focus-bubble">准备好了吗？要开始一起吃饭啦</div>
+      </div>
+      <div class="food-edit-header"><div><h2>为这顿饭选菜</h2><p>想换哪一盘，就点它旁边的「换菜」</p></div><button class="btn ghost" onclick="cancelFoodPick()">取消</button></div>
+      <div class="food-edit-footer"><p id="food-progress">只换其中一盘也可以保存</p><button class="btn" id="save-food-btn" onclick="saveFoodPick()">确定，摆好这盘菜</button></div>
+    </div>
+    <div style="height:14px;"></div>
+    <div class="mode-row" id="mode-row">
+      <div class="mode-card" data-mode="0" onclick="setMode(0)"><div class="m-name">超级严格</div><div class="m-desc">失败 -60 · 成功 +40</div></div>
+      <div class="mode-card active" data-mode="1" onclick="setMode(1)"><div class="m-name">严格</div><div class="m-desc">失败 -30 · 成功 +25</div></div>
+      <div class="mode-card" data-mode="2" onclick="setMode(2)"><div class="m-name">白名单</div><div class="m-desc">仅白名单可用 · -15</div></div>
+      <div class="mode-card" data-mode="3" onclick="setMode(3)"><div class="m-name">宽松</div><div class="m-desc">不扣好感 · 成功 +10</div></div>
+    </div>
+    <div class="card timer-wrap">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;margin-bottom:8px;">选择专注时长</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="chip" data-l="15" onclick="setFocusLen(15)">15 分钟</button>
+          <button class="chip active" data-l="25" onclick="setFocusLen(25)">25 分钟</button>
+          <button class="chip" data-l="45" onclick="setFocusLen(45)">45 分钟</button>
+          <button class="chip" data-l="60" onclick="setFocusLen(60)">60 分钟</button>
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;margin-bottom:8px;">今天要完成什么？</div>
+        <div class="focus-task-field">
+          <input id="task-input" placeholder="选择已设任务，或直接输入" style="width:100%;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;font-weight:600;box-sizing:border-box;outline:none;" value="专注学习" onclick="openFocusTaskMenu()" onkeydown="focusTaskKeydown(event)" aria-haspopup="listbox" aria-controls="focus-task-menu" aria-expanded="false" autocomplete="off">
+          <button class="task-menu-toggle" aria-label="选择已有任务" onclick="openFocusTaskMenu()">⌄</button>
+          <div class="focus-task-menu" id="focus-task-menu" role="listbox" hidden></div>
+        </div>
+      </div>
+      <div class="timer-ring">
+        <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85" cy="85" r="72" fill="none" stroke="#EFE6DA" stroke-width="12"/><circle id="timer-circle" cx="85" cy="85" r="72" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="0"/></svg>
+        <div class="t-num"><b id="timer-num">25:00</b><span>专注 25 分钟 · 严格</span></div>
+      </div>
+      <div class="focus-actions">
+        <button class="btn" id="focus-main-btn" onclick="toggleFocus()">开始专注</button>
+        <button class="btn ghost" onclick="simulateLeave()">切到别的 App</button>
+      </div>
+      <div style="font-size:11px;color:var(--gray);font-weight:600;text-align:center;">提示：切到别的 App 后主角会等你 10 秒，超时才会打扰到它</div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：伙伴（图鉴 + 好友） ===== -->
+  <section class="view" id="view-buddies">
+    <div class="buddy-tabs">
+      <button class="chip active" data-bt="0" onclick="setBuddyTab(0)">图鉴</button>
+      <button class="chip" data-bt="1" onclick="setBuddyTab(1)">好友</button>
+    </div>
+    <div id="buddies-roles">
+    <div class="collection-header">
+      <h2 class="page-title" style="margin:0;">角色图鉴 <span class="sub" style="display:block;">十二位伙伴 · 六只小狗与六只小猫</span></h2>
+      <div class="collection-tools">
+        <button class="overview-btn" onclick="openFace()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><path d="M5.5 15.5c1-2 4.5-3.5 7.5-3.5s6.5 1.5 7.5 3.5"/><path d="M15 4l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z"/></svg>捏一只</button>
+        <button class="overview-btn" onclick="openOverview()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 9 3l6 6M9 3v7"/><path d="M21 15l-6 6-6-6M15 21v-7"/></svg>场景总览</button>
+        <button class="overview-btn" onclick="openHomePick()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>主页出场</button>
+      </div>
+    </div>
+    <div class="collect-banner">
+      <div class="b-text"><b id="collection-count">十二位伙伴图鉴</b><span>熟悉的面孔，各有自己的小脾气</span></div>
+      <div class="collect-faces" id="collect-faces" aria-label="十二位狗猫伙伴合照"></div>
+    </div>
+    <h3 class="partner-group-title">小狗伙伴<span>六只 · 各有自己的小脾气</span></h3>
+    <div class="role-grid" id="role-grid"></div>
+    <h3 class="partner-group-title">小猫伙伴<span>六只 · 都是熟悉的面孔</span></h3>
+    <div class="role-grid" id="cat-grid"></div>
+    <div class="more-title">更多伙伴 <span>蜥蜴 · 玉米蛇 · 性格各异</span></div>
+    <div class="role-grid" id="extra-grid"></div>
+    <div class="more-title">自由绘画 <span>画一只 · 捏一只 · 都是你的陪伴</span></div>
+    <div class="role-grid" id="draw-grid"></div>
+    </div>
+    <div id="buddies-friends" style="display:none;">
+    <h2 class="page-title">好友广场 <span class="sub">找搭子 · 每日 PK · 周排行</span></h2>
+    <div class="card coin-card">
+      <div class="coin-ic">🐟</div>
+      <div class="coin-info"><b id="coin-num">220</b><span>鱼币</span></div>
+      <div class="coin-rank">本周排名：第 <b id="my-rank">1</b> 名</div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">本周好友排行</div>
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:8px;">每周前三可领鱼币 · 周一 0 点结算</div>
+      <div id="rank-list"></div>
+      <button class="btn" style="width:100%;" onclick="claimRank()">领取我的排行奖励</button>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">今日 PK</div>
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:8px;">和搭子比今日专注时长 · 每晚 24:00 自动结算</div>
+      <div class="pk-row">
+        <div class="pk-ava" id="pk-me"></div>
+        <div class="pk-vs">VS</div>
+        <div class="pk-ava" id="pk-opp"></div>
+        <div class="pk-info"><b id="pk-name">果冻</b><span id="pk-note">今日 PK 对象</span></div>
+      </div>
+      <div class="pk-prog"><div class="pk-bar"><i id="pk-bar-me"></i><i id="pk-bar-opp"></i></div></div>
+      <div class="pk-tag" id="pk-tag"><span id="pk-tag-me">我 0 分钟</span><span id="pk-tag-opp">对手 0 分钟</span></div>
+      <div class="pk-count" id="pk-count">今日 PK · 每晚 24:00 自动结算</div>
+      <div class="pk-react" id="pk-react"></div>
+      <button class="btn" style="width:100%;margin-top:10px;" id="pk-btn" onclick="startPK()">发起 PK</button>
+      <button class="btn ghost" style="width:100%;margin-top:8px;display:none;" id="pk-settle-btn" onclick="settlePK()">立即结算（原型演示 · 真实版到点自动结算）</button>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">专注广场 · 找搭子</div>
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:8px;">挑一个想一起干饭的人，申请做专注搭子</div>
+      <div id="plaza-list"></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">鱼币商店 · 兑换服装</div>
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:8px;">主角可以穿戴 · 排行榜和 PK 都能赚鱼币</div>
+      <div class="outfit-grid" id="outfit-grid"></div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图：装扮（小屋 + 主角） ===== -->
+  <section class="view" id="view-dress">
+    <div class="back-nav" style="display:none;"><button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>返回</button></div>
+    <h2 class="page-title">装扮 <span class="sub">布置小屋 · 也给主角穿好看</span></h2>
+    <div class="dress-tabs main">
+      <button class="chip active" data-mode="0" onclick="setDressMode(0)">小屋</button>
+      <button class="chip" data-mode="1" onclick="setDressMode(1)">主角</button>
+    </div>
+    <div id="dress-house">
+      <div class="house-caption house-heading"><span>客厅全景 · 局部换装</span><div><button class="btn ghost" id="house-original" type="button">原型布置</button></div></div>
+      <div class="house-toolbar">
+        <label>时间<select id="house-time" aria-label="预览时间"><option value="0">早晨</option><option value="1" selected>午后</option><option value="2">夜晚</option></select></label>
+        <label>天气<select id="house-weather" aria-label="预览天气"><option value="0">晴天</option><option value="1">雨天</option><option value="2">雪天</option></select></label>
+        <button class="btn ghost house-export" id="house-export" type="button">导出预览壁纸</button>
+      </div>
+      <div class="dress-stage" id="dress-stage">
+        <img src="assets/scenes/original-room-0-0.png" alt="小屋场景">
+        <div class="veil"></div>
+        <div id="placed-layer" style="position:absolute;inset:0;z-index:5;"></div>
+        <div class="stage-tip">点下面物品放进小屋 · 拖动物品摆位置</div>
+        <button class="export-btn" onclick="exportWallpaper()">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          导出壁纸
+        </button>
+      </div>
+      <div class="dress-tabs" id="dress-tabs">
+        <button class="chip active" data-tab="1" onclick="setDressTab(1)">玩具</button>
+        <button class="chip" data-tab="2" onclick="setDressTab(2)">装饰</button>
+      </div>
+      <div class="house-picker" id="house-picker"></div>
+      <div class="item-tray" id="item-tray"></div>
+      <div class="house-caption">月亮、星星、雨滴等挂饰统一在装饰里。拖动摆放，点击 × 移除。</div>
+      <div class="house-actions"><button class="btn ghost" id="house-cancel" type="button">取消修改</button><button class="btn" id="house-confirm" type="button">确定布置</button></div>
+      <p class="house-status" id="house-status" role="status" aria-live="polite"></p>
+    </div>
+    <div id="dress-pet" style="display:none;">
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin:2px 4px 6px;">选择主角（已解锁才能装扮）</div>
+      <div class="pet-pick" id="pet-pick"></div>
+      <div class="wardrobe-preview"><div class="pet-show" id="pet-show" style="position:relative;border-radius:var(--r-lg);overflow:hidden;background:url('assets/scenes/original-room-0-0.png') center/cover;min-height:220px;display:flex;align-items:center;justify-content:center;padding:42px 0 24px;"></div>
+      <div id="raincoat-colors" class="raincoat-colors" hidden></div></div>
+      <div class="wardrobe-filters" aria-label="衣橱分类"><button type="button" aria-pressed="true" onclick="setWardrobeFilter('all')">全部</button><button type="button" aria-pressed="false" onclick="setWardrobeFilter('owned')">已拥有</button><button type="button" aria-pressed="false" onclick="setWardrobeFilter('fish')">鱼币兑换</button><button type="button" aria-pressed="false" onclick="setWardrobeFilter('cash')">1元购买</button></div>
+      <div class="outfit-grid" id="outfit-wear" aria-label="左右滑动试穿装扮"></div>
+      <div class="wardrobe-scrollbar"><button type="button" aria-label="上一组装扮" onclick="scrollWardrobe(-1)">‹</button><span id="wardrobe-count">左右滑动 · 点击试穿</span><button type="button" aria-label="下一组装扮" onclick="scrollWardrobe(1)">›</button></div>
+      <div class="pet-actions">
+        <button class="btn" onclick="saveDress()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M5 12l5 5 9-10"/></svg>确定装扮</button>
+        <button class="btn ghost" onclick="resetDress()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg>重置试穿</button>
+      </div>
+      <p class="wardrobe-note">都可以先试穿，确定时再解锁；已拥有的装扮直接保存。</p>
+    </div>
+  </section>
+
+  <!-- ===== 视图：我的 ===== -->
+  <section class="view" id="view-mine">
+    <div class="back-nav" style="display:none;"><button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>返回</button></div>
+    
+    <!-- 个人身份区 -->
+    <div class="card" id="account-card">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐾</div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:900;">个人身份与账号</div>
+        <div style="font-size:12px;color:var(--gray);font-weight:600;margin-top:3px;">本机保存个人计划、专注记录与装扮</div>
+      </div>
+      <button class="btn" style="padding:8px 18px;font-size:13px;" onclick="AccountManager.show()">登录 / 注册</button>
+    </div>
+
+    <!-- 我的专注大卡片 -->
+    <div class="card" style="background:var(--wood);color:#fff;cursor:pointer;" onclick="AccountManager.showHistory()">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:17px;font-weight:900;">我的专注</div>
+          <div id="my-focus-summary" style="font-size:12px;color:rgba(255,255,255,.7);font-weight:600;margin-top:4px;">累计专注 0 小时 · 连续打卡 0 天</div>
+        </div>
+        <div style="font-size:20px;opacity:.6;">›</div>
+      </div>
+    </div>
+
+    <!-- 功能列表 -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;" onclick="AccountManager.showProfile()">
+        <div style="font-size:20px;">👤</div>
+        <div style="flex:1;font-size:14px;font-weight:700;">个人资料</div>
+        <div id="personal-profile-summary" style="font-size:12px;color:var(--gray);">登录后填写</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;" onclick="AccountManager.showHistory()">
+        <div style="font-size:20px;">⏱️</div>
+        <div style="flex:1;font-size:14px;font-weight:700;">专注记录</div>
+        <div id="my-focus-today" style="font-size:12px;color:var(--gray);">今日 0h</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="CommunityUI.openPrivacy()">
+        <div style="font-size:20px;">🔒</div>
+        <div style="flex:1;font-size:14px;font-weight:700;">账号与隐私</div>
+        <div style="font-size:12px;color:var(--gray);">本地数据 / 账号</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line);cursor:pointer;" onclick="openSettings()">
+        <div style="font-size:20px;">⚙️</div>
+        <div style="flex:1;font-size:14px;font-weight:700;">设置</div>
+        <div style="font-size:12px;color:var(--gray);">音乐 / 音效</div>
+      </div>
+    </div>
+
+    <div class="card growth-shortcuts"><button class="btn ghost" onclick="CommunityUI.openCheckin()">每日签到 ›</button><button class="btn ghost" onclick="CommunityUI.openAchievements()">陪伴成就 / 称号 ›</button></div>
+    <!-- 今日任务 -->
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:12px;">今日任务</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <input id="new-task-input" placeholder="添加自定义任务..." style="flex:1;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-weight:600;outline:none;box-sizing:border-box;">
+        <button onclick="addTask()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:13px;font-weight:800;cursor:pointer;">添加</button>
+      </div>
+      <div id="task-list"></div>
+    </div>
+
+    <h2 class="page-title">我的 <span class="sub">你的影子 · 成长 · 轻商店</span></h2>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;display:flex;align-items:center;gap:6px;">你的影子 <span style="font-size:11px;color:var(--gray);font-weight:700;">陪主角吃饭的你</span></div>
+      <div class="avatar-row" id="avatar-row"></div>
+      <div style="font-size:11px;color:var(--gray);font-weight:600;margin-top:10px;">选择你的陪伴影子，餐桌上会映出对应的轮廓。</div>
+    </div>
+    <div class="card">
+      <div id="my-affinity-title" style="font-size:14px;font-weight:900;margin-bottom:6px;">与小豆的好感度</div>
+      <div class="aff-level">
+        <div class="lv active">陌生</div><div class="lv active">眼熟</div><div class="lv active">熟悉</div><div class="lv">亲密</div><div class="lv">挚友</div>
+      </div>
+      <div style="font-size:12px;color:var(--wood);font-weight:700;margin-top:8px;"><span id="my-affinity-value">陌生 · 0 分</span></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">陪伴等级 <span style="font-size:11px;color:var(--gray);font-weight:700;">每累计 100 小时升一级</span></div>
+      <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:10px;">一千小时的相伴，从每一顿饭开始 · 累计真实时长，解锁并佩戴称号</div>
+      <div class="lv-head">
+        <div class="lv-badge" id="lv-badge">Lv.1</div>
+        <div>
+          <div style="font-size:14px;font-weight:900;" id="lv-title">萌新伙伴</div>
+          <div style="font-size:10px;color:var(--gray);font-weight:700;" id="lv-next">距 Lv.2 还差 32 小时</div>
+        </div>
+      </div>
+      <div class="progress-line"><span class="p-name">本等级进度</span><div class="p-bar"><i id="lv-bar" style="width:0%;"></i></div><span class="p-val" id="lv-val">0/100h</span></div>
+      <div class="lv-miles" id="lv-miles"></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:10px;">我的成长</div>
+      <div class="progress-line"><span class="p-name">登录天数</span><div class="p-bar"><i id="my-login-bar" style="width:0%;"></i></div><span class="p-val" id="my-login-days">0/30天</span></div>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;font-weight:900;margin-bottom:4px;">专注时长统计 <span style="font-size:11px;color:var(--gray);font-weight:700;">真实记录</span></div>
+      <div class="stat-tabs">
+        <button class="chip active" data-sv="d" onclick="setStatView('d')">每日</button>
+        <button class="chip" data-sv="m" onclick="setStatView('m')">每月</button>
+      </div>
+      <div class="stat-nav">
+        <button class="mini-btn" onclick="statNav(-1)">‹</button>
+        <div class="stat-title" id="stat-title">2026 年 9 月</div>
+        <button class="mini-btn" onclick="statNav(1)">›</button>
+      </div>
+      <div id="stat-table"></div>
+    </div>
+    <div class="member-card">
+      <div class="m-crown">店</div>
+      <div>
+        <div class="m-title">免费玩儿 · 装扮小铺</div>
+        <div class="m-desc">专注、陪伴和日常玩法免费<br>按喜欢选购装扮包或新手礼包</div>
+      </div>
+      <button class="btn" onclick="openGiftShop()">去逛逛</button>
+    </div>
+  </section>
+
+  <!-- 好友内容已并入「伙伴」视图 -->
+
+  <!-- ===== 底部 Tab ===== -->
+  <nav class="tabbar">
+    <button class="tab active" data-view="home" onclick="go('home',{push:false})" aria-label="小屋">
+      <img src="assets/nav/home.svg" alt="小屋">
+    </button>
+    <button class="tab" data-view="buddies" onclick="go('buddies',{push:false})" aria-label="伙伴">
+      <img src="assets/nav/buddies.svg" alt="伙伴">
+    </button>
+    <div class="tab-main">
+      <button class="main-btn" onclick="go('focus',{push:false})" aria-label="专注">
+        <img src="assets/nav/focus.svg" alt="专注">
+      </button>
+    </div>
+    <button class="tab" data-view="dress" onclick="go('dress',{push:false})" aria-label="装扮">
+      <img src="assets/nav/dress.svg" alt="装扮">
+    </button>
+    <button class="tab" data-view="mine" onclick="go('mine',{push:false})" aria-label="我的">
+      <img src="assets/nav/mine.svg" alt="我的">
+    </button>
+  </nav>
+</div>
+
+<div class="role-detail" id="role-detail"><div class="sheet" id="role-sheet"></div></div>
+
+<!-- 切走倒计时浮层 -->
+<div class="away-overlay" id="away-overlay">
+  <div class="away-card">
+    <div id="away-pet"></div>
+    <div class="away-text" id="away-text">你的小猫还在等你哦</div>
+    <div class="away-count" id="away-count">10</div>
+    <div class="away-tip">10 秒内回来，不打扰它吃饭</div>
+    <button class="btn" onclick="returnHome()">我回来了</button>
+    <button class="btn ghost" onclick="stayAway()">继续忙别的</button>
+  </div>
+</div>
+
+<!-- 专注设置浮层 -->
+<div class="role-detail" id="focus-set"><div class="sheet">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:12px;">开始专注</h2>
+  <div class="fs-opt"><span class="lbl">专注模式</span>
+    <button class="chip" data-m="0" onclick="setMode(0)">超级严格</button>
+    <button class="chip active" data-m="1" onclick="setMode(1)">严格</button>
+    <button class="chip" data-m="2" onclick="setMode(2)">白名单</button>
+    <button class="chip" data-m="3" onclick="setMode(3)">宽松</button>
+  </div>
+  <div class="fs-opt"><span class="lbl">专注时长</span>
+    <button class="chip active" data-l="25" onclick="setFocusLen(25)">25 分钟</button>
+    <button class="chip" data-l="45" onclick="setFocusLen(45)">45 分钟</button>
+    <button class="chip" data-l="60" onclick="setFocusLen(60)">60 分钟</button>
+    <button class="chip" data-l="90" onclick="setFocusLen(90)">90 分钟</button>
+  </div>
+  <div class="fs-opt"><span class="lbl">这次的任务</span>
+    <button class="chip active" data-t="0" onclick="setFocusTask(0)">无任务</button>
+    <button class="chip" data-t="1" onclick="setFocusTask(1)">完成一个番茄</button>
+    <button class="chip" data-t="2" onclick="setFocusTask(2)">专注 25 分钟</button>
+    <button class="chip" data-t="3" onclick="setFocusTask(3)">陪主角吃顿饭</button>
+  </div>
+  <button class="btn" style="width:100%;" onclick="applyFocus()">开始 · 一起吃饭</button>
+</div></div>
+
+<!-- 选主角浮层 -->
+<div class="role-detail companion-picker" id="companion-picker" role="dialog" aria-modal="true" aria-labelledby="companion-title"><div class="sheet">
+  <header><h2 id="companion-title">今天陪谁吃饭</h2><button class="btn ghost" onclick="dismissSheet($('companion-picker'))">关闭</button></header>
+  <p id="companion-count"></p>
+  <div class="pick-grid" id="pick-grid"></div>
+</div></div>
+
+<!-- 主页九宫格菜单 -->
+<div class="role-detail" id="home-menu"><div class="sheet">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:4px;">小屋功能</h2>
+  <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:12px;">换场景 · 换猫咪 · 更多玩法</div>
+  <div class="hm-grid" id="hm-grid"></div>
+</div></div>
+
+<!-- 场景选择 -->
+<div class="role-detail" id="scene-pick"><div class="sheet">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:12px;">更换场景</h2>
+  <div class="sc-pick" id="sc-pick">
+    <div class="sc-card active" onclick="pickScene(0)"><img src="https://aka.doubaocdn.com/s/aD4M3VM6In" alt="客厅"><span>客厅</span></div>
+    <div class="sc-card" onclick="pickScene(1)"><img src="assets/scene-clean/newyear.png" alt="过年门外"><span>过年</span></div>
+  </div>
+  <div style="font-size:11px;color:var(--gray);font-weight:700;margin-top:12px;text-align:center;">左右滑动主页也可以切换 · 更多场景靠专注时长解锁</div>
+</div></div>
+
+<!-- 场景总览（角色解锁处） -->
+<div class="role-detail" id="overview"><div class="sheet" style="max-height:88vh;">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:4px;">场景总览</h2>
+  <div id="overview-caption" style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:10px;">跟随首页当前选择的场景</div>
+  <div class="ov-stage">
+    <img id="overview-bg" alt="当前首页场景">
+    <div class="veil"></div>
+    <div class="pet-crowd" id="ov-crowd"></div>
+  </div>
+  <button class="btn" style="width:100%;margin-top:12px;" onclick="dismissSheet($('overview'))">收起</button>
+</div></div>
+
+<!-- 画一只陪伴（全屏） -->
+<div class="role-detail fullscreen" id="draw-sheet"><div class="sheet">
+  <div class="fs-head"><b>画一只陪伴</b><button class="fs-close" onclick="dismissSheet($('draw-sheet'))">✕</button></div>
+  <div class="fs-sub">画完它就住进你家 · 陪你去专注</div>
+  <div class="draw-canvas-wrap" id="draw-wrap"><canvas id="draw-ref" class="draw-ref"></canvas></div>
+  <div class="layer-row">
+    <div class="layer-bar" id="layer-bar"></div>
+    <button class="lb-arrow" onclick="addLayer()" title="添加图层"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="lb-arrow" onclick="moveLayer(1)" title="上移一层"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button>
+    <button class="lb-arrow" onclick="moveLayer(-1)" title="下移一层"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+  </div>
+  <div class="draw-tools">
+    <button class="dt-btn on" id="tool-brush" onclick="setTool('brush')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><path d="M17 3a2.8 2.8 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3Z"/></svg>画笔</button>
+    <button class="dt-btn" id="tool-eraser" onclick="setTool('eraser')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><path d="M14.5 3.5 21 10l-8 8H9.5L3.5 12Z"/><path d="M9.5 18H21"/></svg>橡皮</button>
+    <span style="width:1px;height:20px;background:var(--line);"></span>
+    <button class="dt-btn" id="draw-undo" onclick="undoDraw()" disabled><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><path d="M3 8h9a6 6 0 0 1 6 6v0a6 6 0 0 1-6 6h-4"/><path d="M7 4 3 8l4 4"/></svg>撤销</button>
+    <button class="dt-btn" id="draw-redo" onclick="redoDraw()" disabled><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;"><path d="M21 8h-9a6 6 0 0 0-6 6v0a6 6 0 0 0 6 6h4"/><path d="M17 4l4 4-4 4"/></svg>恢复</button>
+  </div>
+  <div class="brush-bar" id="brush-bar"></div>
+  <div class="draw-colors" id="draw-colors"></div>
+  <input class="draw-name" id="draw-name" placeholder="给它起个名字（可选）" maxlength="8">
+  <div class="draw-hint" id="draw-hint"></div>
+  <div class="draw-actions">
+    <button class="btn ghost" onclick="clearDraw()">清空</button>
+    <button class="btn ghost" id="skip-blink-btn" onclick="skipStep()" style="display:none;">跳过闭眼</button>
+    <button class="btn" id="save-draw-btn" onclick="saveDraw()">确定，画闭眼动画</button>
+  </div>
+</div></div>
+
+<!-- 捏一只专属宠物 -->
+<div class="role-detail" id="face-sheet"><div class="sheet">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:4px;">捏一只专属宠物</h2>
+  <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:12px;">选物种 · 配颜色 · 选性格 · 捏完加入图鉴</div>
+  <div class="face-row"><div class="lbl">物种</div><div class="chips" id="face-kind"></div></div>
+  <div class="face-row"><div class="lbl">颜色</div><div class="chips" id="face-color"></div></div>
+  <div class="face-row"><div class="lbl">性格</div><div class="chips" id="face-trait"></div></div>
+  <div class="face-preview" id="face-preview"></div>
+  <input class="draw-name" id="face-name" placeholder="给它起个名字（可选）" maxlength="8">
+  <button class="btn" style="width:100%;" onclick="saveFace()">生成并加入图鉴</button>
+</div></div>
+
+<!-- 主页出场勾选 -->
+<div class="role-detail" id="homepick-sheet"><div class="sheet" style="max-height:86vh;">
+  <h2 style="font-size:18px;font-weight:900;margin-bottom:4px;">主页出场</h2>
+  <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:10px;">勾选的主角才会出现在主页和小屋互动 · 未勾选则暂不出场</div>
+  <div class="hp-list" id="hp-list"></div>
+  <button class="btn" style="width:100%;margin-top:12px;" onclick="dismissSheet($('homepick-sheet'))">确定</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="food-overlay" id="food-sheet" role="dialog" aria-modal="true" aria-labelledby="food-sheet-title" onclick="if(event.target===this)closeFoodSheet()">
+  <div class="food-sheet">
+    <header><h3 id="food-sheet-title">为一号盘选菜</h3><button class="chip" onclick="closeFoodSheet()">取消</button></header>
+    <p>彩色食材可以选择，灰色食材尚未拥有</p>
+    <div class="food-grid" id="food-grid"></div>
+    <button class="btn" onclick="confirmSheetPick()">确定，放进这个盘子</button>
+  </div>
+</div>
+
+<script src="assets/art-sources.js"></script>
+<script src="assets/art-renderer.js"></script>
+<script src="assets/drawn-expression.js"></script>
+<script src="assets/outfit-catalog.js"></script>
+<script src="assets/cat-catalog.js"></script>
+<script src="assets/wardrobe-commerce.js"></script>
+<script src="assets/partner-access.js"></script>
+<script src="assets/roster-migration.js"></script>
+<script>
+/* ===== 数据 ===== */
+const TRAITS=['开朗','害羞','偷偷摸摸','暴躁','装酷耍帅','贪吃'];
+const PETS=[
+ {name:'小豆',breed:'柯基',trait:0,line:'「你回来啦！今天想干点啥？」'},
+ {name:'奶糖',breed:'比熊',trait:1,line:'「你…你回来啦（小声）」'},
+ {name:'黑豆',breed:'泰迪',trait:2,line:'「嘘…我偷偷藏了零食」'},
+ {name:'辣椒',breed:'柴犬',trait:3,line:'「哼，去哪儿了？下次早点回来」'},
+ {name:'酷盖',breed:'萨摩耶',trait:4,line:'「嗯，回来了就好。（转身偷笑）」'},
+ {name:'饭团',breed:'博美',trait:5,line:'「有没有带好吃的回来！」'}
+];
+/* ===== 更多伙伴：爬宠/鱼 + 自由创作 ===== */
+const EXTRA_PETS=[
+ {name:'小翠',breed:'守宫',kind:'lizard',trait:3,line:'「一起晒太阳写作业，别偷懒哦」'},
+ {name:'花卷',breed:'玉米蛇',kind:'snake',trait:1,line:'「嘶…专心一点，我看着你呢」'},
+ {name:'已移除伙伴',kind:'retired',retired:true},
+ ...CatCatalog
+];
+const EXTRA_UNLOCK=EXTRA_PETS.map(p=>p.retired?0:1);
+const DRAWN_PETS=[]; /* 画笔绘制的自定义陪伴：{name,dataURL} */
+const CUSTOM_PETS=[]; /* 捏脸宠物：{name,kind,color,face,acc} */
+function getPet(pid){
+ if(!Number.isInteger(pid)||pid<0)return null;
+ const p=allPets()[pid];return p&&!p.retired&&p.kind!=='fish'?p:null;
+}
+function allPets(){return PETS.concat(EXTRA_PETS,DRAWN_PETS,CUSTOM_PETS);}
+function addDrawnPet(pet){
+ // 画作排在捏脸伙伴前面，插入时迁移所有按索引保存的伙伴状态。
+ const customStart=PETS.length+EXTRA_PETS.length+DRAWN_PETS.length;
+ DRAWN_PETS.push(pet);
+ if(curPet>=customStart)curPet++;
+ if(dressPet>=customStart)dressPet++;
+ if(appliedPK>=customStart)appliedPK++;
+ if(homePicks!==null)homePicks=homePicks.map(pid=>pid>=customStart?pid+1:pid);
+ const shifted={};
+ Object.entries(petOutfits).forEach(([key,outfits])=>{const pid=Number(key);shifted[pid>=customStart?pid+1:pid]=outfits;});
+ petOutfits=shifted;
+ const shiftedColors={};
+ Object.entries(outfitColors).forEach(([key,colors])=>{const pid=Number(key);shiftedColors[pid>=customStart?pid+1:pid]=colors;});
+ outfitColors=shiftedColors;
+ if(ROLE_AFF.length>customStart)ROLE_AFF.splice(customStart,0,0);
+ if(window.AppProfileBridge)AppProfileBridge.shiftPetReferences(customStart,1);
+}
+function petUnlocked(pid){
+ if(!getPet(pid))return false;
+ if(pid<PETS.length)return !!ROLE_UNLOCK[pid];
+ if(pid<PETS.length+EXTRA_PETS.length)return !!EXTRA_UNLOCK[pid-PETS.length];
+ return true;
+}
+/* 性格→简化表情：0 温和 / 1 凶 / 2 笑 */
+function faceIdx(t){return t===2?1:((t===3||t===4)?2:0);}
+function snakeSVG(color,face,size){
+ const eyes='<circle cx="35" cy="38" r="2.3" fill="#222"/><circle cx="35" cy="38" r=".9" fill="#fff"/><circle cx="53" cy="38" r="2.3" fill="#222"/><circle cx="53" cy="38" r=".9" fill="#fff"/>';
+ const mouth=face===1?'<path d="M42 48 l4 3" stroke="#222" stroke-width="2" stroke-linecap="round"/>':(face===2?'<path d="M38 46 q5 5 10 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M40 47 q4 2 8 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ const brow=face===1?'<path d="M29 32 q5 -4 11 0 M47 32 q5 -4 11 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>':'';
+ return '<svg viewBox="0 0 96 96" width="'+size+'" height="'+size+'">'
+  +'<path d="M20 84 q-8 -22 6 -26 q16 -5 20 -30 q3 -15 13 -14" stroke="'+color+'" stroke-width="15" fill="none" stroke-linecap="round"/>'
+  +'<path d="M20 84 q-8 -22 6 -26 q16 -5 20 -30 q3 -15 13 -14" stroke="#00000018" stroke-width="15" fill="none" stroke-linecap="round" transform="translate(2,2)"/>'
+  +'<path d="M20 84 q-6 -6 -4 -10 q5 -3 8 1 q1 8 -4 9 Z" fill="'+color+'"/>'
+  +'<ellipse cx="44" cy="34" rx="15" ry="12" fill="'+color+'"/>'
+  +eyes+mouth+brow
+  +'<path d="M49 45 q3 3 2 8" stroke="#E85D5D" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  +'<path d="M66 30 q5 -4 6 -10 M70 34 q8 -2 8 -10" stroke="'+color+'" stroke-width="4" fill="none" stroke-linecap="round"/>'
+  +'</svg>';
+}
+function lizardSVG(color,face,size){
+ const eyes='<circle cx="33" cy="36" r="2.6" fill="#222"/><circle cx="33" cy="36" r="1" fill="#fff"/><circle cx="55" cy="36" r="2.6" fill="#222"/><circle cx="55" cy="36" r="1" fill="#fff"/>';
+ const mouth=face===1?'<path d="M40 46 l6 2" stroke="#222" stroke-width="2" stroke-linecap="round"/>':(face===2?'<path d="M36 44 q6 5 12 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>':'<path d="M39 45 q5 2 9 0" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>');
+ return '<svg viewBox="0 0 96 96" width="'+size+'" height="'+size+'">'
+  +'<path d="M78 40 q14 6 6 22 q-4 8 -12 6" stroke="'+color+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+  +'<ellipse cx="44" cy="58" rx="22" ry="13" fill="'+color+'"/>'
+  +'<ellipse cx="44" cy="34" rx="16" ry="13" fill="'+color+'"/>'
+  +'<path d="M26 60 l-6 10 M40 64 l-4 11 M58 64 l2 11 M66 56 l8 9" stroke="'+color+'" stroke-width="6" stroke-linecap="round"/>'
+  +eyes+mouth
+  +'<path d="M56 44 q4 3 3 8" stroke="#E85D5D" stroke-width="2" fill="none" stroke-linecap="round"/>'
+  +'<circle cx="68" cy="24" r="5" fill="#E85D5D" opacity=".8"/><circle cx="76" cy="30" r="3" fill="#E85D5D" opacity=".6"/>'
+  +'</svg>';
+}
+/* 捏脸宠物渲染 */
+function customSVG(c,size){
+ const color=c.color;
+ if(c.kind==='snake')return snakeSVG(color,c.face,size);
+ if(c.kind==='lizard')return lizardSVG(color,c.face,size);
+ if(c.kind==='fish'||c.retired)return '';
+ /* 与家中伙伴保持圆脑袋、短身体和奶油色口鼻的手绘比例。 */
+ const F=color||'#F0B45A',dog=c.kind==='dog';
+ const ears=dog?'<path d="M25 22 Q12 12 10 31 Q8 48 22 48 L31 29Z"/><path d="M71 22 Q84 12 86 31 Q88 48 74 48 L65 29Z"/>':'<path d="M22 30 L19 8 Q32 8 39 20Z"/><path d="M74 30 L77 8 Q64 8 57 20Z"/>';
+ const mouth=c.face===1?'<path d="M40 49 Q48 62 56 49Z" fill="#68432E"/><path d="M44 54 Q48 50 52 54 L51 58 Q48 61 45 58Z" fill="#E49A8B" stroke="none"/>':'<path d="M48 47 V51 M48 51 Q42 57 38 51 M48 51 Q54 57 58 51" fill="none" stroke-width="2.2"/>';
+ const brows=c.face===2?'<path d="M30 32 L39 35 M57 35 L66 32" fill="none" stroke-width="2.5"/>':'';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="'+size+'" height="'+size+'" role="img" aria-label="'+(dog?'小狗':'小猫')+'">'
+  +'<g fill="'+F+'" stroke="#68432E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'
+  +(dog?'<path d="M65 73 Q83 78 80 64 Q77 60 75 66 Q72 70 65 68Z"/>':'<path d="M65 74 Q87 79 83 60 Q82 52 76 55 Q71 58 77 65 Q79 70 65 67Z"/>')
+  +'<ellipse data-custom-body cx="48" cy="74" rx="21" ry="16"/>'
+  +'<path d="M39 66 Q48 62 57 66 L57 82 Q48 89 39 82Z" fill="#FFF3DD" stroke="none"/>'
+  +'<path d="M28 78 Q24 90 35 90 H41 V78 M68 78 Q72 90 61 90 H55 V78"/>'
+  +ears+'<ellipse data-custom-head cx="48" cy="38" rx="29" ry="26"/>'
+  +(dog?'<path d="M29 23 Q39 15 47 17 Q43 23 36 28" fill="#fff" stroke="none"/>':'<path d="M25 22 L24 15 L32 21 M71 22 L72 15 L64 21" fill="#EAB3A0" stroke="none"/>')
+  +'<ellipse cx="48" cy="49" rx="19" ry="13" fill="#FFF3DD" stroke="none"/>'
+  +'<ellipse cx="35" cy="38" rx="4" ry="5.4" fill="#68432E" stroke="none"/><ellipse cx="61" cy="38" rx="4" ry="5.4" fill="#68432E" stroke="none"/>'
+  +'<circle cx="34" cy="36.5" r="1.5" fill="#fff" stroke="none"/><circle cx="60" cy="36.5" r="1.5" fill="#fff" stroke="none"/>'
+  +'<path d="M44 45 Q48 42 52 45 L48 49Z" fill="#68432E" stroke-width="1.5"/>'+mouth+brows
+  +'<ellipse cx="27" cy="47" rx="4" ry="2.5" fill="#EAB3A0" stroke="none"/><ellipse cx="69" cy="47" rx="4" ry="2.5" fill="#EAB3A0" stroke="none"/>'
+  +(!dog?'<path d="M21 45 L14 43 M22 50 L14 51 M75 45 L82 43 M74 50 L82 51" stroke-width="1.6" fill="none"/>':'')
+  +'<path d="M33 77 L33 82" stroke="#fff" stroke-width="2.5"/></g></svg>';
+}
+/* 统一宠物渲染：猫狗走原立绘，爬宠/鱼/创作走新 SVG */
+function renderPetArt(pid,size,full,expr=0){
+ const p=getPet(pid);
+ if(!p)return '';
+ if(pid<6)return '<img class="dog-art" src="assets/pets-v2/dog-'+pid+'-'+(Number.isInteger(expr)&&expr>=0&&expr<3?expr:0)+'.svg" alt="'+p.name+'" width="'+size+'" height="'+size+'" style="width:'+size+'px;height:'+size+'px;object-fit:contain;">';
+ if(p.catalogCat)return '<img class="catalog-cat" src="assets/cats-v4/cat-'+p.catIndex+'-'+(Number.isInteger(expr)&&expr>=0&&expr<3?expr:0)+'.svg" alt="'+p.name+'" width="'+size+'" height="'+size+'" style="width:'+size+'px;height:'+size+'px;object-fit:contain;">';
+ if(['snake','lizard'].includes(p.kind))return '<img class="companion-art" src="assets/companion-art/v2/'+p.kind+'-'+(Number.isInteger(expr)&&expr>=0&&expr<3?expr:0)+'.svg" alt="'+p.name+'" width="'+size+'" height="'+size+'" style="width:'+size+'px;height:'+size+'px;object-fit:contain;">';
+ if(p.kind==='drawn'){
+  return DrawnExpressions.render(p,size);
+ }
+ if(p.custom)return customSVG(p,size);
+ return full?petSVG(pid,size):catSVG(pid%6,size);
+}
+const LEAVEREACT=[
+ {label:'掉眼泪',text:'「说好一起吃的…你怎么走了」'},
+ {label:'偷吃你的份',text:'「哼，那你的那份我帮你吃掉好了」'},
+ {label:'炸毛',text:'「说好一起吃饭的你人呢！！」'},
+ {label:'强装没事等你',text:'「啊？走啦…那我先吃，你快点回来哦」'},
+ {label:'理直气壮代吃',text:'「你那份我替你吃了，不用谢！」'},
+ {label:'嘴硬等门',text:'「谁等你了，我只是自己吃」'}
+];
+const RETURNTXT=[
+ '「你…你终于回来了（红着脸）」',
+ '「哦，回来了啊。咳，我可没想你」',
+ '「哼！还知道回来？下次不准走这么久！」',
+ '「你终于回来啦！我等你好久了！」',
+ '「你回来啦！你的份我帮你留着呢」',
+ '「嗯，回来了。」（默默把碗筷又摆好）'
+];
+const STARTTXT=[
+ '「你来啦！我等你好久啦，快坐～」',
+ '「你…你终于来了（小声），快开饭吧」',
+ '「嘿嘿，你来了我就放心啦，今天也好好陪我哦」',
+ '「哼，算你有良心，没让我饿太久，坐吧」',
+ '「嗯，你来了就好，今天一起好好吃饭」',
+ '「哇！你终于来啦！我都等饿扁了，快坐快坐！」'
+];
+/* 性格色板 */
+const TC=['#B8A8D8','#5A6B7C','#6E6A5C','#F0B45A','#E8926B','#C47A7A'];
+const SHADOWS=['男','女','外星人','小猫','小狗','小熊'];
+/* ===== 状态 ===== */
+let curPet=0, curTime=1, curWeather=0, curMode=1, curDressTab=0, curShadow=0;
+let petOutfits={}; /* 每位主角的穿戴：{主角id:[服装名,...]} */
+let outfitColors={},tempDressColors=null;
+let dressPet=0; /* 装扮页当前选中的主角 */
+let focusing=false, focusTick=null, focusSec=25*60, leftAway=false, switchCount=0, awayTimer=null, awayLeft=10, homeFixed=false, focusLen=25, focusTask=0;
+
+/* ===== 工具 ===== */
+const $=id=>document.getElementById(id);
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800);}
+/* 视图历史栈 + 返回导航 */
+let viewStack=['home'];
+function updateBackNav(){const show=viewStack.length>1;document.querySelectorAll('.back-nav').forEach(n=>n.style.display=show?'flex':'none');}
+function switchTo(view,fromBack){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('view-'+view).classList.add('active');
+ document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===view));
+ if(view==='home'){if(!homeFixed&&!fromBack){const pool=allPets().map((_,i)=>i).filter(i=>petUnlocked(i)&&(homePicks===null||homePicks.includes(i)));if(pool.length)curPet=pool[Math.floor(Math.random()*pool.length)];}const track=$('scene-track'),width=track.querySelector('.scene-page').offsetWidth;track.scrollTo({left:curScene*width,behavior:'instant'});renderSwap();renderHome();}
+ if(view==='focus'){renderFocusPet();requestAnimationFrame(layoutFocusWorld);}
+ updateBackNav();window.scrollTo(0,0);
+}
+function go(view,opts){
+ if(foodPickOpen){toast('先确认或取消这次选菜吧');return;}
+ /* 专注中拦截切页面 */
+ if(focusing&&view!=='focus'){
+  toast('先结束或暂停专注哦');
+  return;
+ }
+ const push=!opts||opts.push!==false;
+ if(push)viewStack.push(view);else viewStack=[view];
+ switchTo(view,false);
+}
+function goBack(){
+ if(foodPickOpen){cancelFoodPick();return;}
+ if(focusing){toast('先结束这次专注，再回小屋吧');return;}
+ if(viewStack.length>1){viewStack.pop();switchTo(viewStack[viewStack.length-1],true);}
+ else{viewStack=['home'];switchTo('home',true);}
+}
+/* 弹层退场动效 + 下滑关闭 */
+function dismissSheet(el){
+ if(!el||el.classList.contains('closing'))return;
+ if(el.id==='overview'){clearInterval(ovTimer);ovTimer=null;}
+ el.classList.add('closing');
+ setTimeout(()=>{el.classList.remove('show');el.classList.remove('closing');},210);
+}
+function bindSheetDismiss(){
+ document.querySelectorAll('.role-detail').forEach(ov=>{
+  const sheet=ov.querySelector('.sheet');if(!sheet)return;
+  if(ov.classList.contains('companion-picker')){ov.addEventListener('click',e=>{if(e.target===ov)dismissSheet(ov);});return;}
+  if(ov.classList.contains('fullscreen')){
+   /* 全屏弹层：屏蔽滑动返回手势，避免左滑后退导致画布清屏 */
+   sheet.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+   ov.addEventListener('click',e=>{if(e.target===ov)dismissSheet(ov);});
+   return;
+  }
+  let sy=0,dy=0;
+  sheet.addEventListener('touchstart',e=>{if(!ov.classList.contains('show'))return;sy=e.touches[0].clientY;dy=0;},{passive:true});
+  sheet.addEventListener('touchmove',e=>{if(!ov.classList.contains('show'))return;const d=e.touches[0].clientY-sy;if(d>0){dy=d;sheet.style.transition='none';sheet.style.transform='translateY('+Math.min(d,140)+'px)';}},{passive:true});
+  const end=()=>{if(dy>70)dismissSheet(ov);sheet.style.transition='';sheet.style.transform='';dy=0;};
+  sheet.addEventListener('touchend',end);sheet.addEventListener('touchcancel',end);
+  ov.addEventListener('click',e=>{if(e.target===ov)dismissSheet(ov);});
+ });
+}
+
+/* 返回键/左滑返回拦截：弹层开着时先关弹层，不让页面后退导致画布丢失 */
+window.addEventListener('popstate',()=>{
+ const open=document.querySelector('.role-detail.show');
+ if(open){dismissSheet(open);history.pushState({lc:1},'');}
+});
+
+/* Q版猫头 SVG（按性格） */
+const HEAD_FACES=[
+  '<path d="M24 30 Q24 22 32 22 Q40 22 40 30 Q40 38 32 38 Q24 38 24 30 Z" fill="#fff"/><path d="M28 27 q2 2 4 0" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M36 27 q2 2 4 0" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M30 33 q3 3 6 0" stroke="#b66" stroke-width="1.6" fill="none"/><circle cx="30" cy="29" r="1" fill="#444"/><circle cx="36" cy="29" r="1" fill="#444"/>',
+  '<path d="M22 28 Q22 20 32 20 Q42 20 42 28 Q42 36 32 36 Q22 36 22 28 Z" fill="#444"/><circle cx="29" cy="26" r="1.4" fill="#fff"/><circle cx="36" cy="26" r="1.4" fill="#fff"/><path d="M27 31 q4 3 9 0" stroke="#aaa" stroke-width="1.6" fill="none"/>',
+  '<path d="M20 30 Q20 18 32 18 Q44 18 44 30 Q44 42 32 42 Q20 42 20 30 Z" fill="#fff"/><path d="M18 16 l4 10 M18 22 l8 4 M46 16 l-4 10 M46 22 l-8 4" stroke="#b55" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M27 26 q2 2 4 0" stroke="#b55" stroke-width="1.6" fill="none"/><path d="M35 26 q2 2 4 0" stroke="#b55" stroke-width="1.6" fill="none"/><path d="M28 34 q4 3 8 0" stroke="#b55" stroke-width="1.8" fill="none"/>',
+  '<path d="M24 30 Q24 22 32 22 Q40 22 40 30 Q40 38 32 38 Q24 38 24 30 Z" fill="#F4C98A"/><path d="M28 26 q3 3 6 0" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M34 26 q3 3 6 0" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M28 32 q4 5 8 0" stroke="#b66" stroke-width="1.8" fill="none"/><circle cx="31" cy="28" r="1.2" fill="#444"/><circle cx="37" cy="28" r="1.2" fill="#444"/>',
+  '<path d="M24 30 Q24 22 32 22 Q40 22 40 30 Q40 38 32 38 Q24 38 24 30 Z" fill="#F0A060"/><path d="M28 26 q3 3 6 0" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M34 26 q3 3 6 0" stroke="#8a6" stroke-width="1.6" fill="none"/><circle cx="31" cy="28" r="1.2" fill="#444"/><circle cx="37" cy="28" r="1.2" fill="#444"/><path d="M29 34 q3 3 6 0" stroke="#b66" stroke-width="1.6" fill="none"/><path d="M36 34 q1 2 3 2" stroke="#c66" stroke-width="1.4" fill="none"/>',
+  '<path d="M24 30 Q24 22 32 22 Q40 22 40 30 Q40 38 32 38 Q24 38 24 30 Z" fill="#D9A98A"/><path d="M27 25 l5 -3 l5 3" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M34 25 l5 -3 l5 3" stroke="#8a6" stroke-width="1.6" fill="none"/><path d="M28 31 q4 -2 8 0" stroke="#8a6" stroke-width="1.6" fill="none"/><circle cx="31" cy="28" r="1.1" fill="#444"/><circle cx="37" cy="28" r="1.1" fill="#444"/>'
+];
+function catSVG(trait,size){
+ const C=TC[trait];
+ const ears='<path d="M22 26 L16 12 L30 20 Z" fill="'+C+'"/><path d="M42 26 L48 12 L34 20 Z" fill="'+C+'"/>';
+ return '<svg viewBox="0 0 64 64" width="'+size+'" height="'+size+'"><g>'+ears+'<ellipse cx="32" cy="34" rx="17" ry="15" fill="'+C+'"/>'+HEAD_FACES[trait]+'</g></svg>';
+}
+/* 全身立绘（图鉴页用） */
+function petSVG(i,size){
+ const p=PETS[i];
+ const isDog=p.breed.includes('狗');
+ const F=['#F3EDE3','#F6F2EC','#4B4B4B','#C8905E','#EFEDE8','#DDA258','#F2C97E','#F6F2EC','#F09E5E','#9CA8B4','#F0E2D8','#F6F2EC'][i];
+ const D=['#E6DED0','#EFE9E0','#3A3A3A','#B07844','#DAD5CC','#C88A44','#E3B25F','#EFE9E0','#E08A48','#8A96A2','#E2D0C2','#EFE9E0'][i];
+ const ears=isDog
+  ?'<ellipse cx="22" cy="16" rx="8" ry="11" fill="'+D+'"/><ellipse cx="42" cy="16" rx="8" ry="11" fill="'+D+'"/>'
+  :'<path d="M18 24 L10 2 L30 12 Z" fill="'+D+'"/><path d="M46 24 L54 2 L34 12 Z" fill="'+D+'"/>';
+ const head='<g transform="translate(16,-4)">'+ears+'<ellipse cx="32" cy="34" rx="18" ry="16" fill="'+F+'"/>'+HEAD_FACES[p.trait]+'</g>';
+ const body='<ellipse cx="48" cy="74" rx="30" ry="23" fill="'+F+'"/>';
+ const paws='<ellipse cx="34" cy="87" rx="8" ry="6" fill="'+D+'"/><ellipse cx="62" cy="87" rx="8" ry="6" fill="'+D+'"/>';
+ const tail=isDog
+  ?'<path d="M76 70 q17 4 12 -13 q-3 -7 -12 -3" stroke="'+D+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+  :'<path d="M74 68 q20 -2 11 -19" stroke="'+D+'" stroke-width="7" fill="none" stroke-linecap="round"/>';
+ let patch='';
+ if(i===4)patch='<path d="M22 62 q12 -14 26 0 q-7 13 -13 13 q-7 0 -13 -13" fill="#4B4B4B"/>';
+ if(i===10){patch='<path d="M20 60 q10 -12 20 0 q-5 11 -10 11 q-5 0 -10 -11" fill="#D98A5A"/><path d="M42 66 q8 -10 18 0 q-5 9 -9 9 q-4 0 -9 -9" fill="#6E4A3A"/>';}
+ return '<svg viewBox="0 0 96 96" width="'+size+'" height="'+size+'">'+tail+body+patch+paws+head+'</svg>';
+}
+/* 服装叠加：头部件（头像显示）+ 全身件（装扮预览显示） */
+const OUTFIT_POS={
+ '胡砸':{h:{t:60,l:50,f:.55},b:{t:58,l:50,f:.52}},
+ '俺是外星人':{h:{t:4,l:50,f:.3},b:{t:0,l:50,f:.25}},
+ '圣诞袜':{h:null,b:{t:82,l:60,f:.75}},
+ '左眼是为了…':{h:{t:24,l:38,f:.75},b:{t:22,l:38,f:.8}},
+ '懒羊羊口水巾':{h:null,b:{t:76,l:50,f:.45}},
+ '321跪':{h:{t:5,l:50,f:.5},b:{t:3,l:50,f:.45}}
+};
+/* 不同脸型单独校准，避免胡子挡住小豆和辣椒的鼻头。 */
+const OUTFIT_PET_Y={'胡砸':{0:3,3:3}};
+function petDressed(pid,size,full,editable){return petDressedExpr(pid,size,full,0,editable);}
+function petDressedExpr(pid,size,full,expr,editable,overrideOutfits){
+ const p=getPet(pid);
+ if(!p)return '';
+ let base;
+ if(pid<6){
+  base='<img src="'+DOG_LIST[pid].exprs[expr]+'" style="width:'+size+'px;height:'+size+'px;object-fit:contain;">';
+ }else{
+  base=renderPetArt(pid,size,full,expr);
+ }
+ let lay='';
+ {
+  const outfits=overrideOutfits||petOutfits[pid]||[];
+  outfits.forEach(n=>{
+   const supplied=OUTFITS.find(o=>o.name===n&&o.supplied);
+   if(supplied){
+    const colors=editable&&overrideOutfits&&pid===dressPet?(tempDressColors||outfitColors[pid]):outfitColors[pid];
+    lay+=SuppliedOutfits.layer(supplied,pid,size,editable,colors?.raincoat||'yellow');return;
+   }
+   const pos=OUTFIT_POS[n];if(!pos)return;
+   const ps=pos.b||pos.h;if(!ps)return;
+   const arr=Array.isArray(ps)?ps:[ps];
+   arr.forEach(pp=>{
+    pp={...pp,t:pp.t+(OUTFIT_PET_Y[n]?.[pid]||0)+SuppliedOutfits.legacyOffset(n,pid),l:pp.l+SuppliedOutfits.legacyX(n,pid)};
+    const o=OUTFITS.find(o=>o.name===n);
+    const ow=Math.round(size*pp.f);
+    if(o.img){
+      const xBtn=editable?'<span class="outfit-x">×</span>':'';
+      const clickAttr=editable?'onclick="event.stopPropagation();removeOutfitFromPreview(\''+n+'\')"':'';
+      lay+='<div data-outfit-name="'+n+'" style="position:absolute;top:'+pp.t+'%;left:'+pp.l+'%;transform:translate(-50%,-50%) translate(var(--outfit-dx,0px),var(--outfit-dy,0px)) scale(var(--outfit-scale,1));'+(window.OutfitAdjuster?.style(n,pid,size,editable)||'')+(editable?'cursor:pointer;':'pointer-events:none;')+'" '+clickAttr+'><img src="'+(preparedArt[o.art]||o.img)+'" style="width:'+ow+'px;height:auto;display:block;filter:drop-shadow(0 2px 3px rgba(74,59,47,.28));pointer-events:none;">'+xBtn+'</div>';
+    }else{
+      const xBtn=editable?'<span class="outfit-x">×</span>':'';
+      const clickAttr=editable?'onclick="event.stopPropagation();removeOutfitFromPreview(\''+n+'\')"':'';
+      lay+='<span class="of-emoji" data-outfit-name="'+n+'" style="position:absolute;top:'+pp.t+'%;left:'+pp.l+'%;transform:translate(-50%,-50%) translate(var(--outfit-dx,0px),var(--outfit-dy,0px)) scale(var(--outfit-scale,1));'+(window.OutfitAdjuster?.style(n,pid,size,editable)||'')+'font-size:'+ow+'px;'+(editable?'cursor:pointer;':'pointer-events:none;')+'" '+clickAttr+'>'+o.emoji+xBtn+'</span>';
+    }
+   });
+  });
+ }
+ return '<div class="dressed" style="width:'+size+'px;height:'+size+'px;position:relative;">'+base+lay+'</div>';
+}
+/* 影子轮廓 SVG */
+function shadowSVG(idx,size){
+ const s=SHADOWS[idx];const C='#7A6A5A';
+ if(s==='男')return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><circle cx="28" cy="16" r="11" fill="'+C+'"/><path d="M10 64 Q10 40 28 40 Q46 40 46 64 Z" fill="'+C+'"/></svg>';
+ if(s==='女')return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><circle cx="28" cy="15" r="10" fill="'+C+'"/><path d="M10 62 Q10 40 28 38 Q46 40 46 62 L40 62 L40 50 Q40 46 36 46 L20 46 Q16 46 16 50 L16 62 Z" fill="'+C+'"/></svg>';
+ if(s==='外星人')return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><ellipse cx="28" cy="20" rx="12" ry="14" fill="'+C+'"/><path d="M18 12 Q12 2 8 8 M38 12 Q44 2 48 8" stroke="'+C+'" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M10 64 Q10 42 28 42 Q46 42 46 64 Z" fill="'+C+'"/></svg>';
+ if(s==='小猫')return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><path d="M20 20 L14 6 L28 14 Z M36 20 L42 6 L28 14 Z" fill="'+C+'"/><circle cx="28" cy="24" r="12" fill="'+C+'"/><path d="M12 64 Q12 44 28 44 Q44 44 44 64 Z" fill="'+C+'"/></svg>';
+ if(s==='小狗')return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><ellipse cx="16" cy="20" rx="7" ry="9" fill="'+C+'"/><ellipse cx="40" cy="20" rx="7" ry="9" fill="'+C+'"/><circle cx="28" cy="24" r="11" fill="'+C+'"/><path d="M12 64 Q12 44 28 44 Q44 44 44 64 Z" fill="'+C+'"/></svg>';
+ return '<svg viewBox="0 0 56 64" width="'+size+'" height="'+size+'"><circle cx="28" cy="17" r="10" fill="'+C+'"/><circle cx="22" cy="15" r="3.4" fill="'+C+'"/><circle cx="34" cy="15" r="3.4" fill="'+C+'"/><path d="M14 44 Q12 34 18 32 Q28 28 38 32 Q44 34 42 44 L42 64 L14 64 Z" fill="'+C+'"/></svg>';
+}
+/* ===== HOME 渲染 ===== */
+function renderSwap(){
+ const s=$('swap-strip');
+ const wasExpanded=s.classList.contains('expanded');
+ s.innerHTML='';
+ if(!wasExpanded)s.classList.add('collapsed');
+ else{s.classList.remove('collapsed');s.classList.add('expanded');}
+ /* 折叠/展开按钮 */
+ const toggle=document.createElement('div');
+ toggle.className='swap-toggle';
+ toggle.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+ toggle.title='选择伙伴';
+ toggle.onclick=(e)=>{e.stopPropagation();s.classList.toggle('collapsed');s.classList.toggle('expanded');};
+ s.appendChild(toggle);
+ /* 关闭按钮 */
+ const close=document.createElement('div');
+ close.className='swap-close';
+ close.textContent='×';
+ close.onclick=(e)=>{e.stopPropagation();s.classList.add('collapsed');s.classList.remove('expanded');};
+ s.appendChild(close);
+ /* 可滑动的宠物列表容器 */
+ const list=document.createElement('div');
+ list.className='pet-list';
+ s.appendChild(list);
+ /* 随机按钮 */
+ const r=document.createElement('div');
+ r.className='s-item'+(homeFixed?'':' active');
+ r.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-d);"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>';
+ r.title='随机主角';
+ r.onclick=()=>{const pool=allPets().map((_,i)=>i).filter(i=>petUnlocked(i));homeFixed=false;curPet=pool[Math.floor(Math.random()*pool.length)];renderSwap();renderHome();toast('随机主角登场：'+getPet(curPet).name);};
+ list.appendChild(r);
+ /* 6只小狗用真实头像 */
+ const dogImgs=['assets/pets-v2/dog-0-0.svg','assets/pets-v2/dog-1-0.svg','assets/pets-v2/dog-2-0.svg','assets/pets-v2/dog-3-0.svg','assets/pets-v2/dog-4-0.svg','assets/pets-v2/dog-5-0.svg'];
+ for(let i=0;i<6;i++){
+  if(!petUnlocked(i))continue;
+  const d=document.createElement('div');
+  d.className='s-item'+(i===curPet&&homeFixed?' active':'');
+  d.innerHTML='<img src="'+dogImgs[i]+'" style="width:30px;height:30px;object-fit:contain;border-radius:50%;">';
+  d.title=PETS[i].name;
+  d.onclick=()=>{curPet=i;homeFixed=true;renderSwap();renderHome();renderFocusPet();toast('切换为常驻主角：'+PETS[i].name);};
+  list.appendChild(d);
+ }
+ /* 额外宠物（蜥蜴/鱼/画作/捏脸）也加进来 */
+ for(let i=6;i<allPets().length;i++){
+  if(!petUnlocked(i))continue;
+  const p=allPets()[i];
+  const d=document.createElement('div');
+  d.className='s-item'+(i===curPet&&homeFixed?' active':'');
+  d.innerHTML=renderPetArt(i,30,false);
+  d.title=p.name;
+  d.onclick=()=>{curPet=i;homeFixed=true;renderSwap();renderHome();renderFocusPet();toast('切换为常驻主角：'+p.name);};
+  list.appendChild(d);
+ }
+}
+/* 小狗主角：3 个表情随机切换 */
+const DOG_EXPRS=[
+ 'assets/pets-v2/dog-0-0.svg',
+ 'assets/pets-v2/dog-0-1.svg',
+ 'assets/pets-v2/dog-0-2.svg'
+];
+function renderHome(){
+ const p=getPet(curPet);
+ $('home-petname').textContent=p.name+' · '+(p.breed||'伙伴');
+ $('home-sprite-wrap').innerHTML=petDressed(curPet,110,false);
+ const b=$('home-bubble');
+ b.textContent=window.PetInteractions?PetInteractions.choose(p,'arrival').text:'你回来啦！';
+ b.classList.add('show');
+ clearTimeout(window._petBubbleT);window._petBubbleT=setTimeout(()=>b.classList.remove('show'),2600);
+ renderCrowdInto($('pet-crowd'));
+}
+/* 每隔几秒随机切换当前小狗表情（保留装扮） */
+let homeExpr=0;
+setInterval(()=>{
+ if(!$('view-home').classList.contains('active')||focusing)return;
+ const host=$('home-sprite-wrap');if(!host||host.dataset.petMood||host.dataset.petEncounter||host.dataset.petIdle)return;
+ if(window.PetInteractions&&Math.random()<.16){
+  const reaction=PetInteractions.solo(curPet,host,$('home-bubble'),'idle');
+  if(reaction)homeExpr=reaction.expression;return;
+ }
+ if(curPet>=6&&!getPet(curPet)?.catalogCat||Math.random()>.35)return;
+ homeExpr=Math.floor(Math.random()*3);
+ host.innerHTML=petDressedExpr(curPet,110,false,homeExpr);
+},11000);
+/* 恢复原首页互动：双击蹦一下，换表情并冒一句话。 */
+function petDoubleClick(){
+ const el=$('home-sprite-wrap');if(!el)return;
+ if(!window.PetInteractions)return;
+ PetInteractions.configure({onSolo:(pid,reaction,context)=>{
+  if(context!=='touch'||pid!==curPet)return;
+  const task=todayTasks.find(t=>t.name==='和宠物互动一次');
+  if(task&&!task.done){task.done=true;persistTasks();renderTasks();}
+ }});
+ const reaction=PetInteractions.solo(curPet,el,$('home-bubble'),'touch');
+ if(reaction)homeExpr=reaction.expression;
+}
+/* 双击场景里的小狗：蹦一下 + 换表情 + 冒对话 */
+function crowdDoubleClick(c){
+ if(!c||!c.el||!window.PetInteractions)return;
+ const reaction=PetInteractions.solo(c.dogIdx,c.el,c.el.querySelector('.cb'),'touch');
+ if(reaction)c.expr=reaction.expression;
+}
+/* ===== 动物群互动：主页最多3只，各自有3个表情，偶尔相遇互动 ===== */
+const CROWD_TALKS=['蹭蹭','抢玩具','一起看窗外','追尾巴','分享零食','打滚','互相闻闻','扑蝴蝶'];
+/* 6只小狗，每只3个表情 */
+const DOG_LIST=[
+ {name:'小豆',exprs:['assets/pets-v2/dog-0-0.svg','assets/pets-v2/dog-0-1.svg','assets/pets-v2/dog-0-2.svg']},
+ {name:'奶糖',exprs:['assets/pets-v2/dog-1-0.svg','assets/pets-v2/dog-1-1.svg','assets/pets-v2/dog-1-2.svg']},
+ {name:'黑豆',exprs:['assets/pets-v2/dog-2-0.svg','assets/pets-v2/dog-2-1.svg','assets/pets-v2/dog-2-2.svg']},
+ {name:'辣椒',exprs:['assets/pets-v2/dog-3-0.svg','assets/pets-v2/dog-3-1.svg','assets/pets-v2/dog-3-2.svg']},
+ {name:'酷盖',exprs:['assets/pets-v2/dog-4-0.svg','assets/pets-v2/dog-4-1.svg','assets/pets-v2/dog-4-2.svg']},
+ {name:'饭团',exprs:['assets/pets-v2/dog-5-0.svg','assets/pets-v2/dog-5-1.svg','assets/pets-v2/dog-5-2.svg']}
+];
+/* 三个固定站位：猫爬架平台上、圆桌面上、地毯上 */
+const SPOTS=[
+ {x:16,y:50},   // 猫爬架平台上
+ {x:64,y:64},   // 圆桌面上（脚踩桌面，不浮空）
+ {x:32,y:84}    // 地毯上（被出场栏挡下半身）
+];
+let crowdDogs=[];
+const sceneCrowds=new WeakMap();
+function renderCrowdInto(el){
+ if(!el)return;
+ el.innerHTML='';
+ const dogs=[];sceneCrowds.set(el,dogs);
+ if(el.id==='pet-crowd')crowdDogs=dogs;
+ /* 选3只和主角不同的狗上场 */
+ const pool=allPets().map((_,i)=>i).filter(i=>i!==curPet&&petUnlocked(i)&&(homePicks===null||homePicks.includes(i)));
+ const picks=pool.sort(()=>Math.random()-0.5).slice(0,3);
+ picks.forEach((dogIdx,i)=>{
+  const spot=SPOTS[i];
+  const expr=Math.floor(Math.random()*3);
+  const dog={dogIdx,expr,home:{x:spot.x,y:spot.y},el:null};
+  dogs.push(dog);
+  const div=document.createElement('div');
+  div.className='cr';div.dataset.dog=dogIdx;
+  div.style.left=spot.x+'%';div.style.top=spot.y+'%';
+  div.style.cursor='pointer';
+  div.ondblclick=()=>crowdDoubleClick(dog);
+  /* 配角也穿着已确认的装扮 */
+  div.innerHTML=petDressedExpr(dogIdx,60,false,expr)+'<span class="cb"></span>';
+  el.appendChild(div);
+  dog.el=div;
+ });
+}
+/* 随机切换在场小狗的表情 */
+setInterval(()=>{
+ if(!$('view-home').classList.contains('active')||focusing)return;
+ crowdDogs.forEach(c=>{
+  if(!c.el.isConnected||c.el.dataset.petMood||c.el.dataset.petEncounter||c.el.dataset.petIdle)return;
+  if(Math.random()<0.22){
+   if(window.PetInteractions&&Math.random()<.18){PetInteractions.solo(c.dogIdx,c.el,c.el.querySelector('.cb'),'idle');return;}
+   c.expr=(c.expr+1+Math.floor(Math.random()*2))%3;
+   const dressed=c.el.querySelector('.dressed');
+   if(dressed)dressed.outerHTML=petDressedExpr(c.dogIdx,60,false,c.expr);
+  }
+ });
+},12500);
+/* PetRoom schedules staggered idle steps and meetings, and cancels them on leaving. */
+/* 随机两只伙伴在各自附近缓缓靠近，说两句再回原位。 */
+function crowdStep(el){
+ if(window.PetRoom)return PetRoom.step(el);
+ const dogs=(sceneCrowds.get(el)||[]).filter(c=>c.el.isConnected&&!c.el.dataset.petEncounter);
+ if(dogs.length<2||!window.PetInteractions)return;
+ const a=dogs[Math.floor(Math.random()*dogs.length)];
+ const others=dogs.filter(c=>c!==a),b=others[Math.floor(Math.random()*others.length)];
+ return PetInteractions.encounter(a,b,el);
+}
+// 3×3 背景矩阵：[早/中/晚][晴/雨/雪]
+const TIME_WEATHER_BG=[
+ ['assets/scenes/original-room-0-0.png','assets/scenes/original-room-0-1.png','assets/scenes/original-room-0-2.png'],
+ ['assets/scenes/original-room-1-0.png','assets/scenes/original-room-1-1.png','assets/scenes/original-room-1-2.png'],
+ ['assets/scenes/original-room-2-0.png','assets/scenes/original-room-2-1.png','assets/scenes/original-room-2-2.png'],
+];
+function updateLivingRoomBg(){if(window.HouseEditor){HouseEditor.sync();return;}$('living-room-bg').src='assets/scene-clean/room.png';syncScenePreviews();}
+function setTime(t){curTime=t;document.querySelectorAll('.top-cap.left .mini-btn').forEach((b,i)=>b.classList.toggle('active',i===t));
+ const tip=['早安！今天也一起加油','午后时光，专注刚刚好','夜深了，陪它慢慢吃吧'][t];
+ toast(tip);
+ updateLivingRoomBg();
+ // 卧室/阳台在夜晚略微压暗
+ document.querySelectorAll('.scene-page').forEach((p,i)=>{ if(i>0) p.style.filter=t===2?'brightness(.92) saturate(.94)':'none'; });
+ syncScenePreviews();
+}
+function setWeather(w){curWeather=w;document.querySelectorAll('.top-cap.right .mini-btn').forEach((b,i)=>b.classList.toggle('active',i===w));
+ toast(['天气：晴天','天气：下雨（有雨声环境音）','天气：下雪'][w]);
+ updateLivingRoomBg();
+}
+function toggleTasks(){const p=$('task-panel'),a=$('task-arrow');p.classList.toggle('show');a.classList.toggle('open',p.classList.contains('show'));}
+/* ===== FOCUS ===== */
+function setMode(m){
+ if(focusing)return;
+ curMode=m;
+ document.querySelectorAll('.mode-card').forEach((c,i)=>c.classList.toggle('active',i===m));
+ document.querySelectorAll('#focus-set .chip[data-m]').forEach((c,i)=>c.classList.toggle('active',i===m));
+ const nm=document.querySelectorAll('.mode-card')[m].querySelector('.m-name').textContent;
+ const tt=$('timer-num');if(tt)tt.nextElementSibling.textContent='专注 '+focusLen+' 分钟 · '+nm;
+ toast('已切换为「'+nm+'」');
+}
+function openFocusSet(){if(focusing){toast('正在一起吃饭，结束后再设置吧');return;}$('focus-set').classList.add('show');}
+function setFocusLen(n){
+ if(focusing||!Number.isInteger(n)||n<=0)return;
+ focusLen=n;focusSec=n*60;
+ document.querySelectorAll('.chip[data-l]').forEach(c=>c.classList.toggle('active',+c.dataset.l===n));
+ updateFocusClock();
+ $('timer-num').nextElementSibling.textContent='专注 '+n+' 分钟 · '+document.querySelectorAll('.mode-card')[curMode].querySelector('.m-name').textContent;
+ toast('专注 '+n+' 分钟');
+}
+function setFocusTask(t){focusTask=t;document.querySelectorAll('#focus-set .chip[data-t]').forEach(c=>c.classList.toggle('active',+c.dataset.t===t));toast(['无任务','任务：完成一个番茄','任务：专注 25 分钟','任务：陪主角吃顿饭'][t]);}
+function applyFocus(){
+ dismissSheet($('focus-set'));
+ if(focusing){toast('已经在专注中啦');return;}
+ go('focus');toggleFocus();
+}
+function pickPet(i){
+ if(focusing||!getPet(i))return;
+ if(!petUnlocked(i)){toast('「'+getPet(i).name+'」未解锁');return;}
+ curPet=i;homeFixed=true;renderSwap();renderHome();renderFocusPet();
+ if($('view-focus').classList.contains('active'))$('focus-bubble').textContent='「'+getPet(i).name+'」上桌陪你啦';
+ dismissSheet($('companion-picker'));
+ toast('已选 '+getPet(i).name+' 陪你');
+}
+/* ===== 主页场景轮播 & 功能菜单 ===== */
+const SCENES=[{name:'客厅',filter:''},{name:'过年门外',filter:''}];
+let curScene=0;
+function renderDots(){const d=$('scene-dots');d.innerHTML='';SCENES.forEach((s,i)=>{const b=document.createElement('i');if(i===curScene)b.className='on';b.onclick=()=>goScene(i);d.appendChild(b);});}
+function goScene(i){if(!SCENES[i])return;curScene=i;const t=$('scene-track');t.scrollTo({left:i*t.querySelector('.scene-page').offsetWidth,behavior:'smooth'});renderDots();document.querySelectorAll('.sc-card').forEach((c,j)=>c.classList.toggle('active',j===i));syncScenePreviews();toast('场景：'+SCENES[i].name);}
+function updateDotsFromScroll(){const t=$('scene-track');const w=t.querySelector('.scene-page').offsetWidth;if(!w)return;const i=Math.max(0,Math.min(SCENES.length-1,Math.round(t.scrollLeft/w)));if(i!==curScene){curScene=i;renderDots();document.querySelectorAll('.sc-card').forEach((c,j)=>c.classList.toggle('active',j===i));syncScenePreviews();}}
+function pickScene(i){goScene(i);dismissSheet($('scene-pick'));}
+const HM=[['场景','景','scene'],['伙伴','伴','pet'],['装扮','装','dress'],['好友','友','friends'],['签到','签','checkin'],['成就','成','achievements'],['抽奖','抽','demo'],['商店','店','shop'],['截图分享','享','demo']];
+function openHomeMenu(){
+ const g=$('hm-grid');g.innerHTML='';
+ HM.forEach(m=>{
+  const d=document.createElement('div');d.className='hm-item';
+  d.innerHTML='<div class="ic">'+m[1]+'</div><span>'+m[0]+'</span>';
+  d.onclick=()=>{
+   dismissSheet($('home-menu'));
+   if(m[2]==='scene')openScenePick();
+   else if(m[2]==='pet')openPetPick();
+   else if(m[2]==='dress')go('dress');
+   else if(m[2]==='shop')openGiftShop();
+   else if(m[2]==='friends')openBuddy('friends');
+   else if(m[2]==='checkin')CommunityUI.openCheckin();
+   else if(m[2]==='achievements')CommunityUI.openAchievements();
+   else toast('「'+m[0]+'」演示功能');
+  };
+  g.appendChild(d);
+ });
+ $('home-menu').classList.add('show');
+}
+function openScenePick(){syncScenePreviews();$('scene-pick').classList.add('show');}
+/* ===== 背景音乐：Buddy，渐入播放 ===== */
+let bgmAudio=new Audio('https://aka.doubaocdn.com/s/Kfv99hU4rE');
+bgmAudio.loop=true;bgmAudio.volume=0;
+let bgmFade=null;
+function startMusic(){
+ if(!musicOn)return;
+ bgmAudio.play().then(()=>{
+  clearInterval(bgmFade);if(!musicOn){bgmAudio.pause();return;}
+  bgmFade=setInterval(()=>{if(!musicOn){clearInterval(bgmFade);return;}bgmAudio.volume=Math.min(.25,bgmAudio.volume+.0125);if(bgmAudio.volume>=.25)clearInterval(bgmFade);},100);
+ }).catch(()=>{});
+}
+document.addEventListener('click',()=>{if(musicOn&&bgmAudio.paused)startMusic();});
+/* ===== 三盘选菜：菜单候选 → 盘子草稿 → 整顿饭保存 ===== */
+const FOODS=[
+ {name:'空盘子',art:'',img:'',unlocked:true},
+ {name:'小鱼干',art:'fish',unlocked:true},
+ {name:'奶块',art:'milk',unlocked:true},
+ {name:'鸡肉条',art:'chicken',unlocked:true},
+ {name:'奶冻',art:'pudding',unlocked:false},
+ {name:'肉罐头',art:'can',unlocked:false},
+ {name:'月饼',art:'mooncake',unlocked:false},
+ {name:'粽子',art:'dumpling',unlocked:false},
+ {name:'小蛋糕',art:'cake',unlocked:false}
+];
+let plateFoodIdx=[0,0,0],draftFoodIdx=[0,0,0],plateConfirmed=[false,false,false];
+let foodPickOpen=false,pickPlateIdx=0,tempPickIdx=0;
+const EMPTY_PLATE='<svg viewBox="0 0 100 70" fill="none" aria-hidden="true"><ellipse cx="50" cy="40" rx="42" ry="20" fill="#fffdf9" stroke="#d5c3aa" stroke-width="3"/><ellipse cx="50" cy="37" rx="30" ry="12" stroke="#e6d9c8" stroke-width="3"/></svg>';
+function openPetPick(){
+ if(focusing||foodPickOpen){toast('先完成眼前这顿饭的准备吧');return;}
+ const pets=allPets().map((p,pid)=>({p,pid})).filter(({pid})=>petUnlocked(pid));
+ const grid=$('pick-grid');grid.innerHTML='';
+ $('companion-count').textContent='已拥有 '+pets.length+' 位伙伴 · 选一位一起吃饭';
+ pets.forEach(({p,pid})=>{
+  const button=document.createElement('button');button.className='pick-item'+(pid===curPet?' active':'');
+  button.setAttribute('aria-pressed',String(pid===curPet));
+  button.innerHTML=petDressed(pid,66,false);
+  const name=document.createElement('span');name.textContent=p.name;button.appendChild(name);
+  const breed=document.createElement('small');breed.textContent=p.breed||'新伙伴';button.appendChild(breed);
+  button.onclick=()=>pickPet(pid);grid.appendChild(button);
+ });
+ $('companion-picker').classList.add('show');
+ $('companion-picker').querySelector('button').focus();
+}
+function layoutFocusWorld(){
+ const stage=$('focus-stage'),world=$('focus-world');
+ const fit=foodPickOpen?Math.min:Math.max;
+ const scale=fit(stage.clientWidth/1344,stage.clientHeight/2912);
+ world.style.width=(1344*scale)+'px';world.style.height=(2912*scale)+'px';
+ const height=2912*scale;
+ const top=foodPickOpen?(stage.clientHeight-height)/2:Math.max(stage.clientHeight-height,Math.min(0,stage.clientHeight/2-height*.62));
+ world.style.top=top+'px';world.style.transform='translateX(-50%)';
+}
+function foodImage(food){return preparedArt[food.art]||ART_SOURCES[food.art]||'';}
+function renderPlateFoods(){
+ const selection=foodPickOpen?draftFoodIdx:plateFoodIdx;
+ selection.forEach((idx,i)=>{
+  const image=$('food-'+i);image.dataset.food=String(idx);
+  if(idx===0){image.removeAttribute('src');image.style.display='none';}
+  else{image.src=foodImage(FOODS[idx]);image.alt=FOODS[idx].name;image.style.display='block';}
+ });
+ const count=plateConfirmed.filter(Boolean).length;
+ $('food-progress').textContent=count?'已确认 '+count+' 个盘子 · 其他盘子保持原样':'只换其中一盘也可以保存';
+ $('save-food-btn').disabled=false;
+ for(let i=0;i<3;i++){
+  const button=$('btn-food-'+i);button.textContent=(plateConfirmed[i]?'✓ 换菜':'换菜')+' · '+(i+1);
+  button.classList.toggle('current',foodPickOpen&&pickPlateIdx===i);
+ }
+}
+function toggleFoodPick(){
+ if(foodPickOpen){cancelFoodPick();return;}
+ if(focusing){toast('吃饭中先不换菜哦');return;}
+ foodPickOpen=true;draftFoodIdx=[...plateFoodIdx];plateConfirmed=[false,false,false];pickPlateIdx=0;
+ $('focus-stage').classList.add('food-editing');document.body.classList.add('food-selecting');
+ renderPlateFoods();layoutFocusWorld();
+}
+function closeFoodSheet(){
+ $('food-sheet').classList.remove('show');
+ if(foodPickOpen)$('btn-food-'+pickPlateIdx).focus({preventScroll:true});
+}
+function closeFoodPick(){
+ closeFoodSheet();foodPickOpen=false;
+ $('focus-stage').classList.remove('food-editing');document.body.classList.remove('food-selecting');
+ renderPlateFoods();layoutFocusWorld();$('btn-food-pick').focus({preventScroll:true});
+}
+function cancelFoodPick(){closeFoodPick();toast('这次先保留原来的菜品');}
+function saveFoodPick(){
+ if(!foodPickOpen)return;
+ plateFoodIdx=[...draftFoodIdx];
+ try{localStorage.setItem('qingpeiban-meal',JSON.stringify(plateFoodIdx));}catch(_){}
+ closeFoodPick();toast('菜品摆好啦，缩小后也会留在盘子里');
+}
+function cycleFood(i){
+ if(!foodPickOpen||focusing||!Number.isInteger(i)||i<0||i>2)return;
+ pickPlateIdx=i;tempPickIdx=draftFoodIdx[i];
+ $('food-sheet-title').textContent='为 '+(i+1)+' 号盘选菜';
+ renderFoodOptions();renderPlateFoods();$('food-sheet').classList.add('show');
+ $('food-sheet').querySelector('button').focus({preventScroll:true});
+}
+function renderFoodOptions(){
+ const grid=$('food-grid');grid.innerHTML='';
+ FOODS.forEach((food,idx)=>{
+  const button=document.createElement('button');button.className='food-option'+(food.unlocked?'':' locked')+(tempPickIdx===idx?' selected':'');
+  button.setAttribute('aria-pressed',String(tempPickIdx===idx));button.setAttribute('aria-label',food.name+(food.unlocked?'':'，您暂时没有拥有'));
+  button.dataset.food=String(idx);if(!food.unlocked)button.setAttribute('aria-disabled','true');
+  if(idx===0)button.innerHTML=EMPTY_PLATE;
+  else{const image=document.createElement('img');image.src=foodImage(food);image.alt='';button.appendChild(image);}
+  const name=document.createElement('span');name.textContent=food.name;button.appendChild(name);
+  const hint=document.createElement('small');hint.textContent=food.unlocked?'可选择':'未拥有';button.appendChild(hint);
+  button.onclick=()=>pickFoodFromSheet(idx);grid.appendChild(button);
+ });
+}
+function pickFoodFromSheet(idx){
+ if(!foodPickOpen||!$('food-sheet').classList.contains('show'))return;
+ if(!FOODS[idx])return;
+ if(!FOODS[idx].unlocked){toast('您暂时没有拥有这个食材，还不能选择哦');return;}
+ tempPickIdx=idx;renderFoodOptions();
+}
+function confirmSheetPick(){
+ if(!foodPickOpen||!$('food-sheet').classList.contains('show')||!FOODS[tempPickIdx]?.unlocked)return;
+ draftFoodIdx[pickPlateIdx]=tempPickIdx;plateConfirmed[pickPlateIdx]=true;
+ closeFoodSheet();
+ const next=plateConfirmed.findIndex((confirmed,i)=>!confirmed&&draftFoodIdx[i]===0);
+ pickPlateIdx=next>=0?next:plateConfirmed.findIndex(confirmed=>!confirmed);
+ if(pickPlateIdx<0)pickPlateIdx=0;
+ renderPlateFoods();
+ $('save-food-btn').focus({preventScroll:true});toast('这盘菜放好啦，可以直接确定，也可以继续换菜');
+}
+function zoomInFood(){toggleFoodPick();}
+let musicOn=true,soundOn=true;
+function openSettings(){
+ const sheet=document.createElement('div');
+ sheet.className='role-detail sheet-mask show';
+ sheet.innerHTML='<div class="sheet">'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">'+
+   '<h2 style="font-size:18px;font-weight:900;margin:0;">设置</h2>'+
+   '<button onclick="this.closest(\'.sheet-mask\').remove()" style="background:var(--cream);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;">×</button>'+
+  '</div>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line);">'+
+   '<div style="font-size:15px;font-weight:700;">背景音乐</div>'+
+   '<label style="position:relative;display:inline-block;width:48px;height:26px;cursor:pointer;"><input type="checkbox" id="set-music" '+(musicOn?'checked':'')+' style="opacity:0;width:0;height:0;" onchange="toggleMusic(this.checked)"><span style="position:absolute;inset:0;background:'+(musicOn?'var(--accent)':'#ccc')+';border-radius:26px;transition:.2s;"></span><span style="position:absolute;top:3px;left:'+(musicOn?'25px':'3px')+';width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.1);"></span></label>'+
+  '</div>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;">'+
+   '<div style="font-size:15px;font-weight:700;">按钮音效</div>'+
+   '<label style="position:relative;display:inline-block;width:48px;height:26px;cursor:pointer;"><input type="checkbox" id="set-sound" '+(soundOn?'checked':'')+' style="opacity:0;width:0;height:0;" onchange="toggleSound(this.checked)"><span style="position:absolute;inset:0;background:'+(soundOn?'var(--accent)':'#ccc')+';border-radius:26px;transition:.2s;"></span><span style="position:absolute;top:3px;left:'+(soundOn?'25px':'3px')+';width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.1);"></span></label>'+
+  '</div>'+
+ '</div>';
+ document.body.appendChild(sheet);
+ sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.remove();});
+}
+function updateSettingSwitch(id,on){
+ const input=$(id);if(!input)return;
+ input.checked=on;if(input.closest('.setting-control'))return;input.nextElementSibling.style.background=on?'var(--accent)':'#ccc';
+ input.nextElementSibling.nextElementSibling.style.left=on?'25px':'3px';
+}
+function toggleMusic(on){
+ musicOn=on;clearInterval(bgmFade);
+ if(on)startMusic();else{bgmAudio.pause();bgmAudio.volume=0;}
+ updateSettingSwitch('set-music',on);toast(on?'背景音乐已开启':'背景音乐已关闭');
+}
+function toggleSound(on){soundOn=on;updateSettingSwitch('set-sound',on);toast(on?'按钮音效已开启':'按钮音效已关闭');}
+// 没有自然按钮音效素材时静默降级，避免合成振荡音及点击异常。
+let buttonAudio=null;
+function playBoop(event){
+ if(!soundOn)return;
+ if(window.UiSounds)return UiSounds.play(UiSounds.classify(event?.target));
+ if(!buttonAudio)return;
+ buttonAudio.currentTime=0;buttonAudio.play().catch(()=>{});
+}
+document.addEventListener('click',e=>{if(e.target.closest('button,.role-card,.mode-card,.outfit-item,[role="button"],.chip'))playBoop(e);});
+let todayTasks=[
+ {name:'完成一次 25 分钟专注',done:false},
+ {name:'和宠物互动一次',done:false},
+ {name:'给宠物换一套装扮',done:false},
+ {name:'签到打卡',done:true}
+];
+try{
+ const stored=JSON.parse(localStorage.getItem('qingpeiban-tasks'));
+ if(Array.isArray(stored)&&stored.every(t=>t&&typeof t.name==='string'&&typeof t.done==='boolean'))todayTasks=stored;
+}catch(_){}
+function persistTasks(){try{localStorage.setItem('qingpeiban-tasks',JSON.stringify(todayTasks));}catch(_){}}
+function openFocusTaskMenu(){
+ if(focusing)return;
+ const menu=$('focus-task-menu');menu.replaceChildren();
+ // Keep viewport-positioned options outside the view's entry transform.
+ if(menu.parentElement!==document.body)document.body.append(menu);
+ const tasks=todayTasks.filter(task=>!task.done);
+ if(!tasks.length){const empty=document.createElement('p');empty.textContent='还没有待办任务，可以去「我的」添加，也可以直接输入';menu.appendChild(empty);}
+ tasks.forEach(task=>{
+  const option=document.createElement('button');option.type='button';option.setAttribute('role','option');
+  option.textContent=task.name;option.setAttribute('aria-selected',String($('task-input').value===task.name));
+  option.onclick=()=>{$('task-input').value=task.name;closeFocusTaskMenu();$('task-input').focus({preventScroll:true});};
+  menu.appendChild(option);
+ });
+ menu.hidden=false;$('task-input').setAttribute('aria-expanded','true');layoutFocusTaskMenu();
+}
+function layoutFocusTaskMenu(){
+ const menu=$('focus-task-menu');if(menu.hidden)return;
+ const box=$('task-input').getBoundingClientRect();
+ const bottom=Math.min(innerHeight,document.querySelector('.tabbar').getBoundingClientRect().top)-8;
+ const below=bottom-box.bottom-6,above=box.top-14;
+ const down=below>=Math.min(180,menu.scrollHeight)||below>=above;
+ menu.style.width=Math.min(box.width,innerWidth-24)+'px';
+ menu.style.left=Math.max(12,Math.min(box.left,innerWidth-box.width-12))+'px';
+ menu.style.maxHeight=Math.max(60,Math.min(220,down?below:above))+'px';
+ menu.style.top=Math.max(8,down?box.bottom+6:box.top-6-menu.offsetHeight)+'px';
+}
+window.addEventListener('resize',layoutFocusTaskMenu);
+window.addEventListener('scroll',layoutFocusTaskMenu,{passive:true});
+function closeFocusTaskMenu(){$('focus-task-menu').hidden=true;$('task-input').setAttribute('aria-expanded','false');}
+function focusTaskKeydown(event){
+ if(event.key==='ArrowDown'){event.preventDefault();openFocusTaskMenu();$('focus-task-menu').querySelector('button')?.focus();}
+ if(event.key==='Escape'){event.stopPropagation();closeFocusTaskMenu();}
+}
+document.addEventListener('click',event=>{if(!event.target.closest('.focus-task-field,#focus-task-menu'))closeFocusTaskMenu();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('focus-task-menu').hidden){event.stopImmediatePropagation();closeFocusTaskMenu();$('task-input').focus();}},true);
+function taskText(value){const span=document.createElement('span');span.textContent=value;return span.innerHTML;}
+function renderTasks(){
+ const g=$('task-list');g.innerHTML='';
+ const undone=todayTasks.filter(t=>!t.done);
+ const done=todayTasks.filter(t=>t.done);
+ undone.forEach((t,i)=>{
+  g.innerHTML+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);">'+
+   '<div style="width:18px;height:18px;border:2px solid var(--line);border-radius:5px;flex-shrink:0;"></div>'+
+   '<div style="flex:1;font-size:13px;font-weight:700;">'+taskText(t.name)+'</div>'+
+   '<div style="font-size:11px;color:var(--accent);font-weight:800;">+10鱼币</div>'+
+  '</div>';
+ });
+ if(done.length>0){
+  g.innerHTML+='<div style="font-size:11px;color:var(--gray);font-weight:700;margin:10px 0 6px;">已完成</div>';
+  done.forEach(t=>{
+   g.innerHTML+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;opacity:.5;">'+
+    '<div style="width:18px;height:18px;background:var(--accent);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:900;">✓</div>'+
+    '<div style="flex:1;font-size:13px;font-weight:700;text-decoration:line-through;">'+taskText(t.name)+'</div>'+
+   '</div>';
+  });
+ }
+}
+renderTasks();
+function addTask(){
+ const v=$('new-task-input').value.trim();
+ if(!v){toast('先输入任务内容');return;}
+ todayTasks.push({name:v,done:false});persistTasks();
+ $('new-task-input').value='';
+ renderTasks();
+ toast('任务已添加');
+}
+function renderFocusPet(){
+ const p=getPet(curPet);
+ $('focus-pet').innerHTML=petDressed(curPet,82,false);
+}
+let paused=false,pauseTimer=null,pauseGraceLeft=60,focusExpr=0;
+function updateFocusClock(){
+ const value=String(Math.floor(focusSec/60)).padStart(2,'0')+':'+String(focusSec%60).padStart(2,'0');
+ $('timer-num').textContent=value;$('float-timer').textContent=value;
+ $('timer-circle').style.strokeDashoffset=Math.round(452.4*(1-focusSec/(focusLen*60)));
+}
+function resetFocusState(){
+ clearInterval(focusTick);clearInterval(pauseTimer);clearInterval(awayTimer);
+ focusTick=null;pauseTimer=null;awayTimer=null;focusing=false;paused=false;leftAway=false;
+ $('away-overlay').classList.remove('show');$('view-focus').classList.remove('focusing','paused');
+ $('focus-stage').classList.remove('focusing');
+ $('btn-pet-pick').style.display='';$('btn-food-pick').style.display='';
+ $('focus-main-btn').textContent='开始专注';
+ document.querySelector('.focus-btns button:first-child').textContent='⏸ 暂停';
+ renderFocusPet();renderPlateFoods();layoutFocusWorld();
+}
+function finishFocus(){
+ if(!focusing)return;
+ const elapsedSec=focusLen*60-focusSec,elapsedMin=Math.floor(elapsedSec/60);
+ resetFocusState();
+ if(elapsedSec<180){
+  $('focus-bubble').textContent='「啊？这么快就走啦…没关系，下次再陪我吃呀」';
+  toast('专注不到3分钟，这次先不计入时长哦');return;
+ }
+ const rewards=[40,25,10,10],reward=rewards[curMode];
+ ROLE_AFF[curPet]=(Number.isFinite(ROLE_AFF[curPet])?ROLE_AFF[curPet]:0)+reward;
+ $('focus-bubble').textContent='「吃饱啦！谢谢你陪我吃饭」（好感度 +'+reward+'）';
+ addFocusHours(elapsedMin);renderRoles();
+ let message='完成专注：好感度 +'+reward+' · 专注时长 +'+elapsedMin+'min';
+ if(pkState===1){pkMyMin+=elapsedMin;renderPKBar();message+=' · 已计入今日 PK';}
+ toast(message);
+}
+function togglePauseFocus(){
+ if(!focusing)return;
+ paused=!paused;const button=document.querySelector('.focus-btns button:first-child');
+ $('view-focus').classList.toggle('paused',paused);
+ if(paused){
+  pauseGraceLeft=60;button.textContent='▶ 继续（1:00）';
+  $('focus-bubble').textContent='「好呀，我在这儿慢慢等你回来」';
+  clearInterval(pauseTimer);
+  pauseTimer=setInterval(()=>{
+   pauseGraceLeft--;
+   button.textContent='▶ 继续（'+Math.floor(pauseGraceLeft/60)+':'+String(pauseGraceLeft%60).padStart(2,'0')+'）';
+   if(pauseGraceLeft<=0){
+    clearInterval(pauseTimer);pauseTimer=null;clearInterval(focusTick);focusTick=null;
+    button.textContent='▶ 继续';$('focus-bubble').textContent='「暂停啦，等你回来再一起吃」';
+   }
+  },1000);
+ }else{
+  clearInterval(pauseTimer);pauseTimer=null;button.textContent='⏸ 暂停';
+  if(!focusTick)focusTick=setInterval(tick,1000);
+  $('focus-bubble').textContent='「好耶，继续加油」';
+ }
+}
+function toggleFocus(){
+ if(focusing){finishFocus();return;}
+ if(foodPickOpen){toast('先把菜品确认好，再一起吃饭吧');return;}
+ closeFocusTaskMenu();resetFocusState();focusing=true;focusSec=focusLen*60;focusExpr=0;
+ $('view-focus').classList.add('focusing');$('focus-stage').classList.add('focusing');
+ $('btn-pet-pick').style.display='none';$('btn-food-pick').style.display='none';
+ $('float-task').textContent=$('task-input').value.trim()||'专注学习';
+ $('focus-main-btn').textContent='结束专注';$('focus-bubble').textContent=STARTTXT[curPet%6];
+ const name=document.querySelectorAll('.mode-card')[curMode].querySelector('.m-name').textContent;
+ $('timer-num').nextElementSibling.textContent='专注 '+focusLen+' 分钟 · '+name;
+ updateFocusClock();layoutFocusWorld();focusTick=setInterval(tick,1000);
+ toast(getPet(curPet).name+'准备好啦，坐下来一起吃饭吧');
+}
+function tick(){
+ if(!focusing||paused&&pauseGraceLeft<=0)return;
+ focusSec=Math.max(0,focusSec-1);updateFocusClock();
+ if(focusSec===0){finishFocus();return;}
+ if(focusSec===Math.round(focusLen*30)&&!leftAway)$('focus-bubble').textContent='「有你陪着吃饭，时间过得好快呀」';
+ if(focusSec%3===0&&(curPet<6||getPet(curPet)?.catalogCat||['snake','lizard'].includes(getPet(curPet)?.kind))){focusExpr=(focusExpr+1)%3;$('focus-pet').innerHTML=petDressedExpr(curPet,82,false,focusExpr,false,petOutfits[curPet]);}
+}
+function simulateLeave(){
+ if(paused&&pauseGraceLeft<=0){toast('已经暂停啦，安心忙完再回来');return;}
+ if(!focusing){toast('先开始专注，再试试切到别的 App');return;}
+ if(leftAway)return;
+ leftAway=true; awayLeft=10;
+ const p=getPet(curPet);
+ $('away-pet').innerHTML=renderPetArt(curPet,84,false);
+ const pre=p.breed.includes('狗')?'你的小狗':p.breed.includes('猫')?'你的小猫':(p.kind==='drawn'?'你的画中伙伴':(p.kind==='custom'?'你的捏脸伙伴':'你的小伙伴'));
+ $('away-text').textContent=pre+p.name+'还在等你哦';
+ $('away-count').textContent='10';
+ $('away-overlay').classList.add('show');
+ clearInterval(awayTimer);
+ awayTimer=setInterval(()=>{
+  awayLeft--;
+  if(awayLeft<=0){clearInterval(awayTimer);overstay();return;}
+  $('away-count').textContent=awayLeft;
+ },1000);
+}
+function returnHome(){ /* 10 秒内回来：不扣好感度 */
+ clearInterval(awayTimer);
+ $('away-overlay').classList.remove('show');
+ leftAway=false;
+ $('focus-bubble').textContent=RETURNTXT[curPet%6];
+ $('focus-bubble').textContent=getPet(curPet).name+'：你回来啦，一起继续吃饭吧';
+ toast('10 秒内回来了：好感度不扣，'+getPet(curPet).name+' 等你等到开心');
+}
+function stayAway(){ /* 明确继续忙：等同超时 */
+ clearInterval(awayTimer);overstay();
+}
+function overstay(){ /* 超过 10 秒：才扣好感度 */
+ $('away-overlay').classList.remove('show');
+ const r=LEAVEREACT[curPet%6];
+ $('focus-bubble').textContent=r.text;
+ $('focus-bubble').textContent=getPet(curPet).name+'：'+r.text;
+ toast('超过 10 秒没回来：打扰了'+getPet(curPet).name+'吃饭，好感度 -30（本月豁免 3 次）');
+ leftAway=false;
+}
+function switchPet(){
+ switchCount++;const pool=allPets().map((_,i)=>i).filter(i=>petUnlocked(i));
+ curPet=pool[(pool.indexOf(curPet)+1)%pool.length];
+ renderFocusPet();
+ $('focus-bubble').textContent='「'+getPet(curPet).name+'」上桌开饭啦';
+ toast('切换主角：'+getPet(curPet).name+' 加入陪吃');
+}
+/* ===== ROLES 渲染（图鉴式） ===== */
+const ROLE_UNLOCK=[1,1,1,1,1,1];
+const ROLE_AFF=[248,120,88,150,320,96];
+const DOG_THUMBS=['assets/pets-v2/dog-0-0.svg','assets/pets-v2/dog-1-0.svg','assets/pets-v2/dog-2-0.svg','assets/pets-v2/dog-3-0.svg','assets/pets-v2/dog-4-0.svg','assets/pets-v2/dog-5-0.svg'];
+// 直接裁用现有立绘，保留完整耳朵；沿下颌裁去身体与尾巴。
+const DOG_HEAD_CROPS=[
+ {w:260,h:242,b:177,path:'M0 0H260V132H232Q200 174 130 174Q62 174 22 135H0Z'},
+ {w:260,h:253,b:190,path:'M0 0H260V143H222Q194 186 132 188Q74 188 40 165L15 140H0Z'},
+ {w:259,h:253,b:182,path:'M0 0H259V151H220Q185 178 128 180Q78 178 45 164H0Z'},
+ {w:237,h:283,b:212,path:'M0 0H237V172H218Q170 209 103 211Q40 208 10 180H0Z'},
+ {w:252,h:265,b:201,path:'M0 0H252V147H220Q199 179 158 187L137 188L128 185L115 199L104 198L68 183L56 178L50 180L39 175L24 151H0Z'},
+ {w:256,h:258,b:178,path:'M0 0H256V135H229Q188 175 130 175H87Q33 175 13 143H0Z'}
+];
+let portraitSerial=0;
+function renderDogPortrait(pid,size=80){
+ const crop=DOG_HEAD_CROPS[pid];if(!crop)return renderPetArt(pid,size,false);
+ const clip='dog-head-'+(++portraitSerial);
+ return '<svg xmlns="http://www.w3.org/2000/svg" class="dog-portrait" width="'+size+'" height="'+size+'" viewBox="0 0 '+crop.w+' '+crop.b+'" role="img" aria-label="'+getPet(pid).name+'的大头"><defs><clipPath id="'+clip+'"><path d="'+crop.path+'"/></clipPath></defs><image href="'+DOG_THUMBS[pid]+'" width="'+crop.w+'" height="'+crop.h+'" clip-path="url(#'+clip+')"/></svg>';
+}
+function affLevel(v){return v<=0?'陌生':v<100?'眼熟':v<200?'熟悉':v<400?'亲密':'挚友';}
+function renderPetPortrait(pid,size=80){
+ const p=getPet(pid);if(pid<6)return renderDogPortrait(pid,size);
+ if(p?.catalogCat)return '<svg xmlns="http://www.w3.org/2000/svg" class="cat-portrait" viewBox="0 0 288 210" width="'+size+'" height="'+size+'" role="img" aria-label="'+p.name+'的头像"><image href="assets/cats-v4/cat-'+p.catIndex+'-0.svg" width="288" height="288"/></svg>';
+ return renderPetArt(pid,size,false);
+}
+function renderRoles(){
+ const core=allPets().map((p,pid)=>({p,pid})).filter(({p,pid})=>pid<6||p.catalogCat);
+ $('collection-count').textContent='12 位伙伴 · 已拥有 '+core.filter(({pid})=>petUnlocked(pid)).length+'/12';
+ $('collect-faces').innerHTML=core.map(({p,pid})=>'<div class="collect-face'+(petUnlocked(pid)?'':' locked')+'">'+renderPetPortrait(pid,48)+'<span>'+p.name+'</span></div>').join('');
+ const g=$('role-grid');g.innerHTML='';
+ PETS.forEach((p,i)=>{
+  const d=document.createElement('div');
+  d.className='role-card'+(ROLE_UNLOCK[i]?'':' locked');
+  d.dataset.petId=String(i);d.setAttribute('role','button');d.tabIndex=0;
+  let body='<div class="r-art">'+renderPetArt(i,100,true)+'</div><div class="r-name">'+p.name+'</div>';
+  if(ROLE_UNLOCK[i]){
+   body+='<div style="width:100%;padding:0 4px;"><div class="aff-bar"><i style="width:'+Math.min(100,Math.round(ROLE_AFF[i]/4))+'%;"></i></div><div style="font-size:10px;font-weight:800;color:var(--gray);margin-top:3px;text-align:center;">'+ROLE_AFF[i]+' · '+affLevel(ROLE_AFF[i])+'</div></div><div class="r-tag">'+TRAITS[p.trait]+' · '+p.breed+'</div>';
+  }else{
+   body+='<div style="height:22px;"></div><div class="r-tag">'+PartnerAccess.label(i)+'</div>';
+  }
+  d.innerHTML=body;
+  d.onclick=()=>ROLE_UNLOCK[i]?openDetail(i):PartnerAccess.open(i);d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click();}};
+  g.appendChild(d);
+ });
+ /* 更多伙伴：爬宠/鱼 */
+ const eg=$('extra-grid'),cg=$('cat-grid');eg.innerHTML='';cg.innerHTML='';
+ EXTRA_PETS.forEach((p,ei)=>{
+  const pid=PETS.length+ei;
+  if(!getPet(pid))return;
+  const d=document.createElement('div');
+  d.className='role-card'+(EXTRA_UNLOCK[ei]?'':' locked');
+  d.dataset.petId=String(pid);d.setAttribute('role','button');d.tabIndex=0;
+  let body='<div class="r-art">'+renderPetArt(pid,100,true)+'</div><div class="r-name">'+p.name+'</div>';
+  body+='<div style="height:22px;"></div><div class="r-tag">'+(petUnlocked(pid)?TRAITS[p.trait]+' · '+p.breed:PartnerAccess.label(pid))+'</div>';
+  d.innerHTML=body;
+  d.onclick=()=>{if(!petUnlocked(pid))PartnerAccess.open(pid);else openDetail(pid);};d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click();}};
+  (p.catalogCat?cg:eg).appendChild(d);
+ });
+ /* 自由绘画：画笔槽 + 画作 + 捏脸宠物 */
+ const dg=$('draw-grid');dg.innerHTML='';
+ dg.innerHTML+='<div class="role-card draw-slot" onclick="openDraw()"><div class="r-art">🖌️</div><div class="r-name">画一只</div><div class="r-tag">自由画笔</div></div>';
+ dg.innerHTML+='<div class="role-card draw-slot" onclick="openFace()"><div class="r-art">🎨</div><div class="r-name">捏一只</div><div class="r-tag">捏脸生成</div></div>';
+ DRAWN_PETS.forEach((p,di)=>{
+  const pid=PETS.length+EXTRA_PETS.length+di;
+  if(!getPet(pid))return;
+  dg.innerHTML+='<div class="role-card" onclick="setMadeHero('+pid+')"><div class="r-art">'+renderPetArt(pid,86,true)+'</div><div class="r-name">'+p.name+'</div><div class="r-tag">我的画作</div></div>';
+ });
+ CUSTOM_PETS.forEach((c,ci)=>{
+  const pid=PETS.length+EXTRA_PETS.length+DRAWN_PETS.length+ci;
+  if(!getPet(pid))return;
+  dg.innerHTML+='<div class="role-card" onclick="setMadeHero('+pid+')"><div class="r-art">'+renderPetArt(pid,86,true)+'</div><div class="r-name">'+c.name+'</div><div class="r-tag">捏脸 · '+FACE_KIND_NAMES[FACE_KINDS.indexOf(c.kind)]+'</div></div>';
+ });
+}
+function setMadeHero(pid){
+ if(!getPet(pid)||!petUnlocked(pid)){if(getPet(pid))PartnerAccess.open(pid);return;}
+ curPet=pid;homeFixed=true;renderSwap();renderHome();
+ toast('「'+getPet(pid).name+'」来陪你啦');
+}
+/* ===== 主页出场名单（勾选才会出现） ===== */
+let homePicks=null; /* null=全部已解锁 */
+function openHomePick(){renderHomePick();$('homepick-sheet').classList.add('show');}
+function renderHomePick(){
+ const g=$('hp-list');g.innerHTML='';
+ allPets().forEach((p,i)=>{
+  if(!petUnlocked(i))return;
+  const on=homePicks===null||homePicks.includes(i);
+  g.innerHTML+='<div class="hp-item'+(on?' on':'')+'" onclick="toggleHomePick('+i+')">'+renderPetPortrait(i,34)+'<span>'+p.name+'</span><i class="hp-check">'+ (on?'✓':'') +'</i></div>';
+ });
+}
+function toggleHomePick(i){
+ if(!getPet(i)||!petUnlocked(i))return;
+ if(homePicks===null){
+  homePicks=allPets().map((_,x)=>x).filter(x=>petUnlocked(x)&&x!==i);
+ }else{
+  const idx=homePicks.indexOf(i);
+  if(idx>=0)homePicks.splice(idx,1);else homePicks.push(i);
+ }
+ renderHomePick();
+}
+/* ===== 画一只陪伴（canvas 画笔 · 多层 · 透明背景） ===== */
+let drawColor='#5A4636',drawing=false,brushSize=7,MAX_LAYERS=5,tool='brush';
+let layers=[],activeLayer=0,layerHist=[]; /* layerHist[i]={undo:[],redo:[]} */
+function bindLayerEvents(cv,ctx,i){
+ /* 长按复制/文本选择/系统菜单彻底屏蔽 + 双击手势修复 */
+ cv.addEventListener('contextmenu',e=>e.preventDefault());
+ cv.addEventListener('dblclick',e=>e.preventDefault());
+ ['selectstart','dragstart','gesturestart'].forEach(ev=>cv.addEventListener(ev,e=>e.preventDefault()));
+ cv.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+ cv.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+ const pos=e=>{const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*cv.width/r.width,y:(t.clientY-r.top)*cv.height/r.height};};
+ cv.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  if(i!==activeLayer)return;
+  drawing=true;
+  const L=layers[i];
+  L.ctx.globalCompositeOperation=tool==='eraser'?'destination-out':'source-over';
+  L.ctx.strokeStyle=drawColor;
+  L.ctx.lineWidth=tool==='eraser'?Math.max(12,brushSize*2.4):brushSize;
+  L.ctx.beginPath();
+  const p=pos(e);L.ctx.moveTo(p.x,p.y);
+  layerHist[i].undo.push(L.ctx.getImageData(0,0,cv.width,cv.height));
+  if(layerHist[i].undo.length>20)layerHist[i].undo.shift();
+  layerHist[i].redo=[];updateDrawBtns();
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+ });
+ cv.addEventListener('pointermove',e=>{if(!drawing||i!==activeLayer)return;const p=pos(e);layers[i].ctx.lineTo(p.x,p.y);layers[i].ctx.stroke();});
+ ['pointerup','pointercancel','pointerleave'].forEach(ev=>cv.addEventListener(ev,()=>{drawing=false;try{cv.releasePointerCapture(1);}catch(_){};if(ev==='pointerup')saveDrawState();}));
+}
+/* 画布自动存档：防左滑/意外退出清屏 */
+const DRAW_KEY='lc_draw_save';
+function saveDrawState(){
+ try{
+  const d=layers.map(L=>L.el.toDataURL());
+  const s={d:d,w:280,h:280};
+  if(pendingDraw){s.pd={...pendingDraw};delete s.pd.out;}
+  if(Object.values(pendingParts).some(v=>v))s.pp=pendingParts;
+  localStorage.setItem(window.AccountManager?AccountManager.scopeKey(DRAW_KEY):DRAW_KEY,JSON.stringify(s));
+ }catch(_){}
+}
+function restoreDrawState(){
+ try{
+  const s=JSON.parse(localStorage.getItem(window.AccountManager?AccountManager.scopeKey(DRAW_KEY):DRAW_KEY));
+  if(!s||!s.d||!s.d.length)return false;
+  if(s.pp)pendingParts=s.pp;
+  if(s.pd){
+   pendingDraw={...s.pd,step:s.pd.step||2};
+   const cv=document.createElement('canvas');cv.width=280;cv.height=280;
+   const img=new Image();
+   img.onload=()=>{cv.getContext('2d').drawImage(img,0,0,280,280);};
+   img.src=s.pd.dataURL;
+   pendingDraw.out=cv;
+   applyStepUI(pendingDraw.step);
+  }
+  let loaded=0;
+  s.d.forEach((url,li)=>{
+   if(!layers[li]||!url)return;
+   const img=new Image();
+   img.onload=()=>{layers[li].ctx.drawImage(img,0,0);loaded++;if(loaded===s.d.length)toast('发现未完成的画作，已自动恢复');};
+   img.src=url;
+  });
+  return true;
+ }catch(_){return false;}
+}
+function setTool(t){
+ tool=t;
+ const b=$('tool-brush'),e=$('tool-eraser');
+ if(b)b.classList.toggle('on',t==='brush');
+ if(e)e.classList.toggle('on',t==='eraser');
+}
+function initDraw(){
+ const wrap=$('draw-wrap');if(!wrap)return;
+ wrap.querySelectorAll('canvas.layer-canvas').forEach(c=>c.remove());
+ layers=[];layerHist=[];activeLayer=0;drawing=false;
+ for(let i=0;i<3;i++){
+  const cv=document.createElement('canvas');
+  cv.className='layer-canvas';cv.width=280;cv.height=280;cv.dataset.layer=i;
+  wrap.appendChild(cv);
+  const ctx=cv.getContext('2d');ctx.lineCap='round';ctx.lineJoin='round';
+  layers.push({el:cv,ctx,visible:true});
+  layerHist.push({undo:[],redo:[]});
+  bindLayerEvents(cv,ctx,i);
+ }
+ setActiveLayer(0);
+}
+function addLayer(){
+ if(layers.length>=MAX_LAYERS){toast('最多 '+MAX_LAYERS+' 个图层啦');return;}
+ const i=layers.length;
+ const cv=document.createElement('canvas');
+ cv.className='layer-canvas';cv.width=280;cv.height=280;cv.dataset.layer=i;
+ $('draw-wrap').appendChild(cv);
+ const ctx=cv.getContext('2d');ctx.lineCap='round';ctx.lineJoin='round';
+ layers.push({el:cv,ctx,visible:true});
+ layerHist.push({undo:[],redo:[]});
+ bindLayerEvents(cv,ctx,i);
+ activeLayer=i;
+ syncLayerStack();
+ renderLayerBar();
+}
+function syncLayerStack(){
+ layers.forEach((L,li)=>{L.el.style.zIndex=li+1;L.el.style.pointerEvents=li===activeLayer?'auto':'none';});
+}
+/* 参考层：闭眼步骤显示睁眼减淡版，方便对照位置画闭眼 */
+function showDrawRef(){
+ const r=$('draw-ref');if(!r)return;
+ r.width=280;r.height=280;
+ const ctx=r.getContext('2d');ctx.clearRect(0,0,280,280);
+ if(pendingDraw){
+  const img=new Image();
+  img.onload=()=>{ctx.globalAlpha=.28;ctx.drawImage(img,0,0,280,280);ctx.globalAlpha=1;};
+  img.src=pendingDraw.dataURL;
+ }
+ r.style.display='block';
+}
+function hideDrawRef(){
+ const r=$('draw-ref');if(!r)return;
+ r.style.display='none';
+ r.getContext('2d').clearRect(0,0,280,280);
+}
+function setActiveLayer(i){
+ if(i<0||i>=layers.length)return;
+ activeLayer=i;
+ syncLayerStack();
+ renderLayerBar();
+}
+function moveLayer(dir){
+ const j=activeLayer+dir;
+ if(j<0||j>=layers.length){toast(dir>0?'图层已是最上层':'图层已是最下层');return;}
+ const t=layers[activeLayer];layers[activeLayer]=layers[j];layers[j]=t;
+ const th=layerHist[activeLayer];layerHist[activeLayer]=layerHist[j];layerHist[j]=th;
+ activeLayer=j;
+ syncLayerStack();
+ renderLayerBar();
+}
+function toggleLayerVisible(i){
+ if(!layers[i])return;
+ layers[i].visible=!layers[i].visible;
+ layers[i].el.style.opacity=layers[i].visible?'1':'.22';
+ renderLayerBar();
+}
+function renderLayerBar(){
+ const b=$('layer-bar');b.innerHTML='';
+ layers.forEach((L,i)=>{
+  b.innerHTML+='<button class="lb-chip'+(i===activeLayer?' on':'')+'" onclick="setActiveLayer('+i+')"><span class="lb-eye" onclick="event.stopPropagation();toggleLayerVisible('+i+')">'+(L.visible?'👁':'🙈')+'</span>图层'+(i+1)+'</button>';
+ });
+ updateDrawBtns();
+}
+function updateDrawBtns(){
+ const h=layerHist[activeLayer];const u=$('draw-undo'),r=$('draw-redo');
+ if(u)u.disabled=!h||!h.undo.length;
+ if(r)r.disabled=!h||!h.redo.length;
+}
+function undoDraw(){
+ const L=layers[activeLayer],h=layerHist[activeLayer];
+ if(!h||!h.undo.length)return;
+ h.redo.push(L.ctx.getImageData(0,0,280,280));
+ L.ctx.putImageData(h.undo.pop(),0,0);
+ updateDrawBtns();
+}
+function redoDraw(){
+ const L=layers[activeLayer],h=layerHist[activeLayer];
+ if(!h||!h.redo.length)return;
+ h.undo.push(L.ctx.getImageData(0,0,280,280));
+ L.ctx.putImageData(h.redo.pop(),0,0);
+ updateDrawBtns();
+}
+function openDraw(){
+ resetMarks();
+ hideDrawRef();
+ initDraw();
+ restoreDrawState();
+ $('draw-name').value='';
+ const c=$('draw-colors');c.innerHTML='';
+ ['#5A4636','#E8926B','#F0B45A','#7BA05B','#7BA8C8','#C47A7A','#2B2B2B','#FFFFFF'].forEach(col=>{c.innerHTML+='<i class="dc'+(col==='#5A4636'?' on':'')+'" style="background:'+col+'" onclick="setDrawColor(\''+col+'\',this)"></i>';});
+ c.innerHTML+='<label class="wheel-btn" title="色轮选色"><input type="color" id="draw-wheel" value="#5A4636" onchange="setDrawColor(this.value,this)"></label>';
+ const br=$('brush-bar');br.innerHTML='';
+ [[4,'细'],[7,'中'],[11,'粗']].forEach((b)=>{
+  br.innerHTML+='<button class="br-chip'+(b[0]===brushSize?' on':'')+'" onclick="setBrush('+b[0]+')"><i style="width:'+b[0]+'px;height:'+b[0]+'px;"></i><span>'+b[1]+'</span></button>';
+ });
+ $('draw-sheet').classList.add('show');
+}
+function setDrawColor(c,el){
+ drawColor=c;
+ document.querySelectorAll('.dc').forEach(i=>i.classList.remove('on'));
+ document.querySelectorAll('.wheel-btn').forEach(i=>i.classList.remove('on'));
+ const t=el&&el.tagName==='INPUT'?el.parentElement:el;
+ if(t)t.classList.add('on');
+}
+function setBrush(w){brushSize=w;document.querySelectorAll('.br-chip').forEach((c,idx)=>c.classList.toggle('on',[4,7,11][idx]===w));}
+/* ===== 主体与可选表情：旧草稿部位数据只作兼容读取 ===== */
+let markMode=false,pendingDraw=null;
+let markBoxes=[],markSel=null,markSeq=0;
+let pendingParts={head:null,tail:null,eye:null};
+function resetMarks(){markBoxes=[];markSel=null;pendingParts={head:null,tail:null,eye:null};}
+function composeLayers(){
+ const out=document.createElement('canvas');out.width=280;out.height=280;
+ const octx=out.getContext('2d');
+ layers.forEach(L=>{if(L.visible)octx.drawImage(L.el,0,0);});
+ return out;
+}
+function saveDraw(){
+ if(!pendingDraw){
+  /* 第一步：保存主体；新画作不需要手工标注部位。 */
+  const name=$('draw-name').value.trim()||'我的画作';
+  const out=DrawnExpressions.cleanPaper(composeLayers());
+  const parts={head:null,tail:null,eye:null};
+  pendingDraw={name,dataURL:out.toDataURL('image/png'),out:out,parts,frameBounds:DrawnExpressions.bounds(out),expressionVersion:2,step:2};
+  enterStep(2);
+  return;
+ }
+ if(pendingDraw.step===2){
+  /* 第二步：画闭眼 → 进入卖萌 */
+  const out=composeLayers();
+  pendingDraw.blinkURL=DrawnExpressions.expression(pendingDraw.out,out,pendingDraw.parts&&pendingDraw.parts.eye);
+  pendingDraw.blinkCrop=null;
+  pendingDraw.step=3;
+  enterStep(3);
+  return;
+ }
+ /* 第三步：画卖萌表情 → 完成 */
+ const out=composeLayers();
+ pendingDraw.moeURL=DrawnExpressions.expression(pendingDraw.out,out,pendingDraw.parts&&pendingDraw.parts.eye);
+ pendingDraw.moeCrop=null;
+ addDrawnPet({name:pendingDraw.name,kind:'drawn',trait:3,breed:'自由画笔',line:'「我是你亲手画的，会一直陪着你」',dataURL:pendingDraw.dataURL,blinkURL:pendingDraw.blinkURL,blinkCrop:pendingDraw.blinkCrop,moeURL:pendingDraw.moeURL,moeCrop:pendingDraw.moeCrop,parts:pendingDraw.parts,frameBounds:pendingDraw.frameBounds,expressionVersion:2});
+ try{localStorage.removeItem(window.AccountManager?AccountManager.scopeKey(DRAW_KEY):DRAW_KEY);}catch(_){}
+ finishDraw('「'+pendingDraw.name+'」画好啦，点头眨眼摇尾巴卖萌都会了');
+}
+function applyStepUI(n){
+ $('draw-wrap').classList[n>1?'add':'remove']('dim');
+ if(n>=2)showDrawRef();else hideDrawRef();
+ const hint=$('draw-hint'),skip=$('skip-blink-btn'),btn=$('save-draw-btn');
+ if(n===2){hint.textContent='主体已画好（半透明参考）· 现在画闭眼：沿着参考轮廓画闭上的眼睛';btn.textContent='确定，画卖萌';skip.textContent='跳过闭眼';}
+ else{hint.textContent='画卖萌表情（眯眼/吐舌/歪头都行）· 画完点确定带它回家';btn.textContent='确定，带它回家';skip.textContent='跳过卖萌';}
+ hint.classList.add('show');skip.style.display='inline-block';
+}
+function enterStep(n){
+ $('draw-name').value='';
+ clearDraw();
+ applyStepUI(n);
+ toast(n===2?'主体完成！画个闭眼（或点跳过）':'闭眼完成！画个卖萌表情（或点跳过）');
+}
+function skipBlink(){
+ if(!pendingDraw||pendingDraw.step!==2)return;
+ pendingDraw.blinkURL=null;pendingDraw.blinkCrop=null;
+ pendingDraw.step=3;
+ enterStep(3);
+}
+function skipStep(){
+ if(!pendingDraw)return;
+ if(pendingDraw.step===2)skipBlink();
+ else if(pendingDraw.step===3)skipMoe();
+}
+function skipMoe(){
+ if(!pendingDraw||pendingDraw.step!==3)return;
+ pendingDraw.moeURL=null;pendingDraw.moeCrop=null;
+ addDrawnPet({name:pendingDraw.name,kind:'drawn',trait:3,breed:'自由画笔',line:'「我是你亲手画的，会一直陪着你」',dataURL:pendingDraw.dataURL,blinkURL:pendingDraw.blinkURL,blinkCrop:pendingDraw.blinkCrop,moeURL:null,moeCrop:null,parts:pendingDraw.parts,frameBounds:pendingDraw.frameBounds,expressionVersion:2});
+ try{localStorage.removeItem(window.AccountManager?AccountManager.scopeKey(DRAW_KEY):DRAW_KEY);}catch(_){}
+ finishDraw('「'+pendingDraw.name+'」画好啦，已经住进你家');
+}
+function finishDraw(msg){
+ pendingDraw=null;markBoxes=[];markSel=null;
+ pendingParts={head:null,tail:null,eye:null};
+ hideDrawRef();
+ $('draw-wrap').classList.remove('dim');
+ $('draw-hint').classList.remove('show');$('draw-hint').textContent='';
+ $('skip-blink-btn').style.display='none';
+ $('save-draw-btn').textContent='确定，画闭眼动画';
+ dismissSheet($('draw-sheet'));
+ renderRoles();renderSwap();renderHome();
+ renderFocusPet();renderPetPick();renderPetDress();
+ toast(msg);
+}
+function clearDraw(){
+ layers.forEach((L,i)=>{L.ctx.clearRect(0,0,280,280);layerHist[i]={undo:[],redo:[]};});
+ activeLayer=0;setActiveLayer(0);updateDrawBtns();
+}
+/* ===== 捏一只专属宠物 ===== */
+const FACE_KINDS=['cat','dog'];
+const FACE_KIND_NAMES=['猫','狗'];
+const FACE_COLORS=['#F3EDE3','#4B4B4B','#C8905E','#F0B45A','#9CA8B4','#E8926B'];
+let faceKind=0,faceColor=0,faceTrait=0;
+function openFace(){
+ faceKind=0;faceColor=0;faceTrait=0;$('face-name').value='';
+ renderFaceOpts();$('face-sheet').classList.add('show');
+}
+function renderFaceOpts(){
+ const mk=$('face-kind');mk.innerHTML='';FACE_KIND_NAMES.forEach((n,i)=>{mk.innerHTML+='<button class="chip'+(i===faceKind?' active':'')+'" onclick="faceSet(\'kind\','+i+')">'+n+'</button>';});
+ const mc=$('face-color');mc.innerHTML='';FACE_COLORS.forEach((c,i)=>{mc.innerHTML+='<i class="fc'+(i===faceColor?' on':'')+'" style="background:'+c+'" onclick="faceSet(\'color\','+i+')"></i>';});
+ const mt=$('face-trait');mt.innerHTML='';TRAITS.forEach((n,i)=>{mt.innerHTML+='<button class="chip'+(i===faceTrait?' active':'')+'" onclick="faceSet(\'trait\','+i+')">'+n+'</button>';});
+ renderFacePreview();
+}
+function faceSet(k,v){if(k==='kind'&&Number.isInteger(v)&&v>=0&&v<FACE_KINDS.length)faceKind=v;if(k==='color'&&Number.isInteger(v)&&v>=0&&v<FACE_COLORS.length)faceColor=v;if(k==='trait'&&Number.isInteger(v)&&v>=0&&v<TRAITS.length)faceTrait=v;renderFaceOpts();}
+function renderFacePreview(){
+ const c={kind:FACE_KINDS[faceKind],color:FACE_COLORS[faceColor],face:0};
+ $('face-preview').innerHTML='<div class="dressed" style="width:150px;height:150px;margin:0 auto;">'+customSVG(c,150)+'</div>';
+}
+function saveFace(){
+ const name=$('face-name').value.trim()||('我的'+FACE_KIND_NAMES[faceKind]);
+ CUSTOM_PETS.push({name:name,kind:FACE_KINDS[faceKind],custom:true,breed:'捏脸宠物',trait:faceTrait,line:['一起专注吧！','想靠着你','陪我藏零食','哼，陪着我','嗯，我陪你','专注完开饭！'][faceTrait],color:FACE_COLORS[faceColor],face:0,acc:0});
+ dismissSheet($('face-sheet'));
+ renderRoles();renderSwap();renderHome();
+ toast('「'+name+'」捏好啦，已加入图鉴');
+}
+function openDetail(i){
+ const p=getPet(i);
+ if(!p)return;if(!petUnlocked(i)){PartnerAccess.open(i);return;}
+ $('role-sheet').dataset.petId=String(i);
+ const react=['掉眼泪：「说好一起吃的…你怎么走了」','偷吃你的份：「你的那份我帮你吃掉好了」','炸毛：「说好一起吃饭的你人呢！！」','强装没事等你：「那你快点回来哦」','理直气壮代吃：「你那份我替你吃了」','嘴硬等门：「谁等你了，我只是自己吃」'][p.trait];
+ const back=['「你…你终于回来了（红着脸）」','「哦，回来了啊。我可没想你」','「哼！还知道回来？」','「你终于回来啦！我等你好久了！」','「你回来啦！份我留着呢」','「嗯，回来了。」（摆好碗筷）'][p.trait];
+ const aff=ROLE_AFF[i]||0;
+ $('role-sheet').innerHTML='<div class="s-head">'+renderPetPortrait(i,76)+'<div><div class="s-name">'+p.name+'</div><div class="s-meta">'+p.breed+' · '+TRAITS[p.trait]+'</div><div class="s-tag">好感度 '+aff+' · '+affLevel(aff)+'</div></div></div><div class="s-line">开饭台词：'+p.line+'</div><div class="s-grid"><div class="s-cell"><b>超过 10 秒没回来</b>'+react+'</div><div class="s-cell"><b>10 秒内回来</b>'+back+'</div></div><button class="btn" style="width:100%;" onclick="closeDetail()">把它设为常驻主角</button>';
+ $('role-detail').classList.add('show');
+}
+function closeDetail(){const pid=Number($('role-sheet').dataset.petId);if(!Number.isInteger(pid)||!getPet(pid)||!petUnlocked(pid))return;curPet=pid;homeFixed=true;renderSwap();renderHome();renderFocusPet();dismissSheet($('role-detail'));toast('已设为常驻主角');}
+/* ===== DRESS 装扮 · 场景布置编辑器 ===== */
+const DECOR=[
+ {cat:0,name:'原木沙发',lock:0,w:118,h:74,x:6,y:44,svg:'<rect x="6" y="26" width="52" height="24" rx="10" fill="#E8B98A"/><rect x="10" y="12" width="12" height="34" rx="7" fill="#D99B5F"/><rect x="42" y="12" width="12" height="34" rx="7" fill="#D99B5F"/><rect x="6" y="47" width="52" height="9" rx="4.5" fill="#C8864E"/>'},
+ {cat:0,name:'软垫猫窝',lock:0,w:104,h:70,x:58,y:56,svg:'<path d="M10 44 a22 20 0 0 1 44 0 Z" fill="#F0B45A"/><ellipse cx="32" cy="44" rx="24" ry="8" fill="#FFE3C0"/><path d="M20 28 q12 -12 24 0 q-2 12 -12 12 q-10 0 -12 -12" fill="#F0B45A"/>'},
+ {cat:0,name:'狗狗窝',lock:0,w:110,h:66,x:30,y:56,svg:'<ellipse cx="32" cy="44" rx="27" ry="12" fill="#D9A05B"/><ellipse cx="32" cy="42" rx="19" ry="8" fill="#FFE3C0"/><path d="M22 26 h20 l7 10 h-34 Z" fill="#C8864E"/>'},
+ {cat:0,name:'摇椅',lock:1,w:96,h:86,x:72,y:48,svg:'<path d="M10 34 h44" stroke="#A96A3E" stroke-width="6" stroke-linecap="round"/><path d="M6 40 q26 16 52 0" stroke="#A96A3E" stroke-width="5" fill="none"/><path d="M20 28 v14 M44 28 v14" stroke="#A96A3E" stroke-width="5"/>'},
+ {cat:1,name:'逗猫棒',lock:0,w:78,h:78,x:16,y:46,svg:'<line x1="8" y1="54" x2="42" y2="22" stroke="#8A5A3A" stroke-width="3.5"/><circle cx="45" cy="20" r="6.5" fill="#E2725B"/><path d="M45 20 q9 4 15 0 M45 20 q6 9 2 15" stroke="#E2725B" stroke-width="2.2" fill="none"/>'},
+ {cat:1,name:'毛线球',lock:0,w:70,h:70,x:70,y:52,svg:'<circle cx="32" cy="36" r="19" fill="#D98A8A"/><path d="M18 28 q10 -8 20 -2 M22 44 q8 6 18 0 M19 34 h26 M17 38 h28" stroke="#B96A6A" stroke-width="2" fill="none"/><path d="M46 20 q8 -7 11 -1" stroke="#D98A8A" stroke-width="3" fill="none" stroke-linecap="round"/>'},
+ {cat:1,name:'小鱼干碗',lock:0,w:84,h:58,x:38,y:52,svg:'<path d="M6 30 h52 l-6 14 a6 6 0 0 1 -5 3 h-30 a6 6 0 0 1 -5 -3 Z" fill="#E8B98A"/><path d="M18 38 h28" stroke="#C8864E" stroke-width="3" stroke-linecap="round"/><path d="M24 34 l3 -5 M34 34 l3 -5" stroke="#D98A5A" stroke-width="3" fill="none"/>'},
+ {cat:1,name:'玩具鼠',lock:1,w:76,h:60,x:20,y:58,svg:'<ellipse cx="26" cy="40" rx="13" ry="9" fill="#A99B8F"/><circle cx="16" cy="32" r="5.5" fill="#A99B8F"/><circle cx="15" cy="30.5" r="1.2" fill="#4A3B2F"/><path d="M38 40 q12 0 16 -9" stroke="#A99B8F" stroke-width="3.5" fill="none" stroke-linecap="round"/>'},
+ {cat:2,name:'暖橘抱枕',lock:0,w:84,h:58,x:42,y:38,svg:'<rect x="8" y="16" width="48" height="34" rx="13" fill="#F0B45A"/><rect x="17" y="25" width="30" height="16" rx="8" fill="#FFE3C0"/>'},
+ {cat:2,name:'绿植',lock:0,w:80,h:92,x:80,y:34,svg:'<path d="M32 4 C27 12 20 14 20 24 h24 C44 14 37 12 32 4Z" fill="#6FA873"/><path d="M26 22 q-8 6 -8 16 M38 22 q8 6 8 16" stroke="#6FA873" stroke-width="3" fill="none"/><rect x="19" y="38" width="26" height="18" rx="4" fill="#C8864E"/><rect x="16" y="54" width="32" height="8" rx="4" fill="#A96A3E"/>'},
+ {cat:2,name:'圆地毯',lock:0,w:130,h:74,x:14,y:64,svg:'<ellipse cx="32" cy="36" rx="30" ry="17" fill="#E8A99A"/><ellipse cx="32" cy="36" rx="21" ry="12" fill="#F5C9BC"/><ellipse cx="32" cy="36" rx="10" ry="6" fill="#E8A99A"/>'},
+ {cat:2,name:'小书架',lock:1,w:84,h:90,x:4,y:40,svg:'<rect x="13" y="16" width="38" height="32" rx="4" fill="#C8864E"/><rect x="13" y="30" width="38" height="5" fill="#A96A3E"/><rect x="17" y="20" width="11" height="7" fill="#8FBC9A"/><rect x="31" y="20" width="10" height="7" fill="#E2725B"/><rect x="17" y="36" width="13" height="9" fill="#F0C75A"/><rect x="33" y="36" width="12" height="9" fill="#8FBCE0"/>'},
+ {cat:3,name:'月亮挂饰',lock:0,w:66,h:70,x:82,y:6,svg:'<path d="M40 6 a17 17 0 1 0 7 24 a15 15 0 1 1 -7 -24Z" fill="#F0C75A"/><line x1="8" y1="46" x2="14" y2="46" stroke="#C8864E" stroke-width="3"/>'},
+ {cat:3,name:'星星串',lock:0,w:110,h:54,x:8,y:8,svg:'<path d="M14 22 l3.5 7 7.5 1 -5.5 5.5 1.3 7.5 -6.8 -3.5 -6.8 3.5 1.3 -7.5 L7 30 l7.5 -1 Z" fill="#F0D26A"/><path d="M38 16 l2.8 5.6 6 .8 -4.4 4.4 1 6 -5.4 -2.8 -5.4 2.8 1 -6 -4.4 -4.4 6 -.8Z" fill="#F0C75A"/><path d="M56 30 l2.4 4.8 5.2.7 -3.8 3.8.9 5.2 -4.7 -2.4 -4.7 2.4 .9 -5.2 -3.8 -3.8 5.2 -.7Z" fill="#E8B98A"/>'},
+ {cat:3,name:'雨滴挂饰',lock:0,w:58,h:78,x:62,y:10,svg:'<path d="M29 6 q11 18 11 27 a11 11 0 1 1 -22 0 q0 -9 11 -27Z" fill="#8FBCE0"/><line x1="8" y1="52" x2="16" y2="52" stroke="#C8864E" stroke-width="3"/>'},
+ {cat:3,name:'彩虹挂画',lock:1,w:110,h:72,x:26,y:6,svg:'<path d="M12 42 a22 22 0 0 1 44 0" stroke="#E2725B" stroke-width="5" fill="none"/><path d="M19 42 a15 15 0 0 1 30 0" stroke="#F0C75A" stroke-width="5" fill="none"/><path d="M26 42 a8 8 0 0 1 16 0" stroke="#8FBCE0" stroke-width="5" fill="none"/>'}
+];
+let nextDecId=3;
+let placed=[
+ {id:0,name:'原木沙发',x:6,y:44,w:118,h:74,svg:DECOR[0].svg},
+ {id:1,name:'圆地毯',x:14,y:64,w:130,h:74,svg:DECOR[10].svg},
+ {id:2,name:'绿植',x:80,y:34,w:80,h:92,svg:DECOR[9].svg}
+];
+function setDressTab(t){curDressTab=t;document.querySelectorAll('#dress-tabs .chip').forEach((c,i)=>c.classList.toggle('active',i===t));renderTray();}
+/* 伙伴页：图鉴 / 好友 二级切换 */
+let buddyTab=0;
+function setBuddyTab(t){
+ buddyTab=t;
+ document.querySelectorAll('.buddy-tabs .chip').forEach((c,i)=>c.classList.toggle('active',i===t));
+ $('buddies-roles').style.display=t===0?'':'none';
+ $('buddies-friends').style.display=t===1?'':'none';
+ window.scrollTo(0,0);
+}
+function openBuddy(t){ /* 九宫格等入口：t='friends' 或 'roles' */
+ setBuddyTab(t==='friends'?1:0);
+ go('buddies',{push:false});
+}
+/* 装扮页：小屋 / 主角 双模式 */
+let curDressMode=0;
+function setDressMode(m){
+ curDressMode=m;
+ $('view-dress').classList.toggle('dressing-pet',m===1);
+ document.querySelectorAll('.dress-tabs.main .chip').forEach((c,i)=>c.classList.toggle('active',i===m));
+ $('dress-house').style.display=m===0?'':'none';
+ $('dress-pet').style.display=m===1?'':'none';
+ if(m===1){
+  tempDress=[...(petOutfits[dressPet]||[])]; /* 进入装扮模式时初始化试穿状态 */
+  tempDressColors={...(outfitColors[dressPet]||{})};
+  renderPetPick();renderPetDress();
+ }
+}
+function renderPetPick(){
+ const g=$('pet-pick');g.innerHTML='';
+ allPets().forEach((p,pid)=>{
+  if(!getPet(pid))return;
+  if(petUnlocked(pid)){
+   const on=pid===dressPet?' on':'';
+   g.innerHTML+='<div class="pp'+on+'" onclick="pickDressPet('+pid+')">'+petDressed(pid,38,false)+'<span>'+p.name+'</span></div>';
+  }else{
+   g.innerHTML+='<div class="pp lock"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin:8px 12px 2px;"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10"/></svg><span>未解锁</span></div>';
+  }
+ });
+}
+/* 装扮试穿临时状态 */
+let tempDress=null; /* 当前试穿的装扮列表，点确定才保存 */
+let wardrobeFilter='all';
+function pickDressPet(pid){
+ if(!getPet(pid))return;if(!petUnlocked(pid)){PartnerAccess.open(pid);return;}
+ dressPet=pid;
+ tempDress=[...(petOutfits[dressPet]||[])]; /* 复制已保存的装扮作为试穿起点 */
+ tempDressColors={...(outfitColors[dressPet]||{})};
+ renderPetPick();renderPetDress();
+ toast('正在装扮 '+getPet(pid).name);
+}
+function renderPetDress(){
+ const p=getPet(dressPet);
+ /* 直接传试穿状态的装扮作为预览覆盖 */
+ const previewOutfits=tempDress||petOutfits[dressPet]||[];
+ $('pet-show').innerHTML='<div>'+petDressedExpr(dressPet,132,true,0,true,previewOutfits)+'</div><div class="pname">'+p.name+'<div style="font-size:11px;color:var(--gray);font-weight:700;margin-top:2px;">'+p.breed+' · '+TRAITS[p.trait]+'</div></div>';
+ const g=$('outfit-wear'),scroll=g.scrollLeft;g.innerHTML='';let count=0;
+ OUTFITS.forEach((o,i)=>{
+  const owned=outfitOwned(i),wearing=previewOutfits.includes(o.name);
+  if(wardrobeFilter==='owned'&&!owned||wardrobeFilter==='cash'&&o.currency!=='cash'||wardrobeFilter==='fish'&&(o.currency==='cash'||o.price===0))return;
+  count++;
+  const ic=o.img?'<img src="'+(preparedArt[o.art]||o.img)+'" style="width:36px;height:auto;object-fit:contain;">':o.emoji;
+  const status=wearing?(owned?'穿戴中':'试穿 · '+WardrobeCommerce.label(o)):(owned?'已拥有':WardrobeCommerce.label(o));
+  g.innerHTML+='<button type="button" class="outfit-item'+(owned?'':' locked')+(wearing?' wearing':'')+'" aria-pressed="'+wearing+'" onclick="toggleWear('+i+')"><span class="of-ic">'+ic+'</span><span class="of-name">'+o.name+'</span><span class="of-price">'+status+'</span></button>';
+ });
+ g.scrollLeft=scroll;$('wardrobe-count').textContent=count+'件 · 左右滑动，点击试穿';
+ const colors=$('raincoat-colors'),raincoat=previewOutfits.includes('雨衣');
+ colors.hidden=!raincoat;colors.style.display=raincoat?'flex':'none';
+ const color=(tempDressColors||outfitColors[dressPet])?.raincoat||'yellow';
+ colors.innerHTML=raincoat?'<span>雨衣颜色</span>'+[['yellow','黄色雨衣','黄'],['blue','蓝色雨衣','蓝']].map(([key,label,text])=>'<button type="button" aria-label="'+label+'" aria-pressed="'+(color===key)+'" onclick="setRaincoatColor(\''+key+'\')">'+text+'</button>').join(''):'';
+}
+function setWardrobeFilter(filter){if(!['all','owned','fish','cash'].includes(filter))return;wardrobeFilter=filter;$('outfit-wear').scrollLeft=0;document.querySelectorAll('.wardrobe-filters button').forEach((button,i)=>button.setAttribute('aria-pressed',String(['all','owned','fish','cash'][i]===filter)));renderPetDress();}
+function scrollWardrobe(direction){$('outfit-wear').scrollBy({left:direction*Math.max(94,$('outfit-wear').clientWidth*.8),behavior:'smooth'});}
+function outfitOwned(i){return !!OUTFITS[i]&&(OUTFITS[i].price===0||ownedOutfits.includes(i));}
+function setRaincoatColor(color){
+ if(!['yellow','blue'].includes(color))return;
+ if(!tempDress)tempDress=[...(petOutfits[dressPet]||[])];
+ if(!tempDressColors)tempDressColors={...(outfitColors[dressPet]||{})};
+ tempDressColors.raincoat=color;renderPetDress();
+}
+function toggleWear(i){
+ const o=OUTFITS[i];
+ if(!o)return;
+ if(!tempDress)tempDress=[...(petOutfits[dressPet]||[])];
+ const idx=tempDress.indexOf(o.name);
+ if(idx>=0)tempDress.splice(idx,1);else{
+  if(o.supplied)tempDress=tempDress.filter(name=>{const other=OUTFITS.find(item=>item.name===name);return !other?.supplied||!SuppliedOutfits.clashes(o,other);});
+  tempDress.push(o.name);
+ }
+ renderPetDress(); /* 只更新预览，不更新全局 */
+ toast(idx>=0?'已脱下 '+o.name:'已穿上 '+o.name+'（点确定装扮才保存）');
+}
+/* 预览图上点×直接脱掉 */
+function removeOutfitFromPreview(name){
+ if(!tempDress)tempDress=[...(petOutfits[dressPet]||[])];
+ const idx=tempDress.indexOf(name);
+ if(idx>=0)tempDress.splice(idx,1);
+ renderPetDress();
+ toast('已脱下 '+name);
+}
+function saveDress(){
+ const missing=WardrobeCommerce.missing(tempDress||petOutfits[dressPet]||[]);
+ if(missing.length){WardrobeCommerce.open(missing,true);return false;}
+ return commitDress([]);
+}
+function wardrobeTransaction(ids,wear){
+ const purchases=[...new Set(ids)].filter(i=>!outfitOwned(i));
+ if(purchases.some(i=>!OUTFITS[i]||OUTFITS[i].currency==='cash'))return false;
+ const cost=purchases.reduce((sum,i)=>sum+OUTFITS[i].price,0);
+ if(coins<cost)return false;
+ const previous={coins,owned:[...ownedOutfits],outfits:petOutfits[dressPet],colors:outfitColors[dressPet]};
+ coins-=cost;ownedOutfits=[...new Set([...ownedOutfits,...purchases])];
+ if(wear){petOutfits[dressPet]=[...(tempDress||petOutfits[dressPet]||[])];outfitColors[dressPet]={...(tempDressColors||outfitColors[dressPet]||{})};}
+ try{if(window.AppProfileBridge&&!AppProfileBridge.persist())throw new Error('没有写入本机存档');}
+ catch(error){coins=previous.coins;ownedOutfits=previous.owned;if(previous.outfits===undefined)delete petOutfits[dressPet];else petOutfits[dressPet]=previous.outfits;if(previous.colors===undefined)delete outfitColors[dressPet];else outfitColors[dressPet]=previous.colors;toast('保存失败，鱼币没有扣除，请重试');return false;}
+ if(wear){tempDress=null;tempDressColors=null;}
+ WardrobeCommerce.close();renderPetDress();renderPetPick();renderHome();renderFocusPet();renderFriends();
+ toast(wear?'已保存 '+getPet(dressPet).name+' 的装扮':'装扮已解锁，可以试穿啦');return true;
+}
+function commitDress(ids){
+ const missing=WardrobeCommerce.missing(tempDress||petOutfits[dressPet]||[]);
+ if(missing.some(i=>!ids.includes(i)))return false;
+ return wardrobeTransaction(ids,true);
+}
+function purchaseOutfits(ids){return wardrobeTransaction(ids,false);}
+function resetDress(){
+ tempDress=[];
+ tempDressColors={};
+ renderPetDress();
+ toast('已清空 '+getPet(dressPet).name+' 的试穿（点确定才生效）');
+}
+function renderTray(){
+ const g=$('item-tray');g.innerHTML='';
+ DECOR.filter(d=>d.cat===curDressTab).forEach(d=>{
+  const el=document.createElement('div');
+  el.className='tray-item'+(d.lock?' locked':'');
+  el.innerHTML='<svg viewBox="0 0 64 64" width="46" height="46">'+d.svg+'</svg><span>'+d.name+'</span>'+(d.lock?'<span class="lk">🔒 待解锁</span>':'');
+  el.onclick=()=>d.lock?toast('「'+d.name+'」未解锁：累计专注或登录奖励'):addItem(d);
+  g.appendChild(el);
+ });
+}
+function addItem(d){
+ placed.push({id:nextDecId++,name:d.name,svg:d.svg,x:d.x,y:d.y,w:d.w,h:d.h});
+ renderPlaced();toast('已放入：'+d.name+'（可拖动摆位置）');
+}
+function removeItem(id){placed=placed.filter(p=>p.id!==id);renderPlaced();}
+function renderPlaced(){
+ const L=$('placed-layer');L.innerHTML='';
+ placed.forEach(p=>{
+  const d=document.createElement('div');
+  d.className='pl-item';d.dataset.id=p.id;
+  d.style.left=p.x+'%';d.style.top=p.y+'%';
+  d.innerHTML='<svg viewBox="0 0 64 64" width="'+p.w+'" height="'+p.h+'">'+p.svg+'</svg><span class="rm" onclick="removeItem('+p.id+')">✕</span>';
+  L.appendChild(d);
+ });
+}
+/* 拖动摆放 */
+let dragId=null,dragDX=0,dragDY=0;
+function bindDressDrag(){
+ const st=$('dress-stage');if(!st)return;
+ st.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('.pl-item');if(!el)return;
+  if(e.target.closest('.rm'))return;
+  const p=placed.find(q=>q.id===+el.dataset.id);if(!p)return;
+  dragId=p.id;
+  const r=st.getBoundingClientRect();
+  dragDX=e.clientX-r.left-p.x/100*r.width;
+  dragDY=e.clientY-r.top-p.y/100*r.height;
+  el.classList.add('touch');
+  try{el.setPointerCapture(e.pointerId);}catch(err){}
+  e.preventDefault();
+ });
+ st.addEventListener('pointermove',e=>{
+  if(dragId===null)return;
+  const p=placed.find(q=>q.id===dragId);if(!p)return;
+  const r=st.getBoundingClientRect();
+  p.x=Math.max(0,Math.min(96,(e.clientX-r.left-dragDX)/r.width*100));
+  p.y=Math.max(0,Math.min(90,(e.clientY-r.top-dragDY)/r.height*100));
+  renderPlaced();
+ });
+ const end=()=>{dragId=null;document.querySelectorAll('.pl-item').forEach(el=>el.classList.remove('touch'));};
+ st.addEventListener('pointerup',end);
+ st.addEventListener('pointercancel',end);
+}
+/* 导出壁纸 */
+function exportWallpaper(){
+ toast('正在生成壁纸…');
+ const W=1170,H=2532;
+ const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+ const ctx=canvas.getContext('2d');
+ const bg=new Image();bg.crossOrigin='anonymous';
+ bg.src='https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/DzP7bXtSuoVic8xwktocNX1Tnsg';
+ const drawDone=()=>{
+  const a=document.createElement('a');a.download='我的小屋壁纸.png';a.href=canvas.toDataURL('image/png');a.click();
+  toast('壁纸已生成，保存到相册就能用了');
+ };
+ const drawItems=()=>{
+  const list=placed.slice();
+  let i=0;
+  const next=()=>{
+   if(i>=list.length){drawDone();return;}
+   const it=list[i++];
+   const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">'+it.svg+'</svg>';
+   const im=new Image();
+   im.onload=()=>{ctx.drawImage(im,it.x/100*W,it.y/100*H,it.w*1.7,it.h*1.7);next();};
+   im.onerror=next;
+   im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  };
+  next();
+ };
+ bg.onload=()=>{
+  const s=Math.max(W/bg.width,H/bg.height);
+  const bw=bg.width*s,bh=bg.height*s;
+  ctx.drawImage(bg,(W-bw)/2,(H-bh)/2,bw,bh);
+  const g=ctx.createLinearGradient(0,H*.55,0,H);
+  g.addColorStop(0,'rgba(74,59,47,0)');g.addColorStop(1,'rgba(74,59,47,.3)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  drawItems();
+ };
+ bg.onerror=()=>{ctx.fillStyle='#FAF4EC';ctx.fillRect(0,0,W,H);drawItems();};
+}
+/* ===== 好友广场 ===== */
+let coins=220, rankClaimed=false, pkState=0, appliedPK=0, pkMyMin=0, pkOppMin=0, pkDone=false, pkTimer=null;
+const RANK_ME=1; /* 我的本周排名：第 1 名 */
+const RANK_DATA=[
+ {name:'我',pet:-1,hours:'6.5h',rank:1,rw:'+300'},
+ {name:'果冻',pet:0,hours:'5.2h',rank:2,rw:'+200'},
+ {name:'栗子',pet:4,hours:'4.8h',rank:3,rw:'+100'},
+ {name:'团子糖',pet:14,hours:'3.9h',rank:4,rw:''},
+ {name:'阿柴',pet:5,hours:'3.1h',rank:5,rw:''}
+];
+const PLAZA=[
+ {name:'栗子',pet:4,motto:'一起干饭！求搭子'},
+ {name:'果冻',pet:0,motto:'备考中，每天 3 个番茄'},
+ {name:'团子糖',pet:14,motto:'橘猫本猫，零食共享'},
+ {name:'阿柴',pet:5,motto:'互相监督不跑路'}
+];
+const OUTFITS=[
+ {name:'胡砸',art:'beard',price:0,img:'https://aka.doubaocdn.com/s/0GZEZGUOVw'},
+ {name:'俺是外星人',price:0,img:'https://aka.doubaocdn.com/s/QCjnbdkE6b'},
+ {name:'圣诞袜',price:0,img:'https://aka.doubaocdn.com/s/6tvi27sGsY'},
+ {name:'左眼是为了…',price:0,img:'https://aka.doubaocdn.com/s/Y1J6tmhRF3'},
+ {name:'懒羊羊口水巾',art:'bib',price:100,img:'https://aka.doubaocdn.com/s/9UAVRvxHXq'},
+ {name:'321跪',price:200,img:'https://aka.doubaocdn.com/s/fbqqFKeanO'},
+ ...SuppliedOutfits.catalog
+];
+let ownedOutfits=[0,1,2,3], plazaApplied=[]; /* 初始已拥有免费装扮 */
+function renderFriends(){
+ $('coin-num').textContent=coins;
+ $('my-rank').textContent=RANK_ME;
+ const rl=$('rank-list');rl.innerHTML='';
+ RANK_DATA.forEach(r=>{
+  const medal=r.rank<=3?'<div class="rank-medal g'+r.rank+'">'+['🥇','🥈','🥉'][r.rank-1]+'</div>':'<div class="rank-medal">'+r.rank+'</div>';
+  const petHtml=r.pet<0?renderPetArt(curPet,26,false):renderPetArt(r.pet,26,false);
+  const me=r.name==='我'?'<span class="me">我</span>':'';
+  rl.innerHTML+='<div class="rank-row">'+medal+'<div class="rk-pet">'+petHtml+'</div><div class="rk-name">'+r.name+me+'</div><div class="rk-h">'+r.hours+'</div><div class="rk-rw">'+(r.rw?'奖励 '+r.rw:'')+'</div></div>';
+ });
+ $('pk-me').innerHTML=petDressed(curPet,34,false);
+ const opp=getPet(appliedPK);
+ $('pk-opp').innerHTML=renderPetArt(appliedPK,34,false);
+ $('pk-name').textContent=opp.name;
+ const pl=$('plaza-list');pl.innerHTML='';
+ PLAZA.forEach((u,i)=>{
+  const done=plazaApplied.includes(i);
+  pl.innerHTML+='<div class="plaza-card"><div class="rk-pet">'+renderPetArt(u.pet,26,false)+'</div><div class="plaza-info"><b>'+u.name+'</b><span>'+u.motto+'</span></div><button class="plaza-btn'+(done?' done':'')+'" onclick="applyBuddy('+i+')">'+(done?'已申请':'申请搭子')+'</button></div>';
+ });
+ const og=$('outfit-grid');og.innerHTML='';
+ OUTFITS.forEach((o,i)=>{
+  const owned=outfitOwned(i);
+  const ic=o.img?'<img src="'+(preparedArt[o.art]||o.img)+'" style="width:36px;height:auto;object-fit:contain;">':o.emoji;
+  og.innerHTML+='<div class="outfit-item'+(owned?' owned':'')+'" onclick="buyOutfit('+i+')"><div class="of-ic">'+ic+'</div><div class="of-name">'+o.name+'</div><div class="of-price">'+(owned?'已拥有':WardrobeCommerce.label(o))+'</div></div>';
+ });
+}
+function applyBuddy(i){
+ if(plazaApplied.includes(i)){toast('已经申请过啦，等对方同意');return;}
+ plazaApplied.push(i);renderFriends();
+ toast('已向 '+PLAZA[i].name+' 发出搭子申请');
+}
+function startPK(){
+ if(pkState===1){toast('PK 进行中：今晚 24:00 自动结算');return;}
+ if(pkDone){toast('今日 PK 已结算，明天再来');return;}
+ pkState=1;pkMyMin=0;pkOppMin=40+Math.floor(Math.random()*50);
+ const b=$('pk-btn');b.textContent='PK 进行中 · 今晚 24:00 结算';
+ $('pk-settle-btn').style.display='block';
+ $('pk-note').textContent='今天每完成一次专注都会计入 PK';
+ const r=$('pk-react');r.innerHTML=pkReactText();r.classList.add('show');
+ renderPKBar();pkCountdown();
+ clearInterval(pkTimer);pkTimer=setInterval(pkCountdown,1000);
+ toast('已向 '+$('pk-name').textContent+' 发起今日 PK！每晚 24:00 自动结算，赢的给主角加餐');
+}
+function pkCountdown(){
+ const now=new Date(),end=new Date(now);end.setHours(24,0,0,0);
+ const diff=end-now;
+ if(diff<=0){clearInterval(pkTimer);settlePK();return;}
+ const h=String(Math.floor(diff/3600000)).padStart(2,'0');
+ const m=String(Math.floor(diff/60000)%60).padStart(2,'0');
+ const s=String(Math.floor(diff/1000)%60).padStart(2,'0');
+ $('pk-count').innerHTML='今日 PK · 距 24:00 结算 <b>'+h+':'+m+':'+s+'</b>';
+}
+function renderPKBar(){
+ const me=pkMyMin,opp=pkOppMin,total=Math.max(me,opp,1);
+ $('pk-bar-me').style.width=(me/total*50)+'%';
+ $('pk-bar-opp').style.width=(opp/total*50)+'%';
+ $('pk-tag-me').textContent=getPet(curPet).name+' '+me+' 分钟';
+ $('pk-tag-opp').textContent=$('pk-name').textContent+' '+opp+' 分钟';
+}
+function settlePK(){
+ if(pkState!==1)return;
+ pkState=0;pkDone=true;clearInterval(pkTimer);
+ const win=pkMyMin>=pkOppMin;
+ const b=$('pk-btn');b.textContent='今日已结算 · 明天再 PK';
+ $('pk-settle-btn').style.display='none';
+ $('pk-note').textContent=win?'PK 赢了！奖励已到账':'今天差一点，明天再战';
+ $('pk-react').classList.remove('show');
+ if(win){coins+=50;$('coin-num').textContent=coins;
+  toast('PK 胜利！'+getPet(curPet).name+' 获得小鱼干零食 · 好感度 +10 · 鱼币 +50');
+ }else{toast('PK 惜败：'+getPet(curPet).name+' 说「明天一定赢回来」');}
+ renderFriends();
+}
+function claimRank(){
+ if(rankClaimed){toast('本周奖励已领取，下周一再结算');return;}
+ if(RANK_ME>3){toast('本周不在前三，再专注一点就能上榜');return;}
+ rankClaimed=true;const rw=[300,200,100][RANK_ME-1];coins+=rw;
+ $('coin-num').textContent=coins;
+ toast('已领取第 '+RANK_ME+' 名奖励：鱼币 +'+rw);
+}
+function buyOutfit(i){
+ const o=OUTFITS[i];
+ if(!o)return;
+ if(outfitOwned(i)){toast('已经拥有 '+o.name+' 啦');return;}
+ WardrobeCommerce.open([i],false);
+}
+/* 场景总览 */
+let ovTimer=null;
+function syncScenePreviews(){
+ const pages=document.querySelectorAll('.scene-page'),page=pages[curScene]||pages[0];
+ if(!page)return;
+ const image=page.querySelector('img'),preview=$('overview-bg');
+ preview.src=image.getAttribute('src');preview.alt=SCENES[curScene].name;
+ preview.style.filter=page.style.filter||'none';
+ $('overview-caption').textContent=SCENES[curScene].name+' · 和首页是同一个场景';
+ document.querySelectorAll('.sc-card img').forEach((img,i)=>{if(pages[i]){img.src=pages[i].querySelector('img').getAttribute('src');img.style.filter=pages[i].style.filter||'none';}});
+}
+function openOverview(){
+ syncScenePreviews();
+ renderCrowdInto($('ov-crowd'));
+ $('overview').classList.add('show');
+ clearInterval(ovTimer);
+}
+/* PK 性格互动：行=我方性格，列=对方性格 */
+const PK_REACT=[
+ ['「…要不要一起数番茄」','「你…你别吓到我就行」','「（缩成一团）你、你轻点」','「好呀…慢慢来」','「你要抢我小鱼干吗…」','「（躲开视线）装酷也没用啦」'],
+ ['「嘘，别出声，我们一起偷看进度」','「你藏哪了？我看见你了」','「别炸毛嘛，我就看看」','「咱俩谁先偷跑就算输」','「你把零食藏哪了？」','「装酷？我早看穿啦」'],
+ ['「你那么小声干嘛！大声点！」','「偷偷摸摸的想干嘛？！」','「（互瞪）你瞅啥！」','「你笑啥！不服比一场！」','「敢抢我吃的试试！」','「耍帅？一拳一个！」'],
+ ['「害羞啥呀，走！一起干饭！」','「一起来玩呀！别躲啦」','「别气啦，笑一个嘛～」','「哈哈哈你也太逗了」','「吃啥呢分我一口！」','「酷哥，笑一下嘛」'],
+ ['「你那份看起来好好吃…」','「你藏啥好吃的呢？」','「别凶嘛，分你一口鱼干？」','「一起开饭最快乐！」','「（对视一眼：抢饭！）」','「酷哥也吃饭的吧？」'],
+ ['「咳，害羞什么，坐下」','「我早就看见你了」','「脾气不小啊，有意思」','「笑什么，我认真的」','「吃的收一收，先比一场」','「（双双抱臂）嗯，你也不错」']
+];
+function pkReactText(){
+ const myT=getPet(curPet).trait,oppT=getPet(appliedPK).trait;
+ return '<b>'+getPet(curPet).name+'（'+TRAITS[myT]+'）× '+getPet(appliedPK).name+'（'+TRAITS[oppT]+'）</b><br>'+PK_REACT[myT][oppT];
+}
+/* ===== MINE 渲染 ===== */
+function renderMine(){
+ const row=$('avatar-row');row.innerHTML='';
+ SHADOWS.forEach((s,i)=>{
+  const locked=[1,1,0,0,0,0][i];
+  const d=document.createElement('div');
+  d.className='avatar-cell'+(i===curShadow?' active':'')+(locked?'':' locked');
+  d.innerHTML=shadowSVG(i,40)+'<span style="font-size:10px;font-weight:800;color:var(--wood);">'+s+'</span>';
+  d.onclick=()=>{if(locked){toast('「'+s+'」未解锁：外星人登录7天·小猫14天·小狗专注20h·小熊40h');return;}curShadow=i;renderMine();toast('影子已切换：'+s);};
+  row.appendChild(d);
+ });
+ renderLevel();
+}
+/* ===== 陪伴等级（每 100h 升一级） ===== */
+let totalH=68; /* 累计专注小时（演示值，靠近 Lv.2 方便体验升级） */
+const LV_NAMES=['萌新伙伴','常伴伙伴','暖心伙伴','靠谱伙伴','默契伙伴','专注搭档','成长见证官','时间旅伴','相伴大师','一生的陪伴'];
+const LV_MILES=['咖啡馆角落','限定小围裙','书店场景','限定小皇冠','新伙伴·布偶猫','星空场景','专属头像边框','大师披风','专属家园场景','一生陪伴·全装扮'];
+function lvOf(h){return Math.min(10,Math.floor(h/100)+1);}
+function renderLevel(){
+ const lv=lvOf(totalH);
+ $('lv-badge').textContent='Lv.'+lv;
+ $('lv-title').textContent=LV_NAMES[lv-1];
+ const cur=Math.round((totalH-(lv-1)*100)*10)/10;
+ $('lv-bar').style.width=Math.min(100,cur)+'%';
+ $('lv-val').textContent=(Math.round(totalH*10)/10)+'/'+(lv*100)+'h';
+ $('lv-next').textContent=lv>=10?'已满级：相伴千时，一生陪伴':'距 Lv.'+(lv+1)+' 还差 '+(100-cur)+' 小时';
+ const g=$('lv-miles');g.innerHTML='';
+ LV_MILES.forEach((m,i)=>{
+  const ok=totalH>=(i+1)*100;
+  const cls=ok?' ok':(i===lv-1?' next':'');
+  g.innerHTML+='<span class="lv-m'+cls+'">'+(i+1)*100+'h '+(ok?'✓':'·')+' '+m+'</span>';
+ });
+}
+function addFocusHours(min){
+ const before=lvOf(totalH);
+ totalH=Math.round((totalH+min/60)*3600)/3600;
+ const after=lvOf(totalH);
+ if(after>before)toast('升级啦！陪伴等级 Lv.'+after+'「'+LV_NAMES[after-1]+'」· 解锁：'+LV_MILES[after-1]);
+ renderLevel();
+}
+/* ===== 专注时长统计 ===== */
+let statView='d', statY=2026, statM=9;
+function setStatView(v){statView=v;document.querySelectorAll('.stat-tabs .chip').forEach((c,i)=>c.classList.toggle('active',(i===0&&v==='d')||(i===1&&v==='m')));renderStat();}
+function statNav(dir){
+ if(statView==='d'){statM+=dir;if(statM<1){statM=12;statY--;}if(statM>12){statM=1;statY++;}}
+ else{statY+=dir;if(statY<2024)statY=2024;if(statY>2030)statY=2030;}
+ renderStat();
+}
+function genDaily(y,m){
+ const days=new Date(y,m,0).getDate(),out=[];
+ for(let d=1;d<=days;d++){
+  const seed=(y*13+m*7+d*31)%97;
+  const mins=seed%5===0?0:(20+(seed%6)*13+((d%7===0||d%7===6)?4:12));
+  out.push(mins);
+ }
+ return out;
+}
+function renderStat(){
+ const t=$('stat-table');
+ if(statView==='d'){
+  $('stat-title').textContent=statY+' 年 '+statM+' 月';
+  const days=new Date(statY,statM,0).getDate();
+  const first=new Date(statY,statM-1,1).getDay();
+  const wk=['日','一','二','三','四','五','六'];
+  const data=genDaily(statY,statM);
+  const now=new Date();
+  const isCur=now.getFullYear()===statY&&now.getMonth()+1===statM;
+  let html='<div class="stat-grid">'+wk.map(w=>'<div class="wk">'+w+'</div>').join('');
+  for(let i=0;i<first;i++)html+='<div class="stat-cell empty"></div>';
+  data.forEach((m,i)=>{
+   const d=i+1,isT=isCur&&d===now.getDate();
+   html+='<div class="stat-cell'+(isT?' today':'')+'" onclick="toast(\' '+statM+' 月 '+d+' 日 · 专注 '+m+' 分钟\')"><span class="d">'+d+'</span><span class="m">'+(m?m+'分':'')+'</span></div>';
+  });
+  html+='</div>';
+  const sum=data.reduce((a,b)=>a+b,0);
+  const active=data.filter(v=>v>0).length;
+  html+='<div class="stat-summary">本月累计 '+(sum/60).toFixed(1)+' 小时 · 专注 '+active+' 天</div>';
+  t.innerHTML=html;
+ }else{
+  $('stat-title').textContent=statY+' 年';
+  const sums=[];
+  for(let m=1;m<=12;m++){const data=genDaily(statY,m);sums.push(data.reduce((a,b)=>a+b,0));}
+  const now=new Date(),isCur=now.getFullYear()===statY;
+  let html='<div class="stat-months">';
+  sums.forEach((s,i)=>{
+   const cur=isCur&&now.getMonth()+1===i+1;
+   html+='<div class="stat-month'+(cur?' cur':'')+'" onclick="toast(\''+statY+' 年 '+(i+1)+' 月 · 专注 '+(s/60).toFixed(1)+' 小时\')"><b>'+(i+1)+' 月</b><span>'+(s/60).toFixed(1)+'h</span></div>';
+  });
+  html+='</div>';
+  const total=sums.reduce((a,b)=>a+b,0);
+  html+='<div class="stat-summary">今年累计 '+(total/60).toFixed(1)+' 小时 · 平均 '+(total/12/60).toFixed(1)+' 小时/月</div>';
+  t.innerHTML=html;
+ }
+}
+/* 原素材在本地缓存，完成去底色后同步所有使用位置。 */
+artReady.then(()=>{
+ renderPlateFoods();renderHome();renderFocusPet();renderPetDress();renderFriends();renderPetPick();
+ if($('food-sheet').classList.contains('show'))renderFoodOptions();
+}).catch(()=>toast('有些素材暂时没准备好，稍后再试试吧'));
+try{
+ const meal=JSON.parse(localStorage.getItem('qingpeiban-meal'));
+ if(Array.isArray(meal)&&meal.length===3&&meal.every(i=>Number.isInteger(i)&&FOODS[i]?.unlocked))plateFoodIdx=meal;
+}catch(_){}
+const focusResize=new ResizeObserver(layoutFocusWorld);focusResize.observe($('focus-stage'));
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Escape')return;
+ if($('food-sheet').classList.contains('show'))closeFoodSheet();
+ else if(foodPickOpen)cancelFoodPick();
+ else{const open=document.querySelector('.role-detail.show');if(open)dismissSheet(open);}
+});
+renderPlateFoods();
+/* 初始化 */
+updateLivingRoomBg();
+renderSwap();renderHome();renderFocusPet();renderRoles();renderTray();renderPlaced();renderMine();renderStat();renderDots();bindDressDrag();bindSheetDismiss();updateBackNav();renderFriends();renderPetPick();renderPetDress();
+$('scene-track').addEventListener('scroll',updateDotsFromScroll);
+setInterval(()=>{const d=new Date();$('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');},1000);
+</script>
+<script src="assets/profile-store.js"></script>
+<script src="assets/companion-progress.js"></script>
+<script src="assets/account-ui.js"></script>
+<script src="assets/pet-interactions.js"></script>
+<script src="assets/room-decor.js"></script>
+<script src="assets/house-editor.js"></script>
+<script src="assets/table-shadow.js"></script>
+<script src="assets/pet-room.js"></script>
+<script src="assets/ui-sounds.js"></script>
+<link rel="stylesheet" href="assets/breed-creator.css">
+<script src="assets/breed-creator.js"></script>
+<script src="assets/app-profile-bridge.js"></script>
+<script src="assets/earned-rewards.js"></script>
+<script src="assets/gift-shop.js"></script>
+<link rel="stylesheet" href="assets/community-ui.css">
+<script src="assets/community-ui.js"></script>
+<link rel="stylesheet" href="assets/pet-pk.css">
+<script src="assets/pet-pk.js"></script>
+<link rel="stylesheet" href="assets/soundscapes.css">
+<script src="assets/night-insects.js"></script>
+<script src="assets/soundscapes.js"></script>
+<link rel="stylesheet" href="assets/responsive-controls.css">
+<script src="assets/wardrobe-partners.js"></script>
+<link rel="stylesheet" href="assets/outfit-adjuster.css">
+<script src="assets/outfit-adjuster.js"></script>
+</body>
+</html>

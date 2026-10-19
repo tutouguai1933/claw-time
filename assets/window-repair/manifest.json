@@ -1,0 +1,10 @@
+{
+  "mode": "builtin imagegen edit",
+  "input": "assets/scene-clean/room.png",
+  "inputSha256": "f5226d67205f09ad2df836a910746b80d4c0b798472134a4cd645619e8207584",
+  "output": "assets/window-repair/afternoon-source.png",
+  "outputSha256": "f3db81e74ce4637a4d967b5b2f542bd6f414f5865385ee7b69fd577415ad689d",
+  "prompt": "assets/window-repair/prompt.txt",
+  "consumer": "assets/house-editor.js",
+  "originalRetained": true
+}

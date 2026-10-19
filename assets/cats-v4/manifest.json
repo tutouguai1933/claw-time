@@ -1,0 +1,1244 @@
+[
+  {
+    "pet": 0,
+    "expr": 0,
+    "name": "耳朵",
+    "breed": "三花猫",
+    "png": "cat-0-0.png",
+    "svg": "cat-0-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      15,
+      24,
+      259,
+      252
+    ],
+    "faceBounds": [
+      45,
+      83,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        65,
+        83
+      ],
+      [
+        198,
+        83
+      ],
+      [
+        236,
+        125
+      ],
+      [
+        228,
+        189
+      ],
+      [
+        182,
+        213
+      ],
+      [
+        94,
+        211
+      ],
+      [
+        48,
+        187
+      ],
+      [
+        45,
+        132
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      6,
+      54,
+      280,
+      272
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-0-base.png",
+    "baseSha256": "b8b6703f48f6e0b1c43c993e6fee3646f26b604e1ff2e6d1e16b805302aaf433",
+    "sha256": "b8b6703f48f6e0b1c43c993e6fee3646f26b604e1ff2e6d1e16b805302aaf433"
+  },
+  {
+    "pet": 0,
+    "expr": 1,
+    "name": "耳朵",
+    "breed": "三花猫",
+    "png": "cat-0-1.png",
+    "svg": "cat-0-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      15,
+      24,
+      259,
+      252
+    ],
+    "faceBounds": [
+      45,
+      83,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        65,
+        83
+      ],
+      [
+        198,
+        83
+      ],
+      [
+        236,
+        125
+      ],
+      [
+        228,
+        189
+      ],
+      [
+        182,
+        213
+      ],
+      [
+        94,
+        211
+      ],
+      [
+        48,
+        187
+      ],
+      [
+        45,
+        132
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      7,
+      330,
+      280,
+      270
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-0-base.png",
+    "baseSha256": "b8b6703f48f6e0b1c43c993e6fee3646f26b604e1ff2e6d1e16b805302aaf433",
+    "sha256": "539d73550846b9c88962636151fab8877d32afe66127ab21e3a652f0a1a4f0f5"
+  },
+  {
+    "pet": 0,
+    "expr": 2,
+    "name": "耳朵",
+    "breed": "三花猫",
+    "png": "cat-0-2.png",
+    "svg": "cat-0-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      15,
+      24,
+      259,
+      252
+    ],
+    "faceBounds": [
+      45,
+      83,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        65,
+        83
+      ],
+      [
+        198,
+        83
+      ],
+      [
+        236,
+        125
+      ],
+      [
+        228,
+        189
+      ],
+      [
+        182,
+        213
+      ],
+      [
+        94,
+        211
+      ],
+      [
+        48,
+        187
+      ],
+      [
+        45,
+        132
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      10,
+      600,
+      276,
+      273
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-0-base.png",
+    "baseSha256": "b8b6703f48f6e0b1c43c993e6fee3646f26b604e1ff2e6d1e16b805302aaf433",
+    "sha256": "aa6c66c750d5aa4dfedbbcd99e40e49913ead05e0c20397ae65b0bf51263aca0"
+  },
+  {
+    "pet": 1,
+    "expr": 0,
+    "name": "年糕",
+    "breed": "白猫",
+    "png": "cat-1-0.png",
+    "svg": "cat-1-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      40,
+      260,
+      236
+    ],
+    "faceBounds": [
+      57,
+      92,
+      223,
+      219
+    ],
+    "facePolygon": [
+      [
+        65,
+        92
+      ],
+      [
+        199,
+        92
+      ],
+      [
+        222,
+        125
+      ],
+      [
+        222,
+        189
+      ],
+      [
+        186,
+        218
+      ],
+      [
+        95,
+        218
+      ],
+      [
+        59,
+        185
+      ],
+      [
+        57,
+        130
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      302,
+      71,
+      281,
+      255
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-1-base.png",
+    "baseSha256": "fe6e0ba158ebba10a1ff010e7b1e54b3bee32fc578b02d75ad1dba30901256d8",
+    "sha256": "fe6e0ba158ebba10a1ff010e7b1e54b3bee32fc578b02d75ad1dba30901256d8"
+  },
+  {
+    "pet": 1,
+    "expr": 1,
+    "name": "年糕",
+    "breed": "白猫",
+    "png": "cat-1-1.png",
+    "svg": "cat-1-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      40,
+      260,
+      236
+    ],
+    "faceBounds": [
+      57,
+      92,
+      223,
+      219
+    ],
+    "facePolygon": [
+      [
+        65,
+        92
+      ],
+      [
+        199,
+        92
+      ],
+      [
+        222,
+        125
+      ],
+      [
+        222,
+        189
+      ],
+      [
+        186,
+        218
+      ],
+      [
+        95,
+        218
+      ],
+      [
+        59,
+        185
+      ],
+      [
+        57,
+        130
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      304,
+      348,
+      280,
+      256
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-1-base.png",
+    "baseSha256": "fe6e0ba158ebba10a1ff010e7b1e54b3bee32fc578b02d75ad1dba30901256d8",
+    "sha256": "61e0b2a53aefee2b0441efce20181c7fb7785e57e8f43ae9e4a76a22759dcd9c"
+  },
+  {
+    "pet": 1,
+    "expr": 2,
+    "name": "年糕",
+    "breed": "白猫",
+    "png": "cat-1-2.png",
+    "svg": "cat-1-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      40,
+      260,
+      236
+    ],
+    "faceBounds": [
+      57,
+      92,
+      223,
+      219
+    ],
+    "facePolygon": [
+      [
+        65,
+        92
+      ],
+      [
+        199,
+        92
+      ],
+      [
+        222,
+        125
+      ],
+      [
+        222,
+        189
+      ],
+      [
+        186,
+        218
+      ],
+      [
+        95,
+        218
+      ],
+      [
+        59,
+        185
+      ],
+      [
+        57,
+        130
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      305,
+      622,
+      277,
+      250
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-1-base.png",
+    "baseSha256": "fe6e0ba158ebba10a1ff010e7b1e54b3bee32fc578b02d75ad1dba30901256d8",
+    "sha256": "cf320fb40af48876c44c6c7c520499f1ebe7e4b7c8d9f6b298acf3b4c08ef232"
+  },
+  {
+    "pet": 2,
+    "expr": 0,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-0.png",
+    "svg": "cat-2-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      52,
+      260,
+      224
+    ],
+    "faceBounds": [
+      47,
+      88,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        59,
+        88
+      ],
+      [
+        211,
+        88
+      ],
+      [
+        236,
+        126
+      ],
+      [
+        227,
+        193
+      ],
+      [
+        187,
+        213
+      ],
+      [
+        92,
+        213
+      ],
+      [
+        48,
+        184
+      ],
+      [
+        47,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      601,
+      83,
+      284,
+      245
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-2-base.png",
+    "baseSha256": "91835423034d885fe98f6d47e08371fb9dbb0eb720be417d652b961a53723af3",
+    "sha256": "91835423034d885fe98f6d47e08371fb9dbb0eb720be417d652b961a53723af3"
+  },
+  {
+    "pet": 2,
+    "expr": 1,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-1.png",
+    "svg": "cat-2-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      52,
+      260,
+      224
+    ],
+    "faceBounds": [
+      47,
+      88,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        59,
+        88
+      ],
+      [
+        211,
+        88
+      ],
+      [
+        236,
+        126
+      ],
+      [
+        227,
+        193
+      ],
+      [
+        187,
+        213
+      ],
+      [
+        92,
+        213
+      ],
+      [
+        48,
+        184
+      ],
+      [
+        47,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      601,
+      367,
+      284,
+      237
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-2-base.png",
+    "baseSha256": "91835423034d885fe98f6d47e08371fb9dbb0eb720be417d652b961a53723af3",
+    "sha256": "54b9968308bccd4aa3c5608a8d58b53b76f1721f273dc34c965ddbd89df10445"
+  },
+  {
+    "pet": 2,
+    "expr": 2,
+    "name": "煤球",
+    "breed": "黑猫",
+    "png": "cat-2-2.png",
+    "svg": "cat-2-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      52,
+      260,
+      224
+    ],
+    "faceBounds": [
+      47,
+      88,
+      237,
+      214
+    ],
+    "facePolygon": [
+      [
+        59,
+        88
+      ],
+      [
+        211,
+        88
+      ],
+      [
+        236,
+        126
+      ],
+      [
+        227,
+        193
+      ],
+      [
+        187,
+        213
+      ],
+      [
+        92,
+        213
+      ],
+      [
+        48,
+        184
+      ],
+      [
+        47,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      599,
+      640,
+      286,
+      234
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-2-base.png",
+    "baseSha256": "91835423034d885fe98f6d47e08371fb9dbb0eb720be417d652b961a53723af3",
+    "sha256": "18514590c6e95ae532f3a505a0147013662060c829bbf95a943fa0d5fad34109"
+  },
+  {
+    "pet": 3,
+    "expr": 0,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-0.png",
+    "svg": "cat-3-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      38,
+      24,
+      213,
+      252
+    ],
+    "faceBounds": [
+      60,
+      90,
+      241,
+      217
+    ],
+    "facePolygon": [
+      [
+        70,
+        90
+      ],
+      [
+        225,
+        90
+      ],
+      [
+        240,
+        126
+      ],
+      [
+        219,
+        197
+      ],
+      [
+        184,
+        216
+      ],
+      [
+        98,
+        216
+      ],
+      [
+        61,
+        187
+      ],
+      [
+        60,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      918,
+      29,
+      251,
+      297
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-3-base.png",
+    "baseSha256": "eed7e6a960098d92809a4de60269b9426e9b572bf9d725dfe2a33d02d9bfae60",
+    "sha256": "eed7e6a960098d92809a4de60269b9426e9b572bf9d725dfe2a33d02d9bfae60"
+  },
+  {
+    "pet": 3,
+    "expr": 1,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-1.png",
+    "svg": "cat-3-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      38,
+      24,
+      213,
+      252
+    ],
+    "faceBounds": [
+      60,
+      90,
+      241,
+      217
+    ],
+    "facePolygon": [
+      [
+        70,
+        90
+      ],
+      [
+        225,
+        90
+      ],
+      [
+        240,
+        126
+      ],
+      [
+        219,
+        197
+      ],
+      [
+        184,
+        216
+      ],
+      [
+        98,
+        216
+      ],
+      [
+        61,
+        187
+      ],
+      [
+        60,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      918,
+      319,
+      252,
+      290
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-3-base.png",
+    "baseSha256": "eed7e6a960098d92809a4de60269b9426e9b572bf9d725dfe2a33d02d9bfae60",
+    "sha256": "527fe60c5d93efeb614ff3584aae7be14b7f94e5784954aa7dfbc7df60131b4a"
+  },
+  {
+    "pet": 3,
+    "expr": 2,
+    "name": "芝麻",
+    "breed": "奶牛猫",
+    "png": "cat-3-2.png",
+    "svg": "cat-3-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      38,
+      24,
+      213,
+      252
+    ],
+    "faceBounds": [
+      60,
+      90,
+      241,
+      217
+    ],
+    "facePolygon": [
+      [
+        70,
+        90
+      ],
+      [
+        225,
+        90
+      ],
+      [
+        240,
+        126
+      ],
+      [
+        219,
+        197
+      ],
+      [
+        184,
+        216
+      ],
+      [
+        98,
+        216
+      ],
+      [
+        61,
+        187
+      ],
+      [
+        60,
+        129
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      918,
+      596,
+      248,
+      279
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-3-base.png",
+    "baseSha256": "eed7e6a960098d92809a4de60269b9426e9b572bf9d725dfe2a33d02d9bfae60",
+    "sha256": "3a5e14522ead9c4fd7d6568191dc3a558b18521a405daf08cb5150e8c8c9c911"
+  },
+  {
+    "pet": 4,
+    "expr": 0,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-0.png",
+    "svg": "cat-4-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      27,
+      24,
+      235,
+      252
+    ],
+    "faceBounds": [
+      52,
+      89,
+      245,
+      211
+    ],
+    "facePolygon": [
+      [
+        62,
+        89
+      ],
+      [
+        231,
+        89
+      ],
+      [
+        244,
+        132
+      ],
+      [
+        226,
+        183
+      ],
+      [
+        194,
+        210
+      ],
+      [
+        91,
+        210
+      ],
+      [
+        52,
+        183
+      ],
+      [
+        55,
+        123
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1197,
+      47,
+      261,
+      280
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-4-base.png",
+    "baseSha256": "253c9de13359570ab436e2bebb3ebc8a79be5adabdd994e357db1ddb5d5c3c57",
+    "sha256": "253c9de13359570ab436e2bebb3ebc8a79be5adabdd994e357db1ddb5d5c3c57"
+  },
+  {
+    "pet": 4,
+    "expr": 1,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-1.png",
+    "svg": "cat-4-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      27,
+      24,
+      235,
+      252
+    ],
+    "faceBounds": [
+      52,
+      89,
+      245,
+      211
+    ],
+    "facePolygon": [
+      [
+        62,
+        89
+      ],
+      [
+        231,
+        89
+      ],
+      [
+        244,
+        132
+      ],
+      [
+        226,
+        183
+      ],
+      [
+        194,
+        210
+      ],
+      [
+        91,
+        210
+      ],
+      [
+        52,
+        183
+      ],
+      [
+        55,
+        123
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1197,
+      341,
+      261,
+      266
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-4-base.png",
+    "baseSha256": "253c9de13359570ab436e2bebb3ebc8a79be5adabdd994e357db1ddb5d5c3c57",
+    "sha256": "501532fb93526f4145b5d7e0331d8800e13b6ab64b140cb7a57247ff312fc716"
+  },
+  {
+    "pet": 4,
+    "expr": 2,
+    "name": "布丁",
+    "breed": "暹罗猫",
+    "png": "cat-4-2.png",
+    "svg": "cat-4-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      27,
+      24,
+      235,
+      252
+    ],
+    "faceBounds": [
+      52,
+      89,
+      245,
+      211
+    ],
+    "facePolygon": [
+      [
+        62,
+        89
+      ],
+      [
+        231,
+        89
+      ],
+      [
+        244,
+        132
+      ],
+      [
+        226,
+        183
+      ],
+      [
+        194,
+        210
+      ],
+      [
+        91,
+        210
+      ],
+      [
+        52,
+        183
+      ],
+      [
+        55,
+        123
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1197,
+      612,
+      261,
+      263
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-4-base.png",
+    "baseSha256": "253c9de13359570ab436e2bebb3ebc8a79be5adabdd994e357db1ddb5d5c3c57",
+    "sha256": "3039cb3e449a4e7924cbf364fb6119bc6bb4731bd359126c34f0545ec597b056"
+  },
+  {
+    "pet": 5,
+    "expr": 0,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-0.png",
+    "svg": "cat-5-0.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      30,
+      260,
+      246
+    ],
+    "faceBounds": [
+      48,
+      81,
+      235,
+      212
+    ],
+    "facePolygon": [
+      [
+        60,
+        81
+      ],
+      [
+        212,
+        81
+      ],
+      [
+        234,
+        121
+      ],
+      [
+        229,
+        190
+      ],
+      [
+        189,
+        211
+      ],
+      [
+        97,
+        211
+      ],
+      [
+        48,
+        183
+      ],
+      [
+        48,
+        124
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1490,
+      63,
+      280,
+      265
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-5-base.png",
+    "baseSha256": "20ef15c1e15df6d8d839123082eac547b11bd0442748d79003eaacc9ebd1649f",
+    "sha256": "20ef15c1e15df6d8d839123082eac547b11bd0442748d79003eaacc9ebd1649f"
+  },
+  {
+    "pet": 5,
+    "expr": 1,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-1.png",
+    "svg": "cat-5-1.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      30,
+      260,
+      246
+    ],
+    "faceBounds": [
+      48,
+      81,
+      235,
+      212
+    ],
+    "facePolygon": [
+      [
+        60,
+        81
+      ],
+      [
+        212,
+        81
+      ],
+      [
+        234,
+        121
+      ],
+      [
+        229,
+        190
+      ],
+      [
+        189,
+        211
+      ],
+      [
+        97,
+        211
+      ],
+      [
+        48,
+        183
+      ],
+      [
+        48,
+        124
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1488,
+      348,
+      282,
+      260
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-5-base.png",
+    "baseSha256": "20ef15c1e15df6d8d839123082eac547b11bd0442748d79003eaacc9ebd1649f",
+    "sha256": "e12a58f0c5e6862389d0dda884634d91fe7a89a304c8c569007dbf6a0684be1e"
+  },
+  {
+    "pet": 5,
+    "expr": 2,
+    "name": "团子",
+    "breed": "橘猫",
+    "png": "cat-5-2.png",
+    "svg": "cat-5-2.svg",
+    "width": 288,
+    "height": 288,
+    "baseline": 276,
+    "bodyTop": 208,
+    "bounds": [
+      14,
+      30,
+      260,
+      246
+    ],
+    "faceBounds": [
+      48,
+      81,
+      235,
+      212
+    ],
+    "facePolygon": [
+      [
+        60,
+        81
+      ],
+      [
+        212,
+        81
+      ],
+      [
+        234,
+        121
+      ],
+      [
+        229,
+        190
+      ],
+      [
+        189,
+        211
+      ],
+      [
+        97,
+        211
+      ],
+      [
+        48,
+        183
+      ],
+      [
+        48,
+        124
+      ]
+    ],
+    "source": "sources/approved-sheet.png",
+    "sourceBounds": [
+      1488,
+      622,
+      281,
+      252
+    ],
+    "sourceSha256": "7832eb2562c4ce0bbf51ff341ed50921debee30e91d1eee7e0cb968a70e99c6b",
+    "base": "cat-5-base.png",
+    "baseSha256": "20ef15c1e15df6d8d839123082eac547b11bd0442748d79003eaacc9ebd1649f",
+    "sha256": "74a39a6a2054aa29cffa8efd508dbaefe4a377e4f7411a8fed0d4070272d168b"
+  }
+]

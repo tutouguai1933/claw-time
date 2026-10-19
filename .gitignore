@@ -1,0 +1,29 @@
+# Local previews, exported portfolios, and development research.
+# Keep these files locally; they are not needed to run the app.
+/output/
+/docs/research/
+
+# Dependencies and test reports (never vendor local runtimes).
+node_modules/
+coverage/
+playwright-report/
+test-results/
+
+# Local configuration and credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+
+# Editor, OS, and temporary files.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+*.tmp
+*.bak
+*~

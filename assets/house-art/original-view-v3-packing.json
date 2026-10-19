@@ -1,0 +1,74 @@
+[
+  {
+    "kind": "left",
+    "width": 1774,
+    "height": 887,
+    "alphaCounts": {
+      "zero": 813079,
+      "partial": 755626,
+      "opaque": 4833
+    },
+    "crops": [
+      {
+        "index": 0,
+        "x": 62,
+        "y": 91,
+        "width": 533,
+        "height": 765,
+        "heightWidthRatio": 1.4352720450281427
+      },
+      {
+        "index": 1,
+        "x": 675,
+        "y": 155,
+        "width": 513,
+        "height": 701,
+        "heightWidthRatio": 1.3664717348927875
+      },
+      {
+        "index": 2,
+        "x": 1240,
+        "y": 47,
+        "width": 523,
+        "height": 809,
+        "heightWidthRatio": 1.5468451242829828
+      }
+    ]
+  },
+  {
+    "kind": "sofa",
+    "width": 1717,
+    "height": 916,
+    "alphaCounts": {
+      "zero": 849548,
+      "partial": 720716,
+      "opaque": 2508
+    },
+    "crops": [
+      {
+        "index": 0,
+        "x": 43,
+        "y": 125,
+        "width": 561,
+        "height": 718,
+        "heightWidthRatio": 1.2798573975044563
+      },
+      {
+        "index": 1,
+        "x": 656,
+        "y": 177,
+        "width": 528,
+        "height": 656,
+        "heightWidthRatio": 1.2424242424242424
+      },
+      {
+        "index": 2,
+        "x": 1241,
+        "y": 114,
+        "width": 472,
+        "height": 732,
+        "heightWidthRatio": 1.5508474576271187
+      }
+    ]
+  }
+]

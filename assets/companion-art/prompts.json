@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-10-18",
+  "mode": "built-in image_gen (no CLI fallback)",
+  "styleReference": "assets/pets-v2/dog-0-0.png",
+  "assets": [
+    {
+      "file": "assets/companion-art/lizard.png",
+      "prompt": "Use case: illustration-story\nAsset type: transparent companion pet game sprite.\nPrimary request: draw one adorable chibi bearded dragon lizard matching the supplied original dog sprite reference image in visual language. The reference dog is a style reference ONLY. Create a new animal, not a dog.\nSubject: cream and warm soft orange bearded dragon, a large wide rounded triangular snout, tiny gentle cheek spikes suggesting a beard, round friendly dark eyes with small highlights, tiny smile, squat rounded body, four short stubby feet visibly grounded, a curved tapering tail to the right. Three-quarter front view. Cute harmless baby proportions with big head and tiny body.\nStyle/medium: smooth hand-drawn flat 2D cartoon sticker, bold very dark brown almost black outlines of even thickness matching reference dog, very simple soft pastel flat fills, almost no shading, no texture.\nComposition/framing: single centered full-body animal occupying about 78 percent of a square canvas, safe transparent padding all around; no cut-off feet or tail.\nConstraints: genuine transparent background with alpha; no ground shadow; no room, plants, props, text, watermark, realism, paper grain, scales texture, or extra animals. Preserve chunky cute appearance at 80px sprite size.",
+      "transparent_background": true,
+      "references": [
+        "assets/pets-v2/dog-0-0.png"
+      ],
+      "sourceHint": "Generated images are saved to C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0 as C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0\\exec-7a25e34c-34be-45a2-930a-b2bc07cd5fcb.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "file": "assets/companion-art/snake.png",
+      "prompt": "Use case: illustration-story\nAsset type: transparent companion pet game sprite.\nPrimary request: create ONE super cute corn snake in exactly the same chunky 2D cartoon style as the reference dog sprite. Dog is a style reference ONLY.\nSubject: warm cream and pastel orange corn snake with a short smooth rounded head, round glossy dark dot eyes, small happy curved mouth, subtle orange saddle markings. Large cute head, little curled coiled noodle body, tail curling softly upward on the right. No arms, no legs. Three-quarter front view.\nStyle/medium: flat smooth pastel cartoon sticker, thick even dark brown nearly black outline matching dog, simple rounded shapes, minimal flat shading, no paper texture. Cheerful gentle toy-like baby proportions.\nComposition/framing: centered single full-body snake on square canvas with safe transparent padding; coiled seated stance; large recognizable head; readable at 80px.\nConstraints: genuine transparent background and preserve native alpha; no room, grass, props, floor, cast shadow, text, watermark, scary fangs, photorealistic scales, extra animals, or dog ears.",
+      "transparent_background": true,
+      "references": [
+        "assets/pets-v2/dog-0-0.png",
+        "assets/companion-art/lizard.png"
+      ],
+      "sourceHint": "Generated images are saved to C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0 as C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0\\exec-8473fea9-3389-4f31-87fc-9e7bc688abec.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "file": "assets/companion-art/fish-bowl.png",
+      "prompt": "Use case: illustration-story\nAsset type: transparent companion pet sprite for cozy game balcony.\nPrimary request: ONE adorable warm orange betta fish living inside ONE simple clear round fishbowl. Match the chunky cute cartoon visual language of the reference dog and lizard, not their species.\nSubject: very cute betta with large round happy head, friendly round black eye and tiny smile, compact orange and pale cream body, flowing but simplified rounded fan tail and little ruffled fins in pale apricot and coral. Fish is clearly fully INSIDE a transparent clear round glass bowl with an elliptical open rim at the top, simple dark brown bowl contour, a subtle pastel aqua waterline and faint pale blue water tint, two tiny bubbles. Glass base rounded and stable. No accessories. Fish dominates bowl interior and is recognizable at small size.\nStyle/medium: smooth flat 2D cartoon sticker, bold smooth even very dark brown outlines matching dog, warm cream pastel orange palette, very minimal shading. Glass is a graphic outline with small simple white highlights. Not photorealistic, no texture.\nComposition: one centered complete fishbowl, square canvas and safe transparent margins; keep all fins inside bowl; no ground plane or shadow.\nConstraints: genuinely transparent alpha background outside bowl; no room, no plants, no rocks, no text, no watermark, no extra fish, no dog traits; do not draw fish floating outside the bowl.",
+      "transparent_background": true,
+      "references": [
+        "assets/pets-v2/dog-0-0.png",
+        "assets/companion-art/lizard.png"
+      ],
+      "sourceHint": "Generated images are saved to C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0 as C:\\Users\\19332\\.codex\\generated_images\\01a14d7f-369c-76f0-8385-04757f23d2a0\\exec-afe5809e-b274-43d0-88cd-6e987d462284.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    }
+  ]
+}

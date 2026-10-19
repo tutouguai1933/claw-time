@@ -1,0 +1,528 @@
+{
+  "version": 4,
+  "generator": "built-in image_gen",
+  "baseWidth": 750,
+  "baseHeight": 1400,
+  "backgrounds": [
+    {
+      "time": 0,
+      "weather": 0,
+      "file": "room-0-0.png",
+      "width": 918,
+      "height": 1713,
+      "source": "../scenes/original-room-0-0.png"
+    },
+    {
+      "time": 0,
+      "weather": 1,
+      "file": "room-0-1.png",
+      "width": 920,
+      "height": 1708,
+      "source": "../scenes/original-room-0-1.png"
+    },
+    {
+      "time": 0,
+      "weather": 2,
+      "file": "room-0-2.png",
+      "width": 920,
+      "height": 1708,
+      "source": "../scenes/original-room-0-2.png"
+    },
+    {
+      "time": 1,
+      "weather": 0,
+      "file": "room-1-0.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-1-0.png"
+    },
+    {
+      "time": 1,
+      "weather": 1,
+      "file": "room-1-1.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-1-1.png"
+    },
+    {
+      "time": 1,
+      "weather": 2,
+      "file": "room-1-2.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-1-2.png"
+    },
+    {
+      "time": 2,
+      "weather": 0,
+      "file": "room-2-0.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-2-0.png"
+    },
+    {
+      "time": 2,
+      "weather": 1,
+      "file": "room-2-1.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-2-1.png"
+    },
+    {
+      "time": 2,
+      "weather": 2,
+      "file": "room-2-2.png",
+      "width": 921,
+      "height": 1708,
+      "source": "../scenes/original-room-2-2.png"
+    }
+  ],
+  "items": [
+    {
+      "type": "left",
+      "variant": 0,
+      "width": 533,
+      "height": 765,
+      "alpha": true,
+      "file": "left-0.png",
+      "name": "原木方屋",
+      "alphaValidation": {
+        "file": "left-0.png",
+        "width": 579,
+        "height": 623,
+        "transparent": 156161,
+        "opaque": 194666,
+        "semi": 9890,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-left-original-view-v3.png",
+      "generation": "original-view-v3"
+    },
+    {
+      "type": "left",
+      "variant": 1,
+      "width": 513,
+      "height": 701,
+      "alpha": true,
+      "file": "left-1.png",
+      "name": "拱门小窝",
+      "alphaValidation": {
+        "file": "left-1.png",
+        "width": 641,
+        "height": 611,
+        "transparent": 165101,
+        "opaque": 218687,
+        "semi": 7863,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-left-original-view-v3.png",
+      "generation": "original-view-v3"
+    },
+    {
+      "type": "left",
+      "variant": 2,
+      "width": 523,
+      "height": 809,
+      "alpha": true,
+      "file": "left-2.png",
+      "name": "尖顶小屋",
+      "alphaValidation": {
+        "file": "left-2.png",
+        "width": 620,
+        "height": 587,
+        "transparent": 170744,
+        "opaque": 184229,
+        "semi": 8967,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-left-original-view-v3.png",
+      "generation": "original-view-v3"
+    },
+    {
+      "type": "back",
+      "variant": 0,
+      "width": 450,
+      "height": 844,
+      "alpha": true,
+      "sourceBounds": {
+        "x": 61,
+        "y": 70,
+        "width": 444,
+        "height": 838
+      },
+      "file": "back-0.png",
+      "name": "皇冠高台",
+      "alphaValidation": {
+        "file": "back-0.png",
+        "width": 450,
+        "height": 844,
+        "transparent": 197822,
+        "opaque": 167914,
+        "semi": 14064,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-back.png",
+      "generation": "furniture-v2"
+    },
+    {
+      "type": "back",
+      "variant": 1,
+      "width": 517,
+      "height": 782,
+      "alpha": true,
+      "sourceBounds": {
+        "x": 562,
+        "y": 131,
+        "width": 511,
+        "height": 776
+      },
+      "file": "back-1.png",
+      "name": "拱桥双塔",
+      "alphaValidation": {
+        "file": "back-1.png",
+        "width": 517,
+        "height": 782,
+        "transparent": 227430,
+        "opaque": 161956,
+        "semi": 14908,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-back.png",
+      "generation": "furniture-v2"
+    },
+    {
+      "type": "back",
+      "variant": 2,
+      "width": 477,
+      "height": 845,
+      "alpha": true,
+      "sourceBounds": {
+        "x": 1126,
+        "y": 68,
+        "width": 471,
+        "height": 839
+      },
+      "file": "back-2.png",
+      "name": "叶片猫树",
+      "alphaValidation": {
+        "file": "back-2.png",
+        "width": 477,
+        "height": 845,
+        "transparent": 255591,
+        "opaque": 136895,
+        "semi": 10579,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-back.png",
+      "generation": "furniture-v2"
+    },
+    {
+      "type": "sofa",
+      "variant": 0,
+      "width": 561,
+      "height": 718,
+      "alpha": true,
+      "file": "sofa-0.png",
+      "name": "懒人豆袋",
+      "alphaValidation": {
+        "file": "sofa-0.png",
+        "width": 636,
+        "height": 516,
+        "transparent": 96540,
+        "opaque": 226752,
+        "semi": 4884,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-sofa-original-view-v3.png",
+      "generation": "original-view-v3"
+    },
+    {
+      "type": "sofa",
+      "variant": 1,
+      "width": 528,
+      "height": 656,
+      "alpha": true,
+      "file": "sofa-1.png",
+      "name": "云朵软垫",
+      "alphaValidation": {
+        "file": "sofa-1.png",
+        "width": 666,
+        "height": 468,
+        "transparent": 92085,
+        "opaque": 214705,
+        "semi": 4898,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-sofa-original-view-v3.png",
+      "generation": "original-view-v3"
+    },
+    {
+      "type": "sofa",
+      "variant": 2,
+      "width": 472,
+      "height": 732,
+      "alpha": true,
+      "file": "sofa-2.png",
+      "name": "环抱软座",
+      "alphaValidation": {
+        "file": "sofa-2.png",
+        "width": 685,
+        "height": 493,
+        "transparent": 88197,
+        "opaque": 244156,
+        "semi": 5352,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-sofa-original-view-v3.png",
+      "generation": "original-view-v3"
+    }
+  ],
+  "defaults": {
+    "back": 1,
+    "left": 1,
+    "sofa": 0
+  },
+  "placementBoxesPercent": {
+    "left": {
+      "x": 0,
+      "y": 40,
+      "w": 36,
+      "h": 33
+    },
+    "back": {
+      "x": 5,
+      "y": 9,
+      "w": 65,
+      "h": 62
+    },
+    "sofa": {
+      "x": 73,
+      "y": 52,
+      "w": 27,
+      "h": 33
+    }
+  },
+  "fit": "contain",
+  "alignment": {
+    "back": "center",
+    "left": "original box",
+    "sofa": "left bottom"
+  },
+  "promptRecord": "final-prompts.json",
+  "validation": {
+    "finalPngCount": 22,
+    "transparentFurnitureCount": 9,
+    "allCornersTransparent": true,
+    "archivedCushionCount": 3
+  },
+  "fitBySlot": {
+    "back": "contain",
+    "left": "fill to original footprint",
+    "sofa": "cover, left bottom, clipped side"
+  },
+  "originalBackground": "assets/scenes/original-room-1-0.png",
+  "displayBackground": "assets/scene-clean/room.png",
+  "replacementTracking": "replaced: back/left/sofa only; legacy pad selection is removed; original cushion stays fixed",
+  "promptRecords": [
+    "final-prompts.json",
+    "generation-original-view-v3.json"
+  ],
+  "startsAsOriginal": true,
+  "canonicalGeometry": {
+    "originalFilesPreserved": true,
+    "repair": "assets/house-art/room-1-0.png",
+    "original": "assets/scenes/original-room-1-0.png",
+    "lighting": "3x3 original painted window rasters clipped inside canonical glass; original accumulated outdoor snow retained, indoor snow caps repaired from adjacent same-exposure glass. Night uses a visible recessed upper-frame light, crisp prototype-directed floor beam and canonical surface highlights. No blurred RGB field or Gaussian light pools; original surface highlights disappear with replaced furniture.",
+    "display": "assets/scene-clean/room.png",
+    "occlusion": "original cushion and left ladder contour masks; back repair ends at y=67% to preserve the rug"
+  },
+  "leftLowerPlatform": {
+    "sourceStripX": 0.02,
+    "boxPercent": {
+      "h": 1.815,
+      "x": 0.72,
+      "w": 28.44,
+      "y": 65.41
+    },
+    "mainPlatformYByVariant": [
+      54.025,
+      52.21,
+      54.85
+    ],
+    "sourceStripByVariant": [
+      {
+        "y": 0.425,
+        "h": 0.052
+      },
+      {
+        "y": 0.37,
+        "h": 0.06
+      },
+      {
+        "y": 0.45,
+        "h": 0.05
+      }
+    ],
+    "sourceStripWidth": 0.79,
+    "feetY": 73,
+    "method": "copy original wood platform strip behind unchanged legs and ladder"
+  },
+  "nativeCushion": {
+    "fixed": true,
+    "offsetY": 0,
+    "source": "assets/scene-clean/room.png",
+    "replacementDisabled": true,
+    "legacyPadSelection": "ignored and removed during normalization",
+    "unusedArchivedAssets": [
+      "pad-0.png",
+      "pad-1.png",
+      "pad-2.png",
+      "pad-floor-repair.png"
+    ]
+  },
+  "archivedItems": [
+    {
+      "type": "pad",
+      "variant": 0,
+      "width": 616,
+      "height": 470,
+      "alpha": true,
+      "sourceBounds": {
+        "x": 45,
+        "y": 142,
+        "width": 610,
+        "height": 464
+      },
+      "file": "pad-0.png",
+      "name": "圆形软垫",
+      "alphaValidation": {
+        "file": "pad-0.png",
+        "width": 616,
+        "height": 470,
+        "transparent": 44986,
+        "opaque": 239254,
+        "semi": 5280,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-pad.png",
+      "generation": "furniture-v2",
+      "active": false
+    },
+    {
+      "type": "pad",
+      "variant": 1,
+      "width": 700,
+      "height": 359,
+      "alpha": true,
+      "file": "pad-1.png",
+      "name": "奶黄圆垫",
+      "alphaValidation": {
+        "file": "pad-1.png",
+        "width": 700,
+        "height": 359,
+        "transparent": 30802,
+        "opaque": 1022,
+        "semi": 219476,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "generation": "cushion-v4",
+      "source": "assets/scene-clean/room.png",
+      "active": false
+    },
+    {
+      "type": "pad",
+      "variant": 2,
+      "width": 646,
+      "height": 445,
+      "alpha": true,
+      "sourceBounds": {
+        "x": 1468,
+        "y": 174,
+        "width": 640,
+        "height": 439
+      },
+      "file": "pad-2.png",
+      "name": "方形软垫",
+      "alphaValidation": {
+        "file": "pad-2.png",
+        "width": 646,
+        "height": 445,
+        "transparent": 50248,
+        "opaque": 231918,
+        "semi": 5304,
+        "corners": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sheet": "sheets/sheet-pad.png",
+      "generation": "furniture-v2",
+      "active": false
+    }
+  ],
+  "editableSlots": [
+    "back",
+    "left",
+    "sofa"
+  ],
+  "archivedPromptRecords": [
+    "generation-cushion-v4.json"
+  ]
+}
