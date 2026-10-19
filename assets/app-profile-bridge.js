@@ -184,7 +184,7 @@
   saveFoodPick = function () {
     if (!foodPickOpen) return;
     plateFoodIdx = [...draftFoodIdx]; closeFoodPick();
-    if (persist()) toast('菜品摆好啦，已保存在当前本地账号');
+    if (persist()) toast(AccountManager.cloud?'菜品摆好啦，已保存，同步进度可在我的页面查看':'菜品摆好啦，已保存在当前本地账号');
   };
   saveDrawState = function () {
     try {

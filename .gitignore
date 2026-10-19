@@ -2,6 +2,11 @@
 # Keep these files locally; they are not needed to run the app.
 /output/
 /docs/research/
+/data/
+/deploy-local/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
 
 # Dependencies and test reports (never vendor local runtimes).
 node_modules/

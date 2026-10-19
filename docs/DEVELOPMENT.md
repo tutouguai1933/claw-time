@@ -54,6 +54,8 @@ node .\tests\scene-portrait-nav.cjs
 
 ## 全量回归
 
+2026-10-20 接入服务器账号时，`pet-walking-browser.cjs` 的“approach stays close to its own home”检查在原始 `main` 和新分支均失败。该项属于既有基线问题，本次没有修改宠物行走代码；因此不能将本次验证描述为 62 套全部通过。账号相关检查和主要交互回归单独执行。
+
 `tests/run-all.cjs` 顺序执行 62 套检查。仅在其引用的开发依赖、运行时路径和 Chrome 都已就绪时执行。预期末行是 `RESULT all 62 suites passed`；任一套失败会中止执行并返回非零状态码：
 
 ```powershell
@@ -61,6 +63,17 @@ node .\tests\run-all.cjs
 ```
 
 测试会启动临时浏览器，部分测试还会在 `docs/research/` 下生成截图或记录；该目录默认不提交。全量运行可能需要数分钟。
+
+## 服务器账号检查
+
+使用支持 `node:sqlite` 的 Node.js 22.13+。以下命令预期 API、待同步副本隔离和浏览器账号流程全部通过；最后一项需要本机已有 Playwright 与 Chrome：
+
+```powershell
+node --test .\tests\server-api.test.cjs .\tests\cloud-outbox.test.cjs
+node .\tests\cloud-account-browser.cjs
+```
+
+检查使用临时数据库，退出后清理；不读取或改写正式 `data/`。覆盖密码验证、用户隔离、会话恢复与登出、跨站写入拒绝、编码路径保护、存档版本冲突、多标签页独立待同步副本、离线恢复、显式游客导入和账号恢复失败时阻止写入。
 
 ## 场景缓存
 
