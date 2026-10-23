@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 80" width="110" height="80" fill="none" stroke="#46443A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <title>圣诞袜：红绿条纹袜</title>
+  <defs><clipPath id="sock"><path d="M15 21h48l1 17c14-2 32 2 35 12 7 17-15 21-38 19L19 63Z"/></clipPath></defs>
+  <path d="M15 21h48l1 17c14-2 32 2 35 12 7 17-15 21-38 19L19 63Z" fill="#DB8B61"/>
+  <g clip-path="url(#sock)" stroke="#75A77A" stroke-width="9">
+    <path d="m20 20 9 51m8-51 9 51m8-51 9 51m8-35 9 36m7-30 8 30"/>
+  </g>
+  <path d="M15 21h48l1 17c14-2 32 2 35 12 7 17-15 21-38 19L19 63Z"/>
+  <path d="m12 10 57-3c1 10-3 16-11 17l-43 3Z" fill="#D86E4D"/>
+</svg>

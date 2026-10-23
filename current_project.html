@@ -570,7 +570,7 @@ body.food-selecting{overflow:hidden;}
         <div class="tp-foot"><button class="go-btn" onclick="go('focus');toggleFocus();toggleTasks()">去专注</button><button class="close-btn" onclick="toggleTasks()">收起来</button></div>
       </div>
       <button class="clock-btn" onclick="openFocusSet()" title="开始专注">
-        <img src="https://aka.doubaocdn.com/s/LCfF3aK9QX" alt="开始专注">
+        <img src="assets/nav/focus.svg" alt="开始专注">
       </button>
       <div class="side-dock">
         <button class="sd-btn" onclick="openScenePick()"><span class="sd-content"><img src="assets/home-controls/scene.svg" alt="" aria-hidden="true"><span class="sd-label">场景</span></span></button>
@@ -2661,12 +2661,12 @@ const PLAZA=[
  {name:'阿柴',pet:5,motto:'互相监督不跑路'}
 ];
 const OUTFITS=[
- {name:'胡砸',art:'beard',price:0,img:'https://aka.doubaocdn.com/s/0GZEZGUOVw'},
- {name:'俺是外星人',price:0,img:'https://aka.doubaocdn.com/s/QCjnbdkE6b'},
- {name:'圣诞袜',price:0,img:'https://aka.doubaocdn.com/s/6tvi27sGsY'},
- {name:'左眼是为了…',price:0,img:'https://aka.doubaocdn.com/s/Y1J6tmhRF3'},
- {name:'懒羊羊口水巾',art:'bib',price:100,img:'https://aka.doubaocdn.com/s/9UAVRvxHXq'},
- {name:'321跪',price:200,img:'https://aka.doubaocdn.com/s/fbqqFKeanO'},
+ {name:'胡砸',art:'beard',price:0,img:ART_SOURCES.beard},
+ {name:'俺是外星人',price:0,img:'assets/outfits/alien.svg'},
+ {name:'圣诞袜',price:0,img:'assets/outfits/christmas-sock.svg'},
+ {name:'左眼是为了…',price:0,img:'assets/outfits/eye-patch.svg'},
+ {name:'懒羊羊口水巾',art:'bib',price:100,img:ART_SOURCES.bib},
+ {name:'321跪',price:200,img:'assets/outfits/emperor.svg'},
  ...SuppliedOutfits.catalog
 ];
 let ownedOutfits=[0,1,2,3], plazaApplied=[]; /* 初始已拥有免费装扮 */

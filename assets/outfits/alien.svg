@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 90" width="80" height="90" fill="none" stroke="#302F29" stroke-linecap="round" stroke-linejoin="round">
+  <defs><linearGradient id="stem" x1="0" y1="25" x2="0" y2="85" gradientUnits="userSpaceOnUse"><stop stop-color="#302F29"/><stop offset="1" stop-color="#302F29" stop-opacity=".28"/></linearGradient></defs>
+  <title>俺是外星人：绿色触角</title>
+  <path d="m22 26 8 56m28-48-5 48" stroke="url(#stem)" stroke-width="8"/>
+  <circle cx="21" cy="17" r="11" fill="#4CDD24" stroke-width="6"/>
+  <circle cx="60" cy="25" r="10" fill="#4CDD24" stroke-width="6"/>
+</svg>
